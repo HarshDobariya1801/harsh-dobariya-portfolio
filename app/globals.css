@@ -73,9 +73,9 @@ footer {
 .wordmark {
   width: max-content;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.55rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.035em;
 }
 
 .wordmark span {
@@ -140,6 +140,21 @@ nav a:hover,
   gap: 10px;
   margin: 0 0 24px;
   color: var(--muted);
+}
+
+.availability {
+  width: max-content;
+  margin: -8px 0 26px 18px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 253, 247, 0.62);
+  color: var(--ink);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
 .status-dot {
@@ -269,9 +284,10 @@ nav a:hover,
 }
 
 .core {
-  width: 82px;
-  height: 82px;
+  width: 128px;
+  height: 128px;
   display: grid;
+  align-content: center;
   place-items: center;
   z-index: 3;
   border: 1px solid var(--acid);
@@ -279,8 +295,15 @@ nav a:hover,
   background: var(--ink);
   color: var(--acid);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.8rem;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-align: center;
   box-shadow: 0 0 40px rgba(200, 255, 46, 0.2);
+}
+
+.core span {
+  display: block;
 }
 
 .orbit {
@@ -685,9 +708,46 @@ nav a:hover,
   background: var(--white);
 }
 
-.education-grid article:first-child {
-  background: var(--blue);
+.education-grid .asu-card {
+  background: #8c1d40;
   color: var(--white);
+  border-color: #8c1d40;
+}
+
+.asu-card::after {
+  width: 100%;
+  height: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  content: "";
+  background: #ffc627;
+}
+
+.asu-sun {
+  width: 260px;
+  height: 260px;
+  position: absolute;
+  top: -122px;
+  right: -58px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -5deg,
+    rgba(255, 198, 39, 0.96) 0 7deg,
+    transparent 7deg 18deg
+  );
+  opacity: 0.92;
+}
+
+.asu-sun::after {
+  width: 96px;
+  height: 96px;
+  position: absolute;
+  top: 82px;
+  left: 82px;
+  content: "";
+  border-radius: 50%;
+  background: #ffc627;
 }
 
 .education-year {
@@ -729,8 +789,8 @@ nav a:hover,
   letter-spacing: -0.09em;
 }
 
-.education-grid article:first-child .education-mark {
-  color: rgba(255, 255, 255, 0.09);
+.education-grid .asu-card .education-mark {
+  color: rgba(255, 198, 39, 0.2);
 }
 
 .skills {
@@ -999,6 +1059,12 @@ footer a {
   .kicker {
     align-items: flex-start;
     line-height: 1.5;
+  }
+
+  .availability {
+    width: auto;
+    margin-left: 0;
+    line-height: 1.45;
   }
 
   .status-dot {

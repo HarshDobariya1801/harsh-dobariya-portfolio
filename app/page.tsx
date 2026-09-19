@@ -110,7 +110,7 @@ export default function Home() {
     <main id="top">
       <header className="site-header">
         <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">
-          HD<span>.</span>
+          Harsh Dobariya<span>.</span>
         </a>
         <nav aria-label="Primary navigation">
           <a href="#work">Work</a>
@@ -127,8 +127,9 @@ export default function Home() {
         <div className="hero-copy">
           <p className="kicker">
             <span className="status-dot" aria-hidden="true" />
-            Full-stack software engineer · Tempe, Arizona
+            Full-stack software engineer · Tempe, Arizona, USA
           </p>
+          <p className="availability">Open to relocate for the right opportunity</p>
           <h1 id="hero-title">
             I build software that stays <em>fast, clear,</em> and dependable.
           </h1>
@@ -155,7 +156,10 @@ export default function Home() {
           <div className="system-visual" aria-hidden="true">
             <div className="orbit orbit-one" />
             <div className="orbit orbit-two" />
-            <div className="core">HD</div>
+            <div className="core">
+              <span>Harsh</span>
+              <span>Dobariya</span>
+            </div>
             <span className="node node-a" />
             <span className="node node-b" />
             <span className="node node-c" />
@@ -303,12 +307,13 @@ export default function Home() {
           </div>
         </div>
         <div className="education-grid">
-          <article>
+          <article className="asu-card">
+            <div className="asu-sun" aria-hidden="true" />
             <div className="education-year">2024 — 2025</div>
             <div>
               <p className="degree">M.S. in Information Technology</p>
               <h3>Arizona State University</h3>
-              <p>Tempe, Arizona</p>
+              <p>Tempe, Arizona, USA</p>
             </div>
             <span className="education-mark">ASU</span>
           </article>
@@ -364,8 +369,9 @@ export default function Home() {
           <p className="section-label">06 / CONTACT</p>
           <h2 id="contact-title">Have a hard problem worth solving?</h2>
           <p className="contact-copy">
-            I’m open to software engineering opportunities and thoughtful
-            collaborations. Tell me what you’re building.
+            Based in Tempe, Arizona, USA, and open to relocating for the right
+            opportunity. I’m available for software engineering roles and
+            thoughtful collaborations—tell me what you’re building.
           </p>
           <a className="contact-email" href={`mailto:${profile.email}`}>
             {profile.email} <Arrow />

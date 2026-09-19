@@ -35,6 +35,8 @@ test("server-renders Harsh Dobariya's complete portfolio", async () => {
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
+  assert.match(html, /Tempe, Arizona, USA/);
+  assert.match(html, /Open to relocate for the right opportunity/);
   assert.match(html, /Ninja Technolabs/);
   assert.match(html, /Harsh_Dobariya_Resume\.pdf/);
   assert.match(html, /harsh-dobariya-962238183/);
@@ -44,9 +46,11 @@ test("server-renders Harsh Dobariya's complete portfolio", async () => {
 
 test("includes the downloadable resume and removes starter-only assets", async () => {
   const resume = await stat(new URL("public/Harsh_Dobariya_Resume.pdf", projectRoot));
+  const socialCard = await stat(new URL("public/og.png", projectRoot));
   const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
 
   assert.ok(resume.size > 50_000);
+  assert.ok(socialCard.size > 100_000);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
 });

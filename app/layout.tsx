@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://harsh-dobariya-portfolio.genial-box-4131.chatgpt.site"),
+  metadataBase: new URL("https://harshdobariya.com"),
   title: "Harsh Dobariya — Full-Stack Software Engineer",
   description:
     "Portfolio of Harsh Dobariya, a full-stack software engineer building reliable products, real-time applications, and distributed systems.",
@@ -20,6 +20,22 @@ export const metadata: Metadata = {
     description:
       "Reliable products, real-time applications, and distributed systems.",
     type: "website",
+    url: "https://harshdobariya.com",
+    images: [
+      {
+        url: "https://harshdobariya.com/og.png",
+        width: 1672,
+        height: 941,
+        alt: "Harsh Dobariya — Full-Stack Software Engineer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Harsh Dobariya — Full-Stack Software Engineer",
+    description:
+      "Reliable products, real-time applications, and distributed systems.",
+    images: ["https://harshdobariya.com/og.png"],
   },
 };
 
