@@ -2,66 +2,66 @@
 
 import { useEffect } from "react";
 
-const clamp = (value: number, min = 0, max = 1) =>
-  Math.min(Math.max(value, min), max);
-
 export default function ScrollMotion() {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const root = document.documentElement;
+    const items = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion) {
+      items.forEach((item) => item.classList.add("is-visible"));
       return;
     }
 
-    const root = document.documentElement;
-    const elements = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-scroll-motion]"),
+    root.classList.add("reveal-ready");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8%", threshold: 0.12 },
     );
-    let animationFrame = 0;
 
-    const update = () => {
-      const viewportHeight = window.innerHeight;
+    items.forEach((item) => observer.observe(item));
 
-      elements.forEach((element) => {
-        const rect = element.getBoundingClientRect();
-        const reveal = clamp(
-          (viewportHeight * 0.9 - rect.top) / (viewportHeight * 0.38),
-        );
-        const distanceFromCenter =
-          (rect.top + rect.height / 2 - viewportHeight / 2) / viewportHeight;
+    const heroVisual = document.querySelector<HTMLElement>("[data-hero-visual]");
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
 
-        element.style.setProperty("--reveal-opacity", reveal.toFixed(3));
-        element.style.setProperty(
-          "--reveal-y",
-          `${((1 - reveal) * 64).toFixed(2)}px`,
-        );
-        element.style.setProperty(
-          "--depth-y",
-          `${(distanceFromCenter * -34).toFixed(2)}px`,
-        );
-        element.style.setProperty(
-          "--depth-rotate",
-          `${(distanceFromCenter * -1.25).toFixed(3)}deg`,
-        );
-      });
-
-      animationFrame = 0;
+    const moveVisual = (event: PointerEvent) => {
+      if (!heroVisual) return;
+      const rect = heroVisual.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      heroVisual.style.setProperty("--visual-x", `${(x * 8).toFixed(2)}px`);
+      heroVisual.style.setProperty("--visual-y", `${(y * 8).toFixed(2)}px`);
+      heroVisual.style.setProperty("--visual-rotate-y", `${(x * 3).toFixed(2)}deg`);
+      heroVisual.style.setProperty("--visual-rotate-x", `${(y * -3).toFixed(2)}deg`);
     };
 
-    const scheduleUpdate = () => {
-      if (!animationFrame) {
-        animationFrame = window.requestAnimationFrame(update);
-      }
+    const resetVisual = () => {
+      heroVisual?.style.setProperty("--visual-x", "0px");
+      heroVisual?.style.setProperty("--visual-y", "0px");
+      heroVisual?.style.setProperty("--visual-rotate-y", "0deg");
+      heroVisual?.style.setProperty("--visual-rotate-x", "0deg");
     };
 
-    root.classList.add("motion-ready");
-    update();
-    window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", scheduleUpdate);
+    if (heroVisual && finePointer) {
+      heroVisual.addEventListener("pointermove", moveVisual);
+      heroVisual.addEventListener("pointerleave", resetVisual);
+    }
 
     return () => {
-      root.classList.remove("motion-ready");
-      window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
-      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      observer.disconnect();
+      root.classList.remove("reveal-ready");
+      if (heroVisual && finePointer) {
+        heroVisual.removeEventListener("pointermove", moveVisual);
+        heroVisual.removeEventListener("pointerleave", resetVisual);
+      }
     };
   }, []);
 

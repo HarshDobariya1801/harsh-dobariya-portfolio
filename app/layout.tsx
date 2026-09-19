@@ -21,21 +21,12 @@ export const metadata: Metadata = {
       "Reliable products, real-time applications, and distributed systems.",
     type: "website",
     url: "https://harshdobariya.com",
-    images: [
-      {
-        url: "https://harshdobariya.com/og.png",
-        width: 1672,
-        height: 941,
-        alt: "Harsh Dobariya, Full-Stack Software Engineer",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Harsh Dobariya | Full-Stack Software Engineer",
     description:
       "Reliable products, real-time applications, and distributed systems.",
-    images: ["https://harshdobariya.com/og.png"],
   },
 };
 
