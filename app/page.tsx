@@ -137,19 +137,28 @@ export default function Home() {
         </a>
       </header>
 
-      <section className="hero section-shell" aria-labelledby="hero-title">
-        <div className="hero-copy" data-reveal>
+      <section className="poster-hero section-shell" aria-labelledby="hero-title">
+        <h1 id="hero-title" className="sr-only">
+          Harsh Dobariya, Full-Stack Software Engineer
+        </h1>
+        <div className="poster-frame" data-reveal>
+          <img
+            src="/harsh-system-poster.png"
+            alt="Harsh Dobariya, Full-Stack Software Engineer, with a layered software architecture illustration"
+            width="1672"
+            height="941"
+            fetchPriority="high"
+          />
+        </div>
+        <div className="poster-intro" data-reveal>
           <p className="eyebrow">
             <span className="status-dot" aria-hidden="true" />
             Available for software engineering roles
           </p>
-          <h1 id="hero-title">
-            Harsh Dobariya builds <span>clear products</span> and resilient systems.
-          </h1>
-          <p className="hero-intro">
-            Full-stack software engineer in Tempe, Arizona, working across product
-            interfaces, real-time applications, APIs, and cloud infrastructure.
-            Open to relocate for the right opportunity.
+          <p>
+            Building clear products and resilient systems across interfaces,
+            real-time applications, APIs, and cloud infrastructure. Based in Tempe,
+            Arizona, USA. Open to relocate for the right opportunity.
           </p>
           <div className="hero-actions">
             <a className="button button-dark" href="#work">
@@ -160,33 +169,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-
-        <aside
-          className="hero-visual"
-          aria-label="Harsh Dobariya engineering profile"
-          data-reveal
-          data-hero-visual
-        >
-          <div className="visual-stage" aria-hidden="true">
-            <div className="visual-grid" />
-            <span className="visual-chip chip-a">PRODUCT</span>
-            <span className="visual-chip chip-b">SYSTEMS</span>
-            <span className="visual-chip chip-c">CLOUD</span>
-            <div className="monogram">HD</div>
-            <span className="visual-orbit orbit-a" />
-            <span className="visual-orbit orbit-b" />
-            <span className="visual-node node-a" />
-            <span className="visual-node node-b" />
-            <span className="visual-node node-c" />
-          </div>
-          <div className="visual-footer">
-            <span>Interface</span>
-            <i />
-            <span>API</span>
-            <i />
-            <span>Infrastructure</span>
-          </div>
-        </aside>
       </section>
 
       <div className="discipline-rail" aria-label="Technical focus areas">

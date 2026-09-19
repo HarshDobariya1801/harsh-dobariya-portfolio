@@ -41,6 +41,7 @@ test("server-renders Harsh Dobariya's complete portfolio", async () => {
   assert.match(html, /Harsh_Dobariya_Resume\.pdf/);
   assert.match(html, /harsh-dobariya-962238183/);
   assert.match(html, /HarshDobariya1801/);
+  assert.match(html, /harsh-system-poster\.png/);
   assert.doesNotMatch(
     html,
     /—|3K|35%|1K\+|1,000\+|monthly users supported|algorithmic problems solved|system-stats|2022 to 2023<\/span>/i,
