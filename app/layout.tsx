@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://harshdobariya.com"),
-  title: "Harsh Dobariya — Full-Stack Software Engineer",
+  title: "Harsh Dobariya | Full-Stack Software Engineer",
   description:
     "Portfolio of Harsh Dobariya, a full-stack software engineer building reliable products, real-time applications, and distributed systems.",
   keywords: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Harsh Dobariya" }],
   openGraph: {
-    title: "Harsh Dobariya — Full-Stack Software Engineer",
+    title: "Harsh Dobariya | Full-Stack Software Engineer",
     description:
       "Reliable products, real-time applications, and distributed systems.",
     type: "website",
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
         url: "https://harshdobariya.com/og.png",
         width: 1672,
         height: 941,
-        alt: "Harsh Dobariya — Full-Stack Software Engineer",
+        alt: "Harsh Dobariya, Full-Stack Software Engineer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Harsh Dobariya — Full-Stack Software Engineer",
+    title: "Harsh Dobariya | Full-Stack Software Engineer",
     description:
       "Reliable products, real-time applications, and distributed systems.",
     images: ["https://harshdobariya.com/og.png"],

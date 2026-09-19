@@ -1,3 +1,5 @@
+import ScrollMotion from "./ScrollMotion";
+
 const profile = {
   email: "dobariyaharsh10@gmail.com",
   phone: "+16232977900",
@@ -10,10 +12,10 @@ const experience = [
   {
     company: "Ninja Technolabs",
     role: "Software Engineer, Full Stack",
-    period: "Jan 2023 — Nov 2023",
+    period: "Jan 2023 to Nov 2023",
     location: "Ahmedabad, India",
     summary:
-      "Modernized a legacy billing platform into a reliable React, Node.js, and MySQL product serving 3,000 monthly users.",
+      "Modernized a legacy billing platform into a reliable React, Node.js, and MySQL product.",
     impact: [
       "Reduced invoice propagation errors by 15% while migrating 2,000+ invoices each month.",
       "Built a reusable component kit and API layer that removed 28% of duplicated UI code.",
@@ -23,7 +25,7 @@ const experience = [
   {
     company: "BrainyBeam Technologies",
     role: "Software Engineer Intern",
-    period: "Aug 2022 — Nov 2022",
+    period: "Aug 2022 to Nov 2022",
     location: "Ahmedabad, India",
     summary:
       "Improved data discovery and delivery systems for analysts and engineers across the organization.",
@@ -36,7 +38,7 @@ const experience = [
   {
     company: "Freelance",
     role: "Web Developer",
-    period: "Jan 2022 — Jul 2022",
+    period: "Jan 2022 to Jul 2022",
     location: "Ahmedabad, India",
     summary:
       "Delivered a production React and Node.js application with a focus on performance and secure API design.",
@@ -108,6 +110,7 @@ function Arrow() {
 export default function Home() {
   return (
     <main id="top">
+      <ScrollMotion />
       <header className="site-header">
         <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">
           Harsh Dobariya<span>.</span>
@@ -124,7 +127,7 @@ export default function Home() {
       </header>
 
       <section className="hero section-shell" aria-labelledby="hero-title">
-        <div className="hero-copy">
+        <div className="hero-copy" data-scroll-motion="reveal">
           <p className="kicker">
             <span className="status-dot" aria-hidden="true" />
             Full-stack software engineer · Tempe, Arizona, USA
@@ -135,7 +138,7 @@ export default function Home() {
           </h1>
           <p className="hero-intro">
             I’m Harsh Dobariya, an engineer who turns complex product and systems
-            problems into resilient experiences—from real-time collaboration to
+            problems into resilient experiences, from real-time collaboration to
             distributed infrastructure.
           </p>
           <div className="hero-actions">
@@ -148,7 +151,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="system-card" aria-label="Engineering impact summary">
+        <div
+          className="system-card"
+          aria-label="Engineering impact summary"
+          data-scroll-motion="depth"
+        >
           <div className="system-card-head">
             <span>ENGINEERING PROFILE</span>
             <span className="system-online">ONLINE</span>
@@ -165,10 +172,6 @@ export default function Home() {
             <span className="node node-c" />
           </div>
           <div className="system-stats">
-            <div>
-              <strong>3K</strong>
-              <span>monthly users supported</span>
-            </div>
             <div>
               <strong>35%</strong>
               <span>faster release cycle</span>
@@ -193,8 +196,8 @@ export default function Home() {
       </div>
 
       <section className="about section-shell" aria-labelledby="about-title">
-        <div className="section-label">01 / ABOUT</div>
-        <div className="about-content">
+        <div className="section-label" data-scroll-motion="reveal">01 / ABOUT</div>
+        <div className="about-content" data-scroll-motion="reveal">
           <h2 id="about-title">
             Engineering across the whole stack, with equal attention to the user
             and the system underneath.
@@ -216,7 +219,7 @@ export default function Home() {
       </section>
 
       <section className="work section-shell" id="work" aria-labelledby="work-title">
-        <div className="section-heading">
+        <div className="section-heading" data-scroll-motion="reveal">
           <div>
             <div className="section-label">02 / SELECTED WORK</div>
             <h2 id="work-title">Built for real constraints.</h2>
@@ -227,8 +230,12 @@ export default function Home() {
         </div>
 
         <div className="project-list">
-          {projects.map((project) => (
-            <article className={`project-card ${project.accent}`} key={project.name}>
+          {projects.map((project, projectIndex) => (
+            <article
+              className={`project-card project-layer-${projectIndex + 1} ${project.accent}`}
+              key={project.name}
+              data-scroll-motion="depth"
+            >
               <div className="project-number">{project.index}</div>
               <div className="project-content">
                 <p className="project-eyebrow">{project.eyebrow}</p>
@@ -265,17 +272,20 @@ export default function Home() {
         id="experience"
         aria-labelledby="experience-title"
       >
-        <div className="section-heading">
+        <div className="section-heading" data-scroll-motion="reveal">
           <div>
             <div className="section-label">03 / EXPERIENCE</div>
             <h2 id="experience-title">Impact, not just output.</h2>
           </div>
-          <span className="heading-note">2022 — 2023</span>
         </div>
 
         <div className="timeline">
           {experience.map((item) => (
-            <article className="timeline-row" key={item.company}>
+            <article
+              className="timeline-row"
+              key={item.company}
+              data-scroll-motion="reveal"
+            >
               <div className="timeline-meta">
                 <span>{item.period}</span>
                 <span>{item.location}</span>
@@ -300,16 +310,16 @@ export default function Home() {
         id="education"
         aria-labelledby="education-title"
       >
-        <div className="section-heading">
+        <div className="section-heading" data-scroll-motion="reveal">
           <div>
             <div className="section-label">04 / EDUCATION</div>
             <h2 id="education-title">A foundation in information technology.</h2>
           </div>
         </div>
         <div className="education-grid">
-          <article className="asu-card">
+          <article className="asu-card" data-scroll-motion="reveal">
             <div className="asu-sun" aria-hidden="true" />
-            <div className="education-year">2024 — 2025</div>
+            <div className="education-year">2024 to 2025</div>
             <div>
               <p className="degree">M.S. in Information Technology</p>
               <h3>Arizona State University</h3>
@@ -317,8 +327,8 @@ export default function Home() {
             </div>
             <span className="education-mark">ASU</span>
           </article>
-          <article>
-            <div className="education-year">2019 — 2023</div>
+          <article data-scroll-motion="reveal">
+            <div className="education-year">2019 to 2023</div>
             <div>
               <p className="degree">B.E. in Information Technology</p>
               <h3>Gujarat Technological University</h3>
@@ -330,17 +340,17 @@ export default function Home() {
       </section>
 
       <section className="skills section-shell" aria-labelledby="skills-title">
-        <div className="skills-intro">
+        <div className="skills-intro" data-scroll-motion="reveal">
           <div className="section-label">05 / TOOLKIT</div>
           <h2 id="skills-title">Tools change. Strong engineering habits travel.</h2>
           <p>
-            A practical toolkit for shipping complete products—from accessible
+            A practical toolkit for shipping complete products, from accessible
             interfaces to observable, scalable backends.
           </p>
         </div>
         <div className="skill-list">
           {skillGroups.map((group) => (
-            <div className="skill-row" key={group.title}>
+            <div className="skill-row" key={group.title} data-scroll-motion="reveal">
               <span className="skill-number">{group.number}</span>
               <h3>{group.title}</h3>
               <p>{group.skills}</p>
@@ -349,7 +359,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="competitive section-shell" aria-label="Competitive programming">
+      <section
+        className="competitive section-shell"
+        aria-label="Competitive programming"
+        data-scroll-motion="reveal"
+      >
         <div className="competitive-score">1,000+</div>
         <div>
           <p className="section-label">COMPETITIVE PROGRAMMING</p>
@@ -367,11 +381,13 @@ export default function Home() {
             <span>LET&apos;S BUILD · LET&apos;S BUILD ·</span>
           </div>
           <p className="section-label">06 / CONTACT</p>
-          <h2 id="contact-title">Have a hard problem worth solving?</h2>
+          <h2 id="contact-title" data-scroll-motion="reveal">
+            Have a hard problem worth solving?
+          </h2>
           <p className="contact-copy">
             Based in Tempe, Arizona, USA, and open to relocating for the right
             opportunity. I’m available for software engineering roles and
-            thoughtful collaborations—tell me what you’re building.
+            thoughtful collaborations. Tell me what you’re building.
           </p>
           <a className="contact-email" href={`mailto:${profile.email}`}>
             {profile.email} <Arrow />

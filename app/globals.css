@@ -125,7 +125,6 @@ nav a:hover,
 .section-label,
 .project-eyebrow,
 .system-card-head,
-.heading-note,
 .education-year {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 0.72rem;
@@ -341,7 +340,7 @@ nav a:hover,
 
 .system-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
@@ -459,7 +458,8 @@ nav a:hover,
 
 .project-list {
   display: grid;
-  gap: 22px;
+  gap: 80px;
+  padding-bottom: 80px;
 }
 
 .project-card {
@@ -472,11 +472,22 @@ nav a:hover,
   padding: 44px;
   border: 1px solid var(--ink);
   background: var(--white);
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  transform-origin: 50% 20%;
+  transition: box-shadow 220ms ease;
 }
 
 .project-card:hover {
-  transform: translate(-4px, -4px);
+  z-index: 4;
+}
+
+.project-layer-1 {
+  top: 104px;
+  z-index: 1;
+}
+
+.project-layer-2 {
+  top: 126px;
+  z-index: 2;
 }
 
 .project-card.blue:hover { box-shadow: 10px 10px 0 var(--blue); }
@@ -611,11 +622,6 @@ nav a:hover,
 
 .experience {
   border-top: 1px solid var(--line);
-}
-
-.heading-note {
-  padding-bottom: 10px;
-  color: var(--muted);
 }
 
 .timeline {
@@ -974,6 +980,51 @@ footer a {
   color: var(--ink);
 }
 
+/* Scroll depth is applied only after the motion controller is ready, so the
+   content remains fully visible without JavaScript. */
+.motion-ready [data-scroll-motion="reveal"] {
+  opacity: var(--reveal-opacity, 1);
+  transform: translate3d(0, var(--reveal-y, 0), 0);
+  transition: opacity 90ms linear, transform 90ms linear;
+  will-change: opacity, transform;
+}
+
+.motion-ready [data-scroll-motion="depth"] {
+  transform: perspective(1200px) translate3d(0, var(--depth-y, 0), 0)
+    rotateX(var(--depth-rotate, 0deg));
+  will-change: transform;
+}
+
+.project-card {
+  position: sticky;
+}
+
+.system-card .core,
+.system-card .node,
+.project-diagram .diagram-node,
+.project-diagram .diagram-label {
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.system-card:hover .core {
+  transform: scale(1.06);
+}
+
+.system-card:hover .node-a,
+.system-card:hover .point-a {
+  transform: translate(-8px, -10px);
+}
+
+.system-card:hover .node-b,
+.system-card:hover .point-b {
+  transform: translate(10px, -6px);
+}
+
+.system-card:hover .node-c,
+.system-card:hover .point-c {
+  transform: translate(-6px, 10px);
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -1004,6 +1055,9 @@ footer a {
   .project-card {
     grid-template-columns: 62px 1fr;
   }
+
+  .project-layer-1 { top: 92px; }
+  .project-layer-2 { top: 110px; }
 
   .project-diagram {
     display: none;
@@ -1127,6 +1181,8 @@ footer a {
 
   .project-card {
     min-height: auto;
+    position: relative;
+    top: auto;
     grid-template-columns: 1fr;
     gap: 22px;
     padding: 28px 22px;
@@ -1202,5 +1258,10 @@ footer a {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .motion-ready [data-scroll-motion] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

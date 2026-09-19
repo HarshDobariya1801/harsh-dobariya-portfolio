@@ -31,7 +31,7 @@ test("server-renders Harsh Dobariya's complete portfolio", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Harsh Dobariya — Full-Stack Software Engineer<\/title>/i);
+  assert.match(html, /<title>Harsh Dobariya \| Full-Stack Software Engineer<\/title>/i);
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
@@ -41,6 +41,7 @@ test("server-renders Harsh Dobariya's complete portfolio", async () => {
   assert.match(html, /Harsh_Dobariya_Resume\.pdf/);
   assert.match(html, /harsh-dobariya-962238183/);
   assert.match(html, /HarshDobariya1801/);
+  assert.doesNotMatch(html, /—|3K|monthly users supported|2022 to 2023<\/span>/i);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
 
