@@ -44,8 +44,6 @@ Structured profile, project, experience, education, and skill content lives in `
 
 ## Content still needed
 
-- Project-specific GitHub URLs for both selected projects
-- A live demo URL for the real-time workspace, if one is public
 - A 1600 × 1000 screenshot or optimized recording of the real-time workspace
 - Verified benchmark data and test conditions for both projects
 - Concrete “what I would do next” notes for both case studies

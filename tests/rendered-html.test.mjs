@@ -49,12 +49,12 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /Have a useful problem/i);
   assert.match(html, /Backend systems\. Full-stack products\./i);
   assert.match(html, /Toggle color theme/i);
-  assert.match(html, /URL needed/i);
   assert.match(html, /Screenshot needed/i);
   assert.match(html, /aria-label="Case study: Distributed Key-Value Store"/);
   assert.match(html, /aria-label="Case study: Real-Time Collaborative Workspace"/);
   assert.match(html, /1,000\+ algorithm and data structure problems/);
   assert.match(html, /35%/);
+  assert.doesNotMatch(html, /URL needed|Live demo/i);
   assert.doesNotMatch(
     html,
     /—|3K|monthly users supported|system-stats|harsh-system-poster\.png/i,

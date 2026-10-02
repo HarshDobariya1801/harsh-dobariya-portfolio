@@ -44,16 +44,6 @@ function ProjectLinks({ project }: { project: Project }) {
   return (
     <div className="project-links">
       <a href={`/work/${project.slug}`} aria-label={`Case study: ${project.title}`}>Case study <Arrow /></a>
-      {project.repositoryUrl ? (
-        <a href={project.repositoryUrl} target="_blank" rel="noreferrer">GitHub <Arrow /></a>
-      ) : (
-        <span className="link-placeholder"><b>GitHub</b><small>URL needed</small></span>
-      )}
-      {project.demoUrl ? (
-        <a href={project.demoUrl} target="_blank" rel="noreferrer">Live demo <Arrow /></a>
-      ) : project.diagram === "realtime" ? (
-        <span className="link-placeholder"><b>Live demo</b><small>URL needed</small></span>
-      ) : null}
     </div>
   );
 }

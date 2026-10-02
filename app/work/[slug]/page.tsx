@@ -80,18 +80,6 @@ export default async function ProjectPage({ params }: PageProps) {
             <div><dt>Stack</dt><dd>{project.stack.join(" · ")}</dd></div>
             <div><dt>Focus</dt><dd>{project.engineering.slice(0, 3).join(" · ")}</dd></div>
           </dl>
-          <div className="case-links">
-            {project.repositoryUrl ? (
-              <a href={project.repositoryUrl} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-            ) : (
-              <span className="link-placeholder"><b>GitHub</b><small>URL needed</small></span>
-            )}
-            {project.demoUrl ? (
-              <a href={project.demoUrl} target="_blank" rel="noreferrer">Live demo <span aria-hidden="true">↗</span></a>
-            ) : project.diagram === "realtime" && (
-              <span className="link-placeholder"><b>Live demo</b><small>URL needed</small></span>
-            )}
-          </div>
         </header>
 
         <section className="case-architecture section-shell" aria-labelledby="architecture-title" data-reveal>

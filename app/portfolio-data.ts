@@ -27,8 +27,6 @@ export const projects = [
       "p95 and p99 latency benchmarking",
     ],
     diagram: "kv" as const,
-    repositoryUrl: null as string | null,
-    demoUrl: null as string | null,
     visualPlaceholder: null,
     resultsPlaceholder:
       "Add verified throughput, p50/p95/p99 latency, dataset size, concurrency level, hardware, and test methodology.",
@@ -79,8 +77,6 @@ export const projects = [
       "Role-based access",
     ],
     diagram: "realtime" as const,
-    repositoryUrl: null as string | null,
-    demoUrl: null as string | null,
     visualPlaceholder: "Add a 1600 × 1000 product screenshot or a short optimized demo recording.",
     resultsPlaceholder:
       "Add verified concurrent-user counts, event latency, reconnect behavior, load-test conditions, and production or demo environment details.",

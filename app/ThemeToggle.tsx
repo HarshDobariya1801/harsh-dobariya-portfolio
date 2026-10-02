@@ -5,8 +5,7 @@ type Theme = "dark" | "light";
 export default function ThemeToggle() {
   const toggleTheme = () => {
     const explicit = document.documentElement.dataset.theme as Theme | undefined;
-    const preferred = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-    const next = (explicit ?? preferred) === "dark" ? "light" : "dark";
+    const next = (explicit ?? "light") === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     window.localStorage.setItem("hd-theme", next);
   };
