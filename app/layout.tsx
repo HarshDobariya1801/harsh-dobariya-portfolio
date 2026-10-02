@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://harshdobariya.com"),
   title: "Harsh Dobariya | Software Engineer",
   description:
-    "Harsh Dobariya is a full-stack software engineer building distributed systems, real-time applications, reliable APIs, and thoughtful product interfaces.",
+    "Software engineer building full-stack applications, distributed systems, real-time applications, APIs, and cloud systems.",
   keywords: [
     "Harsh Dobariya",
     "Software Engineer",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Harsh Dobariya | Software Engineer",
     description:
-      "Distributed systems, full-stack products, and real-time software built with care.",
+      "Full-stack applications, distributed systems, real-time software, APIs, and cloud systems.",
     type: "website",
     url: "https://harshdobariya.com",
     siteName: "Harsh Dobariya",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Harsh Dobariya | Software Engineer",
     description:
-      "Distributed systems, full-stack products, and real-time software built with care.",
+      "Full-stack applications, distributed systems, real-time software, APIs, and cloud systems.",
     images: ["https://harshdobariya.com/og.png"],
   },
 };
@@ -78,7 +78,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('hd-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body>
         {children}
         <script

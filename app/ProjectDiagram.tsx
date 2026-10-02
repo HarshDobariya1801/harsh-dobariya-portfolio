@@ -1,82 +1,61 @@
 type DiagramKind = "kv" | "realtime";
 
 const labels = {
-  kv: "Distributed key-value store architecture from clients through the TCP server, thread pool, key-value engine, TTL and LRU policies, to append-only persistence.",
-  realtime: "Collaborative workspace interface and architecture connecting clients through WebSockets and Node.js to Redis Pub/Sub and PostgreSQL.",
+  kv: "Distributed key-value store architecture from clients through TCP, a thread pool, the storage engine, lifecycle policies, and append-only persistence.",
+  realtime: "Real-time workspace architecture connecting clients through WebSockets and Node.js to Redis Pub/Sub and PostgreSQL.",
 } as const;
+
+function Node({ children, accent = false }: { children: React.ReactNode; accent?: boolean }) {
+  return <span className={`architecture-node${accent ? " is-accent" : ""}`}>{children}</span>;
+}
 
 function StoreArchitecture() {
   return (
-    <>
-      <div className="visual-caption"><span>Architecture / SYS.01</span><span>Request path</span></div>
-      <div className="store-flow" aria-hidden="true">
-        <div className="flow-node"><i />Clients</div>
-        <span className="flow-link" />
-        <div className="flow-node">TCP Server</div>
-        <span className="flow-link" />
-        <div className="flow-node">Thread Pool</div>
-        <span className="flow-link" />
-        <div className="flow-node flow-node-accent">Key-Value Engine</div>
-        <span className="flow-link" />
-        <div className="flow-branch">
-          <div className="flow-node">TTL</div>
-          <div className="flow-node">LRU</div>
-        </div>
-        <span className="flow-link" />
-        <div className="flow-node">AOF Persistence</div>
-        <span className="flow-event" />
+    <div className="architecture architecture-kv" aria-hidden="true">
+      <div className="architecture-track">
+        <Node>Clients</Node><i />
+        <Node>TCP Server</Node><i />
+        <Node>Thread Pool</Node><i />
+        <Node accent>KV Engine</Node><i />
+        <span className="architecture-branch"><Node>TTL</Node><Node>LRU</Node></span><i />
+        <Node>AOF</Node>
       </div>
-      <div className="visual-foot" aria-hidden="true">
-        <span>Concurrent</span><span>Bounded memory</span><span>Recoverable</span>
-      </div>
-    </>
+      <span className="architecture-packet" />
+    </div>
   );
 }
 
-function WorkspaceVisual() {
+function WorkspaceArchitecture() {
   return (
-    <>
-      <div className="visual-caption"><span>Workspace / RT.02</span><span>3 people online</span></div>
-      <div className="workspace-ui" aria-hidden="true">
-        <aside className="workspace-sidebar">
-          <b>Project Atlas</b>
-          <span className="sidebar-active">Overview</span>
-          <span>Architecture</span>
-          <span>Decisions</span>
-          <div className="presence-stack"><i /><i /><i /><small>+3</small></div>
-        </aside>
-        <div className="workspace-document">
-          <div className="workspace-toolbar"><span>System notes</span><span>Saved</span></div>
-          <h4>Real-time collaboration</h4>
-          <p className="mock-line line-long" />
-          <p className="mock-line line-medium" />
-          <div className="mock-callout"><i /> Redis keeps live events in sync across instances.</div>
-          <p className="mock-line line-short" />
-          <p className="mock-line line-medium" />
-          <span className="mock-cursor cursor-one">H</span>
-          <span className="mock-cursor cursor-two">A</span>
-        </div>
+    <div className="workspace-visual" aria-hidden="true">
+      <div className="screenshot-placeholder">
+        <span>Product visual</span>
+        <strong>Screenshot needed</strong>
+        <small>Recommended: 1600 × 1000</small>
       </div>
-      <div className="realtime-path" aria-hidden="true">
-        <div className="client-group"><span>A</span><span>B</span><span>C</span></div>
-        <i />
-        <span>WebSocket</span>
-        <i />
-        <span>Node.js</span>
-        <i />
-        <span>Redis</span>
-        <i />
-        <span>PostgreSQL</span>
-        <b />
+      <div className="architecture architecture-realtime">
+        <span className="client-nodes"><b>A</b><b>B</b><b>C</b></span><i />
+        <Node>WebSocket</Node><i />
+        <Node>Node.js</Node><i />
+        <Node accent>Redis Pub/Sub</Node><i />
+        <Node>PostgreSQL</Node>
+        <span className="architecture-event" />
       </div>
-    </>
+    </div>
   );
 }
 
 export default function ProjectDiagram({ kind }: { kind: DiagramKind }) {
   return (
-    <div className={`project-diagram ${kind}`} role="img" aria-label={labels[kind]}>
-      {kind === "kv" ? <StoreArchitecture /> : <WorkspaceVisual />}
+    <div className={`project-visual project-visual-${kind}`} role="img" aria-label={labels[kind]}>
+      <div className="visual-header" aria-hidden="true">
+        <span>{kind === "kv" ? "System architecture" : "Product + event path"}</span>
+        <span>{kind === "kv" ? "SYS / 01" : "RT / 02"}</span>
+      </div>
+      {kind === "kv" ? <StoreArchitecture /> : <WorkspaceArchitecture />}
+      <div className="visual-footer" aria-hidden="true">
+        <span>Interface</span><i /><span>System</span><i /><span>Data</span>
+      </div>
     </div>
   );
 }

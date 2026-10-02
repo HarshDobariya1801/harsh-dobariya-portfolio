@@ -16,6 +16,8 @@ export const projects = [
     title: "Distributed Key-Value Store",
     summary:
       "A concurrent in-memory database built around TCP communication, bounded worker execution, explicit data lifecycles, and recoverable persistence.",
+    outcome:
+      "An in-memory C++ database designed for concurrent clients, bounded memory, persistence, and recovery.",
     stack: ["C++", "TCP/IP", "Multithreading", "CMake"],
     engineering: [
       "Thread pool for concurrent clients",
@@ -25,6 +27,13 @@ export const projects = [
       "p95 and p99 latency benchmarking",
     ],
     diagram: "kv" as const,
+    repositoryUrl: null as string | null,
+    demoUrl: null as string | null,
+    visualPlaceholder: null,
+    resultsPlaceholder:
+      "Add verified throughput, p50/p95/p99 latency, dataset size, concurrency level, hardware, and test methodology.",
+    nextStepsPlaceholder:
+      "Add the concrete improvements you would prioritize next, such as replication, sharding, compaction, or stronger consistency guarantees.",
     caseStudy: {
       overview:
         "This project treats a key-value store as a complete systems problem: accept concurrent network traffic, keep memory bounded, expire stale data, persist mutations, and recover cleanly after a restart.",
@@ -59,6 +68,8 @@ export const projects = [
     title: "Real-Time Collaborative Workspace",
     summary:
       "A multi-user workspace that keeps presence, edits, permissions, autosave, and version history synchronized across horizontally scaled application instances.",
+    outcome:
+      "A real-time product that keeps presence, edits, permissions, autosave, and history synchronized across application instances.",
     stack: ["TypeScript", "React", "Node.js", "WebSockets", "Redis", "PostgreSQL"],
     engineering: [
       "WebSocket synchronization",
@@ -68,6 +79,13 @@ export const projects = [
       "Role-based access",
     ],
     diagram: "realtime" as const,
+    repositoryUrl: null as string | null,
+    demoUrl: null as string | null,
+    visualPlaceholder: "Add a 1600 × 1000 product screenshot or a short optimized demo recording.",
+    resultsPlaceholder:
+      "Add verified concurrent-user counts, event latency, reconnect behavior, load-test conditions, and production or demo environment details.",
+    nextStepsPlaceholder:
+      "Add the concrete product or systems improvements you would build next, based on what you learned from this version.",
     caseStudy: {
       overview:
         "The workspace combines a responsive React interface with a real-time delivery path so multiple people can work in the same product without waiting on full-page refreshes.",
@@ -144,9 +162,50 @@ export const experience = [
 ] as const;
 
 export const toolGroups = [
-  { label: "Languages", value: "C++ · Java · Python · TypeScript · JavaScript · SQL" },
-  { label: "Frontend", value: "React · HTML · CSS" },
-  { label: "Backend", value: "Node.js · Express · REST APIs · WebSockets" },
-  { label: "Data", value: "PostgreSQL · MySQL · Redis · MongoDB" },
-  { label: "Cloud / DevOps", value: "AWS · Docker · Kubernetes · GitHub Actions" },
+  {
+    label: "Languages",
+    skills: [
+      { name: "C++", strong: true },
+      { name: "TypeScript", strong: true },
+      { name: "Java", strong: false },
+      { name: "Python", strong: false },
+      { name: "JavaScript", strong: false },
+      { name: "SQL", strong: true },
+    ],
+  },
+  {
+    label: "Frontend",
+    skills: [
+      { name: "React", strong: true },
+      { name: "HTML", strong: false },
+      { name: "CSS", strong: false },
+    ],
+  },
+  {
+    label: "Backend",
+    skills: [
+      { name: "Node.js", strong: true },
+      { name: "Express", strong: false },
+      { name: "REST APIs", strong: true },
+      { name: "WebSockets", strong: true },
+    ],
+  },
+  {
+    label: "Data",
+    skills: [
+      { name: "PostgreSQL", strong: true },
+      { name: "MySQL", strong: false },
+      { name: "Redis", strong: true },
+      { name: "MongoDB", strong: false },
+    ],
+  },
+  {
+    label: "Cloud / DevOps",
+    skills: [
+      { name: "AWS", strong: true },
+      { name: "Docker", strong: true },
+      { name: "Kubernetes", strong: false },
+      { name: "GitHub Actions", strong: false },
+    ],
+  },
 ] as const;

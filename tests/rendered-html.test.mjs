@@ -46,7 +46,11 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /HarshDobariya1801/);
   assert.match(html, /og\.png/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, /something useful/i);
+  assert.match(html, /Have a useful problem/i);
+  assert.match(html, /Backend systems\. Full-stack products\./i);
+  assert.match(html, /Toggle color theme/i);
+  assert.match(html, /URL needed/i);
+  assert.match(html, /Screenshot needed/i);
   assert.match(html, /1,000\+ algorithm and data structure problems/);
   assert.match(html, /35%/);
   assert.doesNotMatch(
@@ -63,8 +67,10 @@ test("renders both project case studies", async () => {
   assert.match(firstHtml, /<title>Distributed Key-Value Store \| Harsh Dobariya<\/title>/);
   assert.match(firstHtml, /property="og:title" content="Distributed Key-Value Store \| Harsh Dobariya"/);
   assert.doesNotMatch(firstHtml, /property="og:image"/);
-  assert.match(firstHtml, /Engineering decisions/);
+  assert.match(firstHtml, /Key decisions and tradeoffs/);
   assert.match(firstHtml, /p95 and p99 latency/);
+  assert.match(firstHtml, /What I would do next/);
+  assert.match(firstHtml, /Content needed/);
 
   const second = await render("/work/realtime-collaborative-workspace");
   assert.equal(second.status, 200);
@@ -73,18 +79,24 @@ test("renders both project case studies", async () => {
   assert.match(secondHtml, /property="og:title" content="Real-Time Collaborative Workspace \| Harsh Dobariya"/);
   assert.doesNotMatch(secondHtml, /property="og:image"/);
   assert.match(secondHtml, /Redis Pub\/Sub/);
-  assert.match(secondHtml, /What I learned/);
+  assert.match(secondHtml, /Screenshot needed/);
+  assert.match(secondHtml, /Results and benchmarks/);
+  assert.match(secondHtml, /Content needed/);
 });
 
 test("includes portfolio assets and removes starter-only files", async () => {
   const resume = await stat(new URL("public/Harsh_Dobariya_Resume.pdf", projectRoot));
   const ogImage = await readFile(new URL("public/og.png", projectRoot));
   const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
+  const readme = await readFile(new URL("README.md", projectRoot), "utf8");
 
   assert.ok(resume.size > 50_000);
   assert.equal(ogImage.readUInt32BE(16), 1200);
   assert.equal(ogImage.readUInt32BE(20), 630);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
+  assert.match(readme, /Harsh Dobariya Portfolio/);
+  assert.match(readme, /Content still needed/);
+  assert.doesNotMatch(readme, /vinext-starter/);
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
   await assert.rejects(access(new URL("public/file.svg", projectRoot)));
   await assert.rejects(access(new URL("public/globe.svg", projectRoot)));
