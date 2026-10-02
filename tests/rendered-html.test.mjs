@@ -51,6 +51,8 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /Toggle color theme/i);
   assert.match(html, /URL needed/i);
   assert.match(html, /Screenshot needed/i);
+  assert.match(html, /aria-label="Case study: Distributed Key-Value Store"/);
+  assert.match(html, /aria-label="Case study: Real-Time Collaborative Workspace"/);
   assert.match(html, /1,000\+ algorithm and data structure problems/);
   assert.match(html, /35%/);
   assert.doesNotMatch(

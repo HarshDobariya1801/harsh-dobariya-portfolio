@@ -43,7 +43,7 @@ function SectionHeading({
 function ProjectLinks({ project }: { project: Project }) {
   return (
     <div className="project-links">
-      <a href={`/work/${project.slug}`}>Case study <Arrow /></a>
+      <a href={`/work/${project.slug}`} aria-label={`Case study: ${project.title}`}>Case study <Arrow /></a>
       {project.repositoryUrl ? (
         <a href={project.repositoryUrl} target="_blank" rel="noreferrer">GitHub <Arrow /></a>
       ) : (

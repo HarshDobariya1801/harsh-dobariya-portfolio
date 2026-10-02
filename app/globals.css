@@ -11,6 +11,7 @@
   --accent: #8190ff;
   --accent-strong: #aab3ff;
   --accent-soft: rgba(129, 144, 255, 0.13);
+  --accent-contrast: #08090c;
   --header: rgba(11, 12, 15, 0.82);
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
   --sans: Inter, Geist, "Helvetica Neue", Helvetica, Arial, ui-sans-serif, sans-serif;
@@ -44,6 +45,7 @@
     --accent: #485be8;
     --accent-strong: #3346d4;
     --accent-soft: rgba(72, 91, 232, .1);
+    --accent-contrast: #fff;
     --header: rgba(246, 246, 242, .86);
     --shadow: 0 24px 70px rgba(31, 36, 61, .12);
   }
@@ -62,6 +64,7 @@
   --accent: #485be8;
   --accent-strong: #3346d4;
   --accent-soft: rgba(72, 91, 232, .1);
+  --accent-contrast: #fff;
   --header: rgba(246, 246, 242, .86);
   --shadow: 0 24px 70px rgba(31, 36, 61, .12);
 }
@@ -330,7 +333,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   font-weight: 700;
 }
 .button { padding: 0 1.15rem; border-radius: 999px; }
-.button-primary { background: var(--accent); color: #08090c; transition: background 180ms ease, transform 180ms var(--ease); }
+.button-primary { background: var(--accent); color: var(--accent-contrast); transition: background 180ms ease, transform 180ms var(--ease); }
 .button-primary:hover { background: var(--accent-strong); transform: translateY(-2px); }
 .text-link, .project-links a, .contact-links a, .case-links a { position: relative; }
 .text-link::after, .project-links a::after, .contact-links a::after, .case-links a::after {
