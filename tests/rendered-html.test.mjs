@@ -25,14 +25,16 @@ async function render(pathname = "/") {
   );
 }
 
-test("server-renders Harsh Dobariya's editorial portfolio", async () => {
+test("server-renders Harsh Dobariya's portfolio", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /<title>Harsh Dobariya \| Software Engineer<\/title>/i);
-  assert.match(html, /Software that holds up, from interface to infrastructure/);
+  assert.match(html, /Harsh/);
+  assert.match(html, /Dobariya/);
+  assert.match(html, /Selected work/i);
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
@@ -44,10 +46,12 @@ test("server-renders Harsh Dobariya's editorial portfolio", async () => {
   assert.match(html, /HarshDobariya1801/);
   assert.match(html, /og\.png/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, /Read case study/);
+  assert.match(html, /something useful/i);
+  assert.match(html, /1,000\+ algorithm and data structure problems/);
+  assert.match(html, /35%/);
   assert.doesNotMatch(
     html,
-    /—|3K|35%|1K\+|1,000\+|monthly users supported|algorithmic problems solved|system-stats|harsh-system-poster\.png/i,
+    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });

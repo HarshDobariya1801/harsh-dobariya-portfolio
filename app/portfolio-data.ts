@@ -106,13 +106,14 @@ export const experience = [
     role: "Software Engineer, Full Stack",
     period: "Jan 2023 – Nov 2023",
     location: "Ahmedabad, India",
+    stack: "React · Node.js · MySQL",
     summary:
-      "Modernized a legacy billing platform across the React interface, Node.js services, and MySQL data layer.",
+      "Modernized a billing system used by around 3,000 users.",
     impact: [
       { value: "15%", label: "fewer invoice propagation errors" },
       { value: "2,000+", label: "invoices migrated each month" },
       { value: "28%", label: "less duplicated interface code" },
-      { value: "70%", label: "critical-flow test coverage" },
+      { value: "70%+", label: "test coverage on core flows" },
     ],
   },
   {
@@ -121,9 +122,13 @@ export const experience = [
     role: "Software Engineer Intern",
     period: "Aug 2022 – Nov 2022",
     location: "Ahmedabad, India",
+    stack: "Python · Search · Data tooling",
     summary:
-      "Built data discovery and visualization tools, normalized fragmented customer records, and improved the delivery pipeline with caching and parallel execution.",
-    impact: [{ value: "20+", label: "data analysts supported" }],
+      "Helped build internal search and data tools for analysts.",
+    impact: [
+      { value: "35%", label: "faster PR-to-production process" },
+      { value: "20+", label: "analysts supported" },
+    ],
   },
   {
     index: "03",
@@ -131,16 +136,17 @@ export const experience = [
     role: "Web Developer",
     period: "Jan 2022 – Jul 2022",
     location: "Ahmedabad, India",
+    stack: "React · Node.js · REST APIs",
     summary:
-      "Delivered a production React and Node.js application with secure API design, rate limiting, token revocation, and focused performance work.",
+      "Built a React and Node.js application for a client.",
     impact: [{ value: "25%", label: "improvement in Lighthouse LCP" }],
   },
 ] as const;
 
 export const toolGroups = [
-  { label: "Languages", value: "C++ · Java · Python · TypeScript · SQL" },
-  { label: "Application", value: "React · Node.js · Express · REST · WebSockets" },
+  { label: "Languages", value: "C++ · Java · Python · TypeScript · JavaScript · SQL" },
+  { label: "Frontend", value: "React · HTML · CSS" },
+  { label: "Backend", value: "Node.js · Express · REST APIs · WebSockets" },
   { label: "Data", value: "PostgreSQL · MySQL · Redis · MongoDB" },
-  { label: "Infrastructure", value: "AWS · Docker · Kubernetes · GitHub Actions" },
-  { label: "Engineering", value: "Distributed systems · API design · Testing · CI/CD" },
+  { label: "Cloud / DevOps", value: "AWS · Docker · Kubernetes · GitHub Actions" },
 ] as const;
