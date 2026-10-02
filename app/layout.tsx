@@ -3,9 +3,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://harshdobariya.com"),
-  title: "Harsh Dobariya | Full-Stack Software Engineer",
+  title: "Harsh Dobariya | Software Engineer",
   description:
-    "Portfolio of Harsh Dobariya, a full-stack software engineer building reliable products, real-time applications, and distributed systems.",
+    "Harsh Dobariya is a full-stack software engineer building distributed systems, real-time applications, reliable APIs, and thoughtful product interfaces.",
   keywords: [
     "Harsh Dobariya",
     "Software Engineer",
@@ -15,28 +15,61 @@ export const metadata: Metadata = {
     "Distributed Systems",
   ],
   authors: [{ name: "Harsh Dobariya" }],
+  creator: "Harsh Dobariya",
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
-    title: "Harsh Dobariya | Full-Stack Software Engineer",
+    title: "Harsh Dobariya | Software Engineer",
     description:
-      "Reliable products, real-time applications, and distributed systems.",
+      "Distributed systems, full-stack products, and real-time software built with care.",
     type: "website",
     url: "https://harshdobariya.com",
+    siteName: "Harsh Dobariya",
     images: [
       {
-        url: "https://harshdobariya.com/harsh-system-poster.png",
-        width: 1672,
-        height: 941,
-        alt: "Harsh Dobariya, Full-Stack Software Engineer",
+        url: "https://harshdobariya.com/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Harsh Dobariya, Software Engineer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Harsh Dobariya | Full-Stack Software Engineer",
+    title: "Harsh Dobariya | Software Engineer",
     description:
-      "Reliable products, real-time applications, and distributed systems.",
-    images: ["https://harshdobariya.com/harsh-system-poster.png"],
+      "Distributed systems, full-stack products, and real-time software built with care.",
+    images: ["https://harshdobariya.com/og.png"],
   },
+};
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Harsh Dobariya",
+  url: "https://harshdobariya.com",
+  jobTitle: "Software Engineer",
+  email: "mailto:dobariyaharsh10@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Tempe",
+    addressRegion: "Arizona",
+    addressCountry: "US",
+  },
+  alumniOf: [
+    { "@type": "CollegeOrUniversity", name: "Arizona State University" },
+    { "@type": "CollegeOrUniversity", name: "Gujarat Technological University" },
+  ],
+  sameAs: [
+    "https://github.com/HarshDobariya1801",
+    "https://www.linkedin.com/in/harsh-dobariya-962238183/",
+  ],
 };
 
 export default function RootLayout({
@@ -46,7 +79,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
+      </body>
     </html>
   );
 }

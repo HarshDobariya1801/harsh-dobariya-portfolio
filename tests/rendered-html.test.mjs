@@ -4,13 +4,13 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 
-async function render() {
+async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request("http://localhost/", {
+    new Request(`http://localhost${pathname}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -25,35 +25,64 @@ async function render() {
   );
 }
 
-test("server-renders Harsh Dobariya's complete portfolio", async () => {
+test("server-renders Harsh Dobariya's editorial portfolio", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Harsh Dobariya \| Full-Stack Software Engineer<\/title>/i);
+  assert.match(html, /<title>Harsh Dobariya \| Software Engineer<\/title>/i);
+  assert.match(html, /Software that holds up, from interface to infrastructure/);
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
   assert.match(html, /Tempe, Arizona, USA/);
-  assert.match(html, /Open to relocate for the right opportunity/);
+  assert.match(html, /Open to relocate/);
   assert.match(html, /Ninja Technolabs/);
   assert.match(html, /Harsh_Dobariya_Resume\.pdf/);
   assert.match(html, /harsh-dobariya-962238183/);
   assert.match(html, /HarshDobariya1801/);
-  assert.match(html, /harsh-system-poster\.png/);
+  assert.match(html, /og\.png/);
+  assert.match(html, /application\/ld\+json/);
+  assert.match(html, /Read case study/);
   assert.doesNotMatch(
     html,
-    /—|3K|35%|1K\+|1,000\+|monthly users supported|algorithmic problems solved|system-stats|2022 to 2023<\/span>/i,
+    /—|3K|35%|1K\+|1,000\+|monthly users supported|algorithmic problems solved|system-stats|harsh-system-poster\.png/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
 
-test("includes the downloadable resume and removes starter-only assets", async () => {
+test("renders both project case studies", async () => {
+  const first = await render("/work/distributed-key-value-store");
+  assert.equal(first.status, 200);
+  const firstHtml = await first.text();
+  assert.match(firstHtml, /<title>Distributed Key-Value Store \| Harsh Dobariya<\/title>/);
+  assert.match(firstHtml, /property="og:title" content="Distributed Key-Value Store \| Harsh Dobariya"/);
+  assert.doesNotMatch(firstHtml, /property="og:image"/);
+  assert.match(firstHtml, /Engineering decisions/);
+  assert.match(firstHtml, /p95 and p99 latency/);
+
+  const second = await render("/work/realtime-collaborative-workspace");
+  assert.equal(second.status, 200);
+  const secondHtml = await second.text();
+  assert.match(secondHtml, /<title>Real-Time Collaborative Workspace \| Harsh Dobariya<\/title>/);
+  assert.match(secondHtml, /property="og:title" content="Real-Time Collaborative Workspace \| Harsh Dobariya"/);
+  assert.doesNotMatch(secondHtml, /property="og:image"/);
+  assert.match(secondHtml, /Redis Pub\/Sub/);
+  assert.match(secondHtml, /What I learned/);
+});
+
+test("includes portfolio assets and removes starter-only files", async () => {
   const resume = await stat(new URL("public/Harsh_Dobariya_Resume.pdf", projectRoot));
+  const ogImage = await readFile(new URL("public/og.png", projectRoot));
   const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
 
   assert.ok(resume.size > 50_000);
+  assert.equal(ogImage.readUInt32BE(16), 1200);
+  assert.equal(ogImage.readUInt32BE(20), 630);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
+  await assert.rejects(access(new URL("public/file.svg", projectRoot)));
+  await assert.rejects(access(new URL("public/globe.svg", projectRoot)));
+  await assert.rejects(access(new URL("public/window.svg", projectRoot)));
 });
