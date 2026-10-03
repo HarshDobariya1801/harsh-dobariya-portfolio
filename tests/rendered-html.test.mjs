@@ -46,8 +46,9 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /HarshDobariya1801/);
   assert.match(html, /og\.png/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, /Have a useful problem/i);
-  assert.match(html, /Backend systems\. Full-stack products\./i);
+  assert.match(html, /Have something worth building/i);
+  assert.match(html, /interface to infrastructure/i);
+  assert.match(html, /One engineer, across the stack/i);
   assert.match(html, /Toggle color theme/i);
   assert.match(html, /Request Gateway/i);
   assert.match(html, /Worker Pool/i);

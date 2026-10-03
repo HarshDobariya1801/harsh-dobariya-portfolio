@@ -6,52 +6,113 @@ import ScrollMotion from "./ScrollMotion";
 import ThemeToggle from "./ThemeToggle";
 import { experience, profile, projects, toolGroups, type Project } from "./portfolio-data";
 
-function Arrow() {
-  return <span className="link-arrow" aria-hidden="true">↗</span>;
-}
-
 function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
   return (
     <>
-      <a href="#work" data-nav-link>{mobile && <span>01</span>}Work</a>
-      <a href="#experience" data-nav-link>{mobile && <span>02</span>}Experience</a>
-      <a href="#about" data-nav-link>{mobile && <span>03</span>}About</a>
-      <a href="#contact" data-nav-link>{mobile && <span>04</span>}Contact</a>
+      <a href="#work" data-nav-link>{mobile && <span>01</span>}Projects</a>
+      <a href="#focus" data-nav-link>{mobile && <span>02</span>}What I do</a>
+      <a href="#experience" data-nav-link>{mobile && <span>03</span>}Experience</a>
+      <a href="#about" data-nav-link>{mobile && <span>04</span>}About</a>
     </>
   );
 }
 
-function SectionHeading({
-  number,
+function SectionIntro({
+  label,
   title,
   description,
   headingId,
 }: {
-  number: string;
+  label: string;
   title: string;
-  description: string;
-  headingId?: string;
+  description?: string;
+  headingId: string;
 }) {
   return (
-    <header className="section-heading" data-reveal>
-      <p className="eyebrow">{number} / {title}</p>
-      <h2 id={headingId}>{title}</h2>
-      <p>{description}</p>
+    <header className="section-intro" data-reveal>
+      <p className="section-label"><i />{label}</p>
+      <div className="section-intro-copy">
+        <h2 id={headingId}>{title}</h2>
+        {description && <p>{description}</p>}
+      </div>
     </header>
+  );
+}
+
+function HeroSystem() {
+  return (
+    <div className="hero-system" aria-label="Software stack from interface to persistent data" role="img" data-reveal>
+      <div className="system-chrome" aria-hidden="true">
+        <span><i /><i /><i /></span>
+        <code>harsh.profile / stack</code>
+        <b>online</b>
+      </div>
+      <div className="system-map" aria-hidden="true">
+        <div className="system-rail"><i /><i /><i /><i /></div>
+        <div className="system-layer">
+          <span>01 / INTERFACE</span>
+          <strong>React product surface</strong>
+          <small>clear behavior, useful feedback</small>
+        </div>
+        <div className="system-layer">
+          <span>02 / APPLICATION</span>
+          <strong>Node.js API boundary</strong>
+          <small>typed contracts, observable flows</small>
+        </div>
+        <div className="system-layer is-accent">
+          <span>03 / SYSTEM</span>
+          <strong>Concurrent service core</strong>
+          <small>reliable paths, explicit failure modes</small>
+        </div>
+        <div className="system-layer">
+          <span>04 / DATA</span>
+          <strong>PostgreSQL + Redis</strong>
+          <small>durable state, fast coordination</small>
+        </div>
+      </div>
+      <div className="system-terminal" aria-hidden="true">
+        <p><span>$</span> profile --boot harsh</p>
+        <p>location ........ Tempe, Arizona</p>
+        <p>focus ........... backend + full-stack</p>
+        <p className="terminal-ready">ready ........... true<i /></p>
+      </div>
+    </div>
   );
 }
 
 function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="project-card" data-reveal>
-      <header className="project-card-heading">
-        <p className="eyebrow">{project.index} / {project.category}</p>
-        <h3>{project.title}</h3>
-      </header>
       <ProjectDiagram kind={project.diagram} />
+      <div className="project-card-copy">
+        <p className="project-index">{project.index}</p>
+        <div>
+          <h3>{project.title}</h3>
+          <p>{project.category}</p>
+        </div>
+        <span className="project-state"><i />Architecture</span>
+      </div>
     </article>
   );
 }
+
+const focusAreas = [
+  {
+    number: "01",
+    title: "Product engineering",
+    description: "Full-stack applications shaped from the interface through the API, data model, and production behavior.",
+  },
+  {
+    number: "02",
+    title: "Systems and infrastructure",
+    description: "Concurrent services, real-time communication, caching, persistence, and failure paths designed as one system.",
+  },
+  {
+    number: "03",
+    title: "Cloud and delivery",
+    description: "Docker, AWS, Kubernetes, and CI/CD workflows that make software repeatable to build, test, and ship.",
+  },
+] as const;
 
 export default function Home() {
   return (
@@ -62,21 +123,23 @@ export default function Home() {
 
       <header className="site-header" data-site-header>
         <div className="site-header-inner section-shell">
-          <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">HD<span>/</span></a>
+          <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">harsh<span>.</span>dobariya</a>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <NavigationLinks />
           </nav>
           <div className="header-actions">
             <ThemeToggle />
-            <a className="header-resume" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
+            <a className="header-resume" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Résumé</a>
+            <a className="header-contact" href="#contact">Get in touch</a>
             <details className="mobile-nav" data-mobile-nav>
               <summary>Menu</summary>
               <div className="mobile-menu-panel">
                 <nav aria-label="Mobile navigation">
                   <NavigationLinks mobile />
-                  <a href="/Harsh_Dobariya_Resume.pdf" target="_blank"><span>05</span>Resume</a>
+                  <a href="/Harsh_Dobariya_Resume.pdf" target="_blank"><span>05</span>Résumé</a>
+                  <a href="#contact"><span>06</span>Contact</a>
                 </nav>
-                <p>{profile.location}<br />Open to relocate</p>
+                <p>{profile.location}<br />Open to relocate for the right opportunity</p>
               </div>
             </details>
           </div>
@@ -85,44 +148,33 @@ export default function Home() {
 
       <div id="main-content">
         <section className="hero section-shell" aria-labelledby="hero-title">
-          <div className="hero-kicker" data-reveal>
-            <p>Software Engineer</p>
-            <span>Backend · Full-stack · Distributed systems</span>
-          </div>
-          <div className="hero-name-wrap">
+          <div className="hero-copy">
+            <p className="availability" data-reveal><i />Open to Software Engineer roles</p>
             <h1 id="hero-title" data-reveal>
-              <span>Harsh</span>
-              <span>Dobariya</span>
+              I build reliable software from <em>interface to infrastructure.</em>
             </h1>
-            <span className="hero-index" aria-hidden="true">01</span>
-          </div>
-          <div className="hero-grid" data-reveal>
-            <p className="hero-positioning">
-              Backend systems. Full-stack products. <em>Software built to hold up.</em>
+            <p className="hero-summary" data-reveal>
+              Full-stack products and backend systems built with clear boundaries,
+              dependable data flows, and the discipline to hold up in production.
             </p>
-            <div className="hero-availability">
-              <p><i /> Available for Software Engineer roles</p>
-              <span>{profile.location}</span>
-              <span>Open to relocate for the right opportunity</span>
+            <div className="hero-actions" data-reveal>
+              <a className="button button-primary" href="#work">See the work</a>
+              <a className="button button-quiet" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Résumé</a>
             </div>
-            <div className="hero-actions">
-              <a className="button button-primary" href="/Harsh_Dobariya_Resume.pdf" target="_blank">View resume</a>
-              <a className="text-link" href={profile.github} target="_blank" rel="noreferrer">GitHub <Arrow /></a>
-              <a className="text-link" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn <Arrow /></a>
-              <a className="text-link" href={`mailto:${profile.email}`}>Email <Arrow /></a>
-            </div>
+            <dl className="hero-meta" data-reveal>
+              <div><dt>Based in</dt><dd>{profile.location}</dd></div>
+              <div><dt>Availability</dt><dd>Open to relocate</dd></div>
+            </dl>
           </div>
-          <div className="hero-signal" aria-hidden="true">
-            <span>Interface</span><i /><span>API</span><i /><span>System</span><i /><span>Data</span><b />
-          </div>
+          <HeroSystem />
         </section>
 
         <section className="work section-shell" id="work" data-nav-section aria-labelledby="work-title">
-          <SectionHeading
-            number="01"
-            title="Selected Work"
+          <SectionIntro
+            label="Selected work"
+            title="Systems built end to end."
             headingId="work-title"
-            description="Two end-to-end projects that show how I reason about product behavior, concurrency, data, and failure."
+            description="Two projects that show how I think about concurrency, real-time behavior, storage, and the boundaries between them."
           />
           <div className="project-grid">
             <ProjectCard project={projects[0]} />
@@ -130,34 +182,48 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="experience section-shell" id="experience" data-nav-section aria-labelledby="experience-title">
-          <SectionHeading
-            number="02"
-            title="Experience"
-            headingId="experience-title"
-            description="Product and platform work, summarized by the change it created."
+        <section className="focus section-shell" id="focus" data-nav-section aria-labelledby="focus-title">
+          <SectionIntro
+            label="What I do"
+            title="One engineer, across the stack."
+            headingId="focus-title"
           />
-          <ol className="timeline">
+          <ol className="focus-list">
+            {focusAreas.map((item) => (
+              <li key={item.number} data-reveal>
+                <span>{item.number}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="experience section-shell" id="experience" data-nav-section aria-labelledby="experience-title">
+          <SectionIntro
+            label="Experience"
+            title="A path through product and platform work."
+            headingId="experience-title"
+          />
+          <ol className="experience-list">
             {experience.map((item) => (
-              <li className="timeline-item" key={item.company} data-reveal>
-                <div className="timeline-marker" aria-hidden="true"><i /></div>
-                <div className="timeline-date">
+              <li className="experience-row" key={item.company} data-reveal>
+                <div className="experience-meta">
                   <span>{item.period}</span>
                   <span>{item.location}</span>
                 </div>
-                <div className="timeline-role">
+                <div className="experience-role">
                   <p>{item.company}</p>
                   <h3>{item.role}</h3>
-                  <p>{item.stack}</p>
+                  <span>{item.stack}</span>
                 </div>
-                <div className="timeline-summary">
+                <div className="experience-outcome">
                   <p>{item.summary}</p>
-                  <div className="stat-grid">
+                  <div className="impact-list">
                     {item.impact.map((metric) => (
-                      <div className="stat" key={metric.label}>
-                        <strong><CountUp value={metric.value} /></strong>
-                        <span>{metric.label}</span>
-                      </div>
+                      <span key={metric.label}>
+                        <strong><CountUp value={metric.value} /></strong>{metric.label}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -167,84 +233,79 @@ export default function Home() {
         </section>
 
         <section className="about section-shell" id="about" data-nav-section aria-labelledby="about-title">
-          <SectionHeading
-            number="03"
-            title="About"
-            description="How I approach software, what I have studied, and the tools I use most."
+          <SectionIntro
+            label="About"
+            title="I want to understand the whole system."
+            headingId="about-title"
           />
-          <div className="about-layout">
-            <div className="about-intro" data-reveal>
-              <h2 id="about-title">
-                I like understanding the <em>whole system</em>, not just the piece in front of me.
-              </h2>
+          <div className="about-grid">
+            <div className="about-story" data-reveal>
               <p>
                 I work from the interface through the API, database, and infrastructure.
                 My focus is reliable software that stays understandable and easy to change.
               </p>
-              <p className="achievement">
-                Solved 1,000+ algorithm and data structure problems across LeetCode,
+              <p>
+                I have solved 1,000+ algorithm and data structure problems across LeetCode,
                 Codeforces, CodeChef, and GeeksforGeeks.
               </p>
+              <ol className="principle-list" aria-label="How I work">
+                <li><span>01</span>Understand the whole system.</li>
+                <li><span>02</span>Keep boundaries clear.</li>
+                <li><span>03</span>Design for failure paths.</li>
+                <li><span>04</span>Leave code easier to change.</li>
+              </ol>
             </div>
 
-            <section className="principles" aria-labelledby="principles-title" data-reveal>
-              <p className="eyebrow" id="principles-title">How I work</p>
-              <ol>
-                <li><span>01</span><strong>Understand the whole system.</strong></li>
-                <li><span>02</span><strong>Keep boundaries clear.</strong></li>
-                <li><span>03</span><strong>Design for failure paths.</strong></li>
-                <li><span>04</span><strong>Leave code easier to change.</strong></li>
-              </ol>
-            </section>
+            <div className="about-details">
+              <section className="education-panel" aria-labelledby="education-title" data-reveal>
+                <p className="detail-label" id="education-title">Education</p>
+                <article>
+                  <div><h3>Arizona State University</h3><p>M.S. Information Technology</p></div>
+                  <time>2024 – 2025</time>
+                </article>
+                <article>
+                  <div><h3>Gujarat Technological University</h3><p>B.E. Information Technology</p></div>
+                  <time>2019 – 2023</time>
+                </article>
+              </section>
 
-            <section className="education-panel" aria-labelledby="education-title" data-reveal>
-              <p className="eyebrow" id="education-title">Education</p>
-              <article>
-                <div><h3>Arizona State University</h3><p>M.S. Information Technology</p></div>
-                <time>2024 – 2025</time>
-              </article>
-              <article>
-                <div><h3>Gujarat Technological University</h3><p>B.E. Information Technology</p></div>
-                <time>2019 – 2023</time>
-              </article>
-            </section>
-
-            <section className="skills-panel" aria-labelledby="skills-title" data-reveal>
-              <p className="eyebrow" id="skills-title">Skills</p>
-              <dl>
-                {toolGroups.map((group) => (
-                  <div key={group.label}>
-                    <dt>{group.label}</dt>
-                    <dd>
-                      {group.skills.map((skill) => (
-                        skill.strong
-                          ? <strong key={skill.name}>{skill.name}</strong>
-                          : <span key={skill.name}>{skill.name}</span>
-                      ))}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
+              <section className="skills-panel" aria-labelledby="skills-title" data-reveal>
+                <p className="detail-label" id="skills-title">Tools I use</p>
+                <dl>
+                  {toolGroups.map((group) => (
+                    <div key={group.label}>
+                      <dt>{group.label}</dt>
+                      <dd>
+                        {group.skills.map((skill) => (
+                          skill.strong
+                            ? <strong key={skill.name}>{skill.name}</strong>
+                            : <span key={skill.name}>{skill.name}</span>
+                        ))}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            </div>
           </div>
         </section>
 
         <section className="contact" id="contact" data-nav-section aria-labelledby="contact-title">
           <div className="contact-inner section-shell">
-            <p className="eyebrow">04 / Contact</p>
-            <h2 id="contact-title" data-reveal>Have a useful problem?<br /><em>Let&apos;s talk.</em></h2>
-            <div className="contact-grid" data-reveal>
-              <div>
-                <p>I&apos;m available for Software Engineer roles and open to relocating for the right opportunity.</p>
-              </div>
-              <div className="email-actions">
+            <p className="section-label"><i />Contact</p>
+            <div className="contact-copy" data-reveal>
+              <h2 id="contact-title">Have something worth building?</h2>
+              <p>I&apos;m available for Software Engineer roles and open to relocating for the right opportunity.</p>
+            </div>
+            <div className="contact-actions" data-reveal>
+              <div className="contact-email">
                 <a href={`mailto:${profile.email}`}>{profile.email}</a>
                 <CopyEmail email={profile.email} />
               </div>
-              <nav className="contact-links" aria-label="Social links">
-                <a href={profile.github} target="_blank" rel="noreferrer">GitHub <Arrow /></a>
-                <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn <Arrow /></a>
-                <a href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume <Arrow /></a>
+              <nav aria-label="Social links">
+                <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+                <a href="/Harsh_Dobariya_Resume.pdf" target="_blank">Résumé</a>
               </nav>
             </div>
           </div>
@@ -252,9 +313,10 @@ export default function Home() {
       </div>
 
       <footer className="site-footer section-shell">
-        <div><strong>Harsh Dobariya</strong><span>Software Engineer · Tempe, Arizona</span></div>
-        <p>© {new Date().getFullYear()}</p>
-        <a href="#top">Back to top ↑</a>
+        <a className="footer-mark" href="#top">harsh<span>.</span>dobariya</a>
+        <p>Software Engineer<br />{profile.location}</p>
+        <p>© {new Date().getFullYear()} Harsh Dobariya</p>
+        <a href="#top">Back to top</a>
       </footer>
     </main>
   );
