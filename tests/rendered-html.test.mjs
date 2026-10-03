@@ -49,12 +49,13 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /Have a useful problem/i);
   assert.match(html, /Backend systems\. Full-stack products\./i);
   assert.match(html, /Toggle color theme/i);
-  assert.match(html, /Screenshot needed/i);
-  assert.match(html, /aria-label="Case study: Distributed Key-Value Store"/);
-  assert.match(html, /aria-label="Case study: Real-Time Collaborative Workspace"/);
+  assert.match(html, /Request Gateway/i);
+  assert.match(html, /Worker Pool/i);
+  assert.match(html, /Redis Pub\/Sub/i);
+  assert.match(html, /PostgreSQL/i);
   assert.match(html, /1,000\+ algorithm and data structure problems/);
   assert.match(html, /35%/);
-  assert.doesNotMatch(html, /URL needed|Live demo/i);
+  assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
   assert.doesNotMatch(
     html,
     /—|3K|monthly users supported|system-stats|harsh-system-poster\.png/i,
@@ -62,28 +63,11 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
 
-test("renders both project case studies", async () => {
-  const first = await render("/work/distributed-key-value-store");
-  assert.equal(first.status, 200);
-  const firstHtml = await first.text();
-  assert.match(firstHtml, /<title>Distributed Key-Value Store \| Harsh Dobariya<\/title>/);
-  assert.match(firstHtml, /property="og:title" content="Distributed Key-Value Store \| Harsh Dobariya"/);
-  assert.doesNotMatch(firstHtml, /property="og:image"/);
-  assert.match(firstHtml, /Key decisions and tradeoffs/);
-  assert.match(firstHtml, /p95 and p99 latency/);
-  assert.match(firstHtml, /What I would do next/);
-  assert.match(firstHtml, /Content needed/);
+test("removes project case-study routes and sitemap entries", async () => {
+  const sitemap = await readFile(new URL("app/sitemap.ts", projectRoot), "utf8");
 
-  const second = await render("/work/realtime-collaborative-workspace");
-  assert.equal(second.status, 200);
-  const secondHtml = await second.text();
-  assert.match(secondHtml, /<title>Real-Time Collaborative Workspace \| Harsh Dobariya<\/title>/);
-  assert.match(secondHtml, /property="og:title" content="Real-Time Collaborative Workspace \| Harsh Dobariya"/);
-  assert.doesNotMatch(secondHtml, /property="og:image"/);
-  assert.match(secondHtml, /Redis Pub\/Sub/);
-  assert.match(secondHtml, /Screenshot needed/);
-  assert.match(secondHtml, /Results and benchmarks/);
-  assert.match(secondHtml, /Content needed/);
+  await assert.rejects(access(new URL("app/work/[slug]/page.tsx", projectRoot)));
+  assert.doesNotMatch(sitemap, /\/work\//);
 });
 
 test("includes portfolio assets and removes starter-only files", async () => {
@@ -97,7 +81,7 @@ test("includes portfolio assets and removes starter-only files", async () => {
   assert.equal(ogImage.readUInt32BE(20), 630);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(readme, /Harsh Dobariya Portfolio/);
-  assert.match(readme, /Content still needed/);
+  assert.doesNotMatch(readme, /case stud|\/work\//i);
   assert.doesNotMatch(readme, /vinext-starter/);
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
   await assert.rejects(access(new URL("public/file.svg", projectRoot)));

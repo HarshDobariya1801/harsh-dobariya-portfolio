@@ -1,5 +1,6 @@
 import CopyEmail from "./CopyEmail";
 import CountUp from "./CountUp";
+import CustomCursor from "./CustomCursor";
 import ProjectDiagram from "./ProjectDiagram";
 import ScrollMotion from "./ScrollMotion";
 import ThemeToggle from "./ThemeToggle";
@@ -40,26 +41,13 @@ function SectionHeading({
   );
 }
 
-function ProjectLinks({ project }: { project: Project }) {
+function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="project-links">
-      <a href={`/work/${project.slug}`} aria-label={`Case study: ${project.title}`}>Case study <Arrow /></a>
-    </div>
-  );
-}
-
-function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
-  return (
-    <article className={`project-card${featured ? " project-card-featured" : ""}`} data-reveal>
-      <div className="project-card-copy">
-        <p className="eyebrow">{project.index} / {featured ? "Featured system" : project.category}</p>
+    <article className="project-card" data-reveal>
+      <header className="project-card-heading">
+        <p className="eyebrow">{project.index} / {project.category}</p>
         <h3>{project.title}</h3>
-        <p className="project-outcome">{project.outcome}</p>
-        <ul className="tech-list" aria-label="Technologies used">
-          {project.stack.map((item) => <li key={item}>{item}</li>)}
-        </ul>
-        <ProjectLinks project={project} />
-      </div>
+      </header>
       <ProjectDiagram kind={project.diagram} />
     </article>
   );
@@ -69,6 +57,7 @@ export default function Home() {
   return (
     <main id="top">
       <ScrollMotion />
+      <CustomCursor />
       <a className="skip-link" href="#main-content">Skip to content</a>
 
       <header className="site-header" data-site-header>
@@ -136,7 +125,7 @@ export default function Home() {
             description="Two end-to-end projects that show how I reason about product behavior, concurrency, data, and failure."
           />
           <div className="project-grid">
-            <ProjectCard project={projects[0]} featured />
+            <ProjectCard project={projects[0]} />
             <ProjectCard project={projects[1]} />
           </div>
         </section>

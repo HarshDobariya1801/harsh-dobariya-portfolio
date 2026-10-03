@@ -33,22 +33,12 @@ npm test
 ## Routes
 
 - `/`: portfolio overview
-- `/work/distributed-key-value-store`: case study
-- `/work/realtime-collaborative-workspace`: case study
 - `/Harsh_Dobariya_Resume.pdf`: resume
 - `/sitemap.xml` and `/robots.txt`: search metadata
 
 ## Editing content
 
-Structured profile, project, experience, education, and skill content lives in `app/portfolio-data.ts`. The case-study routes use the same data to avoid duplicated claims.
-
-## Content still needed
-
-- A 1600 × 1000 screenshot or optimized recording of the real-time workspace
-- Verified benchmark data and test conditions for both projects
-- Concrete “what I would do next” notes for both case studies
-
-These are shown as labeled placeholders in the interface so missing evidence is not replaced with invented facts.
+Structured profile, project, experience, education, and skill content lives in `app/portfolio-data.ts`. Project architecture diagrams are built as responsive interface components in `app/ProjectDiagram.tsx`.
 
 ## Deployment
 
