@@ -66,9 +66,6 @@ function HeroBlueprint() {
           </li>
         </ol>
       </div>
-      <div className="blueprint-tools" aria-hidden="true">
-        <span>TypeScript</span><span>Node.js</span><span>PostgreSQL</span><span>AWS</span>
-      </div>
     </div>
   );
 }
