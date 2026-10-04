@@ -56,10 +56,12 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /PostgreSQL/i);
   assert.match(html, /1,000\+ algorithm and data structure problems/);
   assert.match(html, /35%/);
+  assert.match(html, /Backend depth, full-stack perspective/i);
+  assert.match(html, /Build the right thing/i);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
   assert.doesNotMatch(
     html,
-    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png/i,
+    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png|harsh\.profile|understand the whole system/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });

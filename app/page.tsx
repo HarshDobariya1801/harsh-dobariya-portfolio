@@ -39,42 +39,35 @@ function SectionIntro({
   );
 }
 
-function HeroSystem() {
+function HeroBlueprint() {
   return (
-    <div className="hero-system" aria-label="Software stack from interface to persistent data" role="img" data-reveal>
-      <div className="system-chrome" aria-hidden="true">
-        <span><i /><i /><i /></span>
-        <code>harsh.profile / stack</code>
-        <b>online</b>
+    <div className="hero-blueprint" aria-label="Harsh's end-to-end engineering approach" role="img" data-reveal>
+      <div className="blueprint-heading" aria-hidden="true">
+        <span>Engineering focus</span>
+        <b><i />Backend + full-stack</b>
       </div>
-      <div className="system-map" aria-hidden="true">
-        <div className="system-rail"><i /><i /><i /><i /></div>
-        <div className="system-layer">
-          <span>01 / INTERFACE</span>
-          <strong>React product surface</strong>
-          <small>clear behavior, useful feedback</small>
-        </div>
-        <div className="system-layer">
-          <span>02 / APPLICATION</span>
-          <strong>Node.js API boundary</strong>
-          <small>typed contracts, observable flows</small>
-        </div>
-        <div className="system-layer is-accent">
-          <span>03 / SYSTEM</span>
-          <strong>Concurrent service core</strong>
-          <small>reliable paths, explicit failure modes</small>
-        </div>
-        <div className="system-layer">
-          <span>04 / DATA</span>
-          <strong>PostgreSQL + Redis</strong>
-          <small>durable state, fast coordination</small>
-        </div>
+      <div className="blueprint-body" aria-hidden="true">
+        <p className="blueprint-kicker">From product intent to production systems</p>
+        <p className="blueprint-statement">
+          Build the right thing.<br /><em>Make it dependable.</em>
+        </p>
+        <ol className="blueprint-flow">
+          <li>
+            <span>01</span>
+            <div><strong>Product</strong><small>Clear interfaces and useful feedback</small></div>
+          </li>
+          <li>
+            <span>02</span>
+            <div><strong>Services</strong><small>Typed APIs and observable behavior</small></div>
+          </li>
+          <li>
+            <span>03</span>
+            <div><strong>Data + cloud</strong><small>Durable state and repeatable delivery</small></div>
+          </li>
+        </ol>
       </div>
-      <div className="system-terminal" aria-hidden="true">
-        <p><span>$</span> profile --boot harsh</p>
-        <p>location ........ Tempe, Arizona</p>
-        <p>focus ........... backend + full-stack</p>
-        <p className="terminal-ready">ready ........... true<i /></p>
+      <div className="blueprint-tools" aria-hidden="true">
+        <span>TypeScript</span><span>Node.js</span><span>PostgreSQL</span><span>AWS</span>
       </div>
     </div>
   );
@@ -166,7 +159,7 @@ export default function Home() {
               <div><dt>Availability</dt><dd>Open to relocate</dd></div>
             </dl>
           </div>
-          <HeroSystem />
+          <HeroBlueprint />
         </section>
 
         <section className="work section-shell" id="work" data-nav-section aria-labelledby="work-title">
@@ -235,24 +228,25 @@ export default function Home() {
         <section className="about section-shell" id="about" data-nav-section aria-labelledby="about-title">
           <SectionIntro
             label="About"
-            title="I want to understand the whole system."
+            title="Backend depth, full-stack perspective."
             headingId="about-title"
           />
           <div className="about-grid">
             <div className="about-story" data-reveal>
               <p>
-                I work from the interface through the API, database, and infrastructure.
-                My focus is reliable software that stays understandable and easy to change.
+                I am a software engineer based in Tempe, Arizona, focused on backend and
+                full-stack development. I turn complex requirements into dependable products
+                with clear APIs, maintainable code, and thoughtful data design.
               </p>
               <p>
-                I have solved 1,000+ algorithm and data structure problems across LeetCode,
-                Codeforces, CodeChef, and GeeksforGeeks.
+                Problem solving is a daily practice for me. I have solved 1,000+ algorithm and
+                data structure problems across LeetCode, Codeforces, CodeChef, and GeeksforGeeks.
               </p>
               <ol className="principle-list" aria-label="How I work">
-                <li><span>01</span>Understand the whole system.</li>
-                <li><span>02</span>Keep boundaries clear.</li>
-                <li><span>03</span>Design for failure paths.</li>
-                <li><span>04</span>Leave code easier to change.</li>
+                <li><span>01</span>Start with the user and the problem.</li>
+                <li><span>02</span>Make technical tradeoffs clear.</li>
+                <li><span>03</span>Design for failures, not just demos.</li>
+                <li><span>04</span>Keep the next change easy.</li>
               </ol>
             </div>
 
