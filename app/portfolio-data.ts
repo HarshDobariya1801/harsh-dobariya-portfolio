@@ -49,16 +49,18 @@ export const experience = [
     location: "Ahmedabad, India",
     summary:
       "Built a React and Node.js application with REST APIs and authentication for a startup client.",
-    metrics: [],
+    metrics: [
+      { value: "25%", label: "improvement in Lighthouse LCP" },
+    ],
   },
 ] as const;
 
 export const toolGroups = [
   { label: "Languages", tools: ["C++", "Java", "Python", "TypeScript", "JavaScript", "SQL"] },
-  { label: "Backend", tools: ["Node.js", "Express", "PostgreSQL", "MySQL", "Redis", "WebSockets"] },
   { label: "Frontend", tools: ["React", "Next.js", "HTML", "CSS"] },
-  { label: "Infrastructure", tools: ["AWS", "Docker", "Kubernetes", "GitHub Actions"] },
-  { label: "AI tooling", tools: ["Ollama", "PGVector", "n8n", "Agent frameworks"] },
+  { label: "Backend", tools: ["Node.js", "Express", "REST APIs", "WebSockets"] },
+  { label: "Data", tools: ["PostgreSQL", "MySQL", "Redis", "MongoDB"] },
+  { label: "Cloud / DevOps", tools: ["AWS", "Docker", "Kubernetes", "GitHub Actions"] },
 ] as const;
 
 export const education = [

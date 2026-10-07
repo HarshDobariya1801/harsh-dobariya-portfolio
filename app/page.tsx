@@ -1,8 +1,9 @@
 import CollaborativeDemo from "./CollaborativeDemo";
+import CopyEmail from "./CopyEmail";
 import CountUp from "./CountUp";
+import HeroSystemVisual from "./HeroSystemVisual";
 import KVStoreDemo from "./KVStoreDemo";
 import ScrollMotion from "./ScrollMotion";
-import SystemShowcase from "./SystemShowcase";
 import { education, experience, profile, toolGroups } from "./portfolio-data";
 
 function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
@@ -19,11 +20,13 @@ function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
 }
 
 function SectionHeading({
+  number,
   eyebrow,
   title,
   description,
   id,
 }: {
+  number: string;
   eyebrow: string;
   title: string;
   description?: string;
@@ -31,7 +34,7 @@ function SectionHeading({
 }) {
   return (
     <header className="section-heading" data-reveal>
-      <p className="eyebrow">{eyebrow}</p>
+      <p className="eyebrow"><span>{number}</span>{eyebrow}</p>
       <div>
         <h2 id={id}>{title}</h2>
         {description && <p>{description}</p>}
@@ -39,6 +42,31 @@ function SectionHeading({
     </header>
   );
 }
+
+const capabilities = [
+  {
+    number: "01",
+    title: "Product engineering",
+    description: "Interfaces, APIs, and data models designed as one product instead of separate layers.",
+  },
+  {
+    number: "02",
+    title: "Systems and infrastructure",
+    description: "Concurrent services, real-time communication, caching, persistence, and failure paths.",
+  },
+  {
+    number: "03",
+    title: "Cloud and delivery",
+    description: "Docker, AWS, Kubernetes, and CI/CD workflows that make releases repeatable.",
+  },
+] as const;
+
+const principles = [
+  "Start with the problem.",
+  "Make tradeoffs explicit.",
+  "Design for failure.",
+  "Leave the next change easy.",
+] as const;
 
 export default function Home() {
   return (
@@ -48,7 +76,7 @@ export default function Home() {
 
       <header className="site-header" data-site-header>
         <div className="site-header-inner section-shell">
-          <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">Harsh Dobariya</a>
+          <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">harsh.dobariya</a>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <NavigationLinks />
           </nav>
@@ -67,12 +95,12 @@ export default function Home() {
         <section className="hero section-shell" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="hero-name" data-reveal>Harsh Dobariya <span>Software Engineer</span></p>
-            <h1 id="hero-title" data-reveal>
-              I build systems that stay fast when things get <em>messy.</em>
+            <h1 id="hero-title">
+              I build reliable software from interface to <em>infrastructure.</em>
             </h1>
             <p className="hero-summary" data-reveal>
-              Backend infrastructure, distributed systems, and product engineering.
-              From APIs and databases to real-time applications.
+              Backend and full-stack engineering with a systems mindset. Clear APIs,
+              durable data flows, and interfaces built for real users.
             </p>
             <div className="hero-actions" data-reveal>
               <a className="button button-primary" href="#work">View my work</a>
@@ -81,68 +109,100 @@ export default function Home() {
             </div>
             <p className="hero-context" data-reveal>
               <i />
-              <span>Based in Tempe, Arizona</span>
+              <span>Tempe, Arizona</span>
               <b>·</b>
-              <span>Open to Software Engineer roles</span>
+              <span>Backend + Full Stack</span>
               <b>·</b>
               <span>Open to relocate</span>
             </p>
           </div>
+          <div className="hero-visual" data-reveal>
+            <HeroSystemVisual />
+          </div>
         </section>
 
-        <SystemShowcase />
-
-        <section className="project-story section-shell" aria-labelledby="kv-title">
-          <div className="story-copy" data-reveal>
-            <p className="eyebrow">Distributed Key-Value Store</p>
-            <h2 id="kv-title">What happens after <code>PUT(key, value)</code>?</h2>
-            <p>
-              Five nodes, TCP connections, and concurrent clients. Requests are routed by key while TTL expiry,
-              LRU eviction, and append-only persistence keep the system predictable under load.
-            </p>
-            <ul className="inline-specs" aria-label="Distributed key-value store technologies">
-              <li>C++</li><li>TCP/IP</li><li>Multithreading</li><li>CMake</li>
-            </ul>
-          </div>
-          <div data-reveal><KVStoreDemo /></div>
+        <section className="work-intro section-shell" id="work" data-nav-section aria-labelledby="work-title">
+          <SectionHeading
+            number="01"
+            eyebrow="Selected work"
+            title="Systems built end to end."
+            description="Two projects that show how I approach concurrency, real-time communication, storage, and system boundaries."
+            id="work-title"
+          />
         </section>
 
-        <section className="project-story collaborative-story section-shell" aria-labelledby="collab-title">
-          <div className="story-copy" data-reveal>
-            <p className="eyebrow">Real-Time Collaborative Workspace</p>
-            <h2 id="collab-title">Realtime without refreshes.</h2>
-            <p>
-              WebSockets move low-latency updates, Redis Pub/Sub carries events between Node.js instances,
-              and PostgreSQL keeps durable workspace history.
-            </p>
-            <ul className="inline-specs" aria-label="Collaborative workspace technologies">
-              <li>TypeScript</li><li>React</li><li>Node.js</li><li>Redis</li><li>PostgreSQL</li>
-            </ul>
+        <section className="project-band project-band-warm" aria-labelledby="kv-title">
+          <div className="project-case section-shell">
+            <header className="project-overview" data-reveal>
+              <p className="project-number">01 / 02</p>
+              <div>
+                <p className="eyebrow">C++ systems project</p>
+                <h2 id="kv-title">Distributed Key-Value Store</h2>
+              </div>
+              <div className="project-summary">
+                <p>
+                  A concurrent in-memory store that accepts commands over TCP and keeps
+                  expiration, eviction, and persistence behavior explicit.
+                </p>
+                <ul className="inline-specs" aria-label="Distributed key-value store technologies">
+                  <li>C++</li><li>TCP/IP</li><li>Multithreading</li><li>CMake</li>
+                </ul>
+              </div>
+            </header>
+            <div className="project-visual" data-reveal><KVStoreDemo /></div>
+            <div className="project-notes" data-reveal>
+              <article><span>What</span><p>GET, SET, and DEL commands move through a bounded concurrent execution path.</p></article>
+              <article><span>How</span><p>A TCP listener hands work to a worker pool before the key-value engine owns state changes.</p></article>
+              <article><span>Tradeoff</span><p>Memory-first access stays direct while TTL, LRU, and AOF make lifecycle decisions visible.</p></article>
+              <article><span>Learning</span><p>Concurrency is easier to reason about when transport, execution, and state ownership stay separate.</p></article>
+            </div>
           </div>
-          <div data-reveal><CollaborativeDemo /></div>
         </section>
 
-        <section className="more-work section-shell" aria-labelledby="more-work-title">
-          <div className="more-work-heading" data-reveal>
-            <p className="eyebrow">More work</p>
-            <h2 id="more-work-title">Smaller explorations, same standard.</h2>
+        <section className="project-band project-band-cool" aria-labelledby="collab-title">
+          <div className="project-case section-shell">
+            <header className="project-overview" data-reveal>
+              <p className="project-number">02 / 02</p>
+              <div>
+                <p className="eyebrow">Real-time product system</p>
+                <h2 id="collab-title">Real-Time Collaborative Workspace</h2>
+              </div>
+              <div className="project-summary">
+                <p>
+                  Changes move between connected clients over WebSockets. Redis Pub/Sub
+                  shares events across Node.js instances while PostgreSQL keeps durable state.
+                </p>
+                <ul className="inline-specs" aria-label="Collaborative workspace technologies">
+                  <li>WebSockets</li><li>Redis Pub/Sub</li><li>PostgreSQL</li><li>Optimistic UI</li>
+                </ul>
+              </div>
+            </header>
+            <div className="project-visual" data-reveal><CollaborativeDemo /></div>
+            <div className="project-notes" data-reveal>
+              <article><span>What</span><p>A shared workspace keeps active collaborators in sync without page refreshes.</p></article>
+              <article><span>How</span><p>WebSocket sessions publish events through Redis so separate Node.js processes agree.</p></article>
+              <article><span>Tradeoff</span><p>Fast optimistic updates improve flow while durable writes preserve recoverable workspace state.</p></article>
+              <article><span>Learning</span><p>Realtime UX depends as much on clear event ownership as it does on transport speed.</p></article>
+            </div>
           </div>
-          <div className="more-work-list">
-            <article data-reveal>
-              <span>04</span>
-              <div><h3>AI Resume Analyzer</h3><p>Document structure, role signals, and a focused review workflow.</p></div>
-              <small>AI tooling</small>
-            </article>
-            <article data-reveal>
-              <span>05</span>
-              <div><h3>Competitive Programming</h3><p>Algorithm practice across graphs, dynamic programming, data structures, and optimization.</p></div>
-              <small>C++</small>
-            </article>
+        </section>
+
+        <section className="capabilities section-shell" id="capabilities" aria-labelledby="capabilities-title">
+          <SectionHeading number="02" eyebrow="What I do" title="One engineer, across the stack." id="capabilities-title" />
+          <div className="capability-list">
+            {capabilities.map((item) => (
+              <article key={item.number} data-reveal>
+                <span>{item.number}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
           </div>
         </section>
 
         <section className="experience section-shell" id="experience" data-nav-section aria-labelledby="experience-title">
           <SectionHeading
+            number="03"
             eyebrow="Experience"
             title="Software that had to work outside a demo."
             description="Product delivery, legacy modernization, internal tooling, and the engineering details that kept each system moving."
@@ -171,35 +231,42 @@ export default function Home() {
           </ol>
         </section>
 
-        <section className="about section-shell" id="about" data-nav-section aria-labelledby="about-title">
-          <SectionHeading eyebrow="About" title="Depth in the system. Care at the surface." id="about-title" />
-          <div className="about-layout">
-            <div className="about-copy" data-reveal>
-              <p>
-                I enjoy understanding how software behaves beneath the abstraction: databases, networks,
-                concurrency, and distributed systems, while still caring deeply about what the end user experiences.
-              </p>
-              <p>
-                I completed my Master&apos;s in Information Technology at Arizona State University and continue
-                building systems that help me understand software at a deeper level.
-              </p>
-              <div className="interest-list" aria-label="Engineering interests">
-                <span>Distributed systems</span><span>System design</span><span>AI tooling</span><span>Product engineering</span>
+        <section className="about" id="about" data-nav-section aria-labelledby="about-title">
+          <div className="section-shell">
+            <SectionHeading number="04" eyebrow="About" title="Backend depth, full-stack perspective." id="about-title" />
+            <div className="about-editorial">
+              <div className="about-copy" data-reveal>
+                <p>
+                  I am a software engineer based in Tempe, focused on backend and full-stack systems.
+                  I turn complex requirements into dependable products with clear APIs, maintainable code,
+                  and thoughtful data design.
+                </p>
+                <p>
+                  I care about the details that make software easier to operate and easier to change:
+                  explicit boundaries, visible tradeoffs, and useful interfaces.
+                </p>
               </div>
+              <ol className="principles" aria-label="How I work" data-reveal>
+                {principles.map((principle, index) => (
+                  <li key={principle}><span>0{index + 1}</span><strong>{principle}</strong></li>
+                ))}
+              </ol>
             </div>
 
-            <div className="about-details">
-              <section className="detail-block" aria-labelledby="education-title" data-reveal>
+            <div className="profile-details">
+              <section className="education-block" aria-labelledby="education-title" data-reveal>
                 <h3 id="education-title">Education</h3>
-                {education.map((item) => (
-                  <article key={item.school}>
-                    <div><strong>{item.school}</strong><span>{item.degree}</span></div>
-                    <p>{item.period}<br />{item.location}</p>
-                  </article>
-                ))}
+                <div>
+                  {education.map((item) => (
+                    <article key={item.school}>
+                      <div><strong>{item.school}</strong><span>{item.degree}</span></div>
+                      <p>{item.period}<br />{item.location}</p>
+                    </article>
+                  ))}
+                </div>
               </section>
-              <section className="detail-block tools-block" aria-labelledby="tools-title" data-reveal>
-                <h3 id="tools-title">Tools I reach for</h3>
+              <section className="tools-block" aria-labelledby="tools-title" data-reveal>
+                <h3 id="tools-title">Tools I use</h3>
                 <dl>
                   {toolGroups.map((group) => (
                     <div key={group.label}>
@@ -215,11 +282,14 @@ export default function Home() {
 
         <section className="contact" id="contact" data-nav-section aria-labelledby="contact-title">
           <div className="contact-inner section-shell" data-reveal>
-            <p className="eyebrow">Contact</p>
-            <h2 id="contact-title">Let&apos;s build something useful.</h2>
+            <p className="eyebrow"><span>05</span>Contact</p>
+            <h2 id="contact-title">Have something worth building?</h2>
             <p>I&apos;m currently open to software engineering opportunities.</p>
+            <div className="email-row">
+              <a href={`mailto:${profile.email}`}>{profile.email}</a>
+              <CopyEmail email={profile.email} />
+            </div>
             <nav aria-label="Contact links">
-              <a className="button button-primary" href={`mailto:${profile.email}`}>Email me</a>
               <a className="text-link" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
               <a className="text-link" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
               <a className="text-link" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
@@ -229,7 +299,8 @@ export default function Home() {
       </div>
 
       <footer className="site-footer section-shell">
-        <div><strong>Harsh Dobariya</strong><span>Software Engineer</span></div>
+        <div><strong>harsh.dobariya</strong><span>Software Engineer</span></div>
+        <p>Tempe, Arizona</p>
         <nav aria-label="Footer links">
           <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
           <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://harshdobariya.com"),
   title: "Harsh Dobariya | Software Engineer",
   description:
-    "Software engineer building backend systems, distributed infrastructure, full-stack products, and AI tools.",
+    "Software engineer building reliable backend systems, distributed infrastructure, and full-stack products.",
   keywords: [
     "Harsh Dobariya",
     "Software Engineer",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Harsh Dobariya | Software Engineer",
     description:
-      "Backend systems, distributed infrastructure, full-stack products, and AI tools.",
+      "Reliable backend systems, distributed infrastructure, and full-stack products.",
     type: "website",
     url: "https://harshdobariya.com",
     siteName: "Harsh Dobariya",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Harsh Dobariya | Software Engineer",
     description:
-      "Backend systems, distributed infrastructure, full-stack products, and AI tools.",
+      "Reliable backend systems, distributed infrastructure, and full-stack products.",
     images: ["https://harshdobariya.com/og.png"],
   },
 };

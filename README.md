@@ -9,7 +9,7 @@ Product-led personal site for [harshdobariya.com](https://harshdobariya.com), de
 - CSS design tokens and responsive layouts
 - Cloudflare-backed Sites hosting
 
-The site avoids third-party font and animation downloads. Its AgentTime, distributed key-value store, and collaborative workspace demonstrations are built as accessible React interfaces. Motion is implemented with CSS and IntersectionObserver and respects `prefers-reduced-motion`.
+The site avoids third-party font and animation downloads. Its distributed key-value store and collaborative workspace demonstrations are built as accessible React interfaces. Motion is implemented with CSS and IntersectionObserver and respects `prefers-reduced-motion`.
 
 ## Run locally
 
@@ -38,7 +38,7 @@ npm test
 
 ## Editing content
 
-Structured profile, experience, education, and tool content lives in `app/portfolio-data.ts`. Interactive system demonstrations live in `app/SystemShowcase.tsx`, `app/KVStoreDemo.tsx`, and `app/CollaborativeDemo.tsx`.
+Structured profile, experience, education, and tool content lives in `app/portfolio-data.ts`. The hero system trace and project demonstrations live in `app/HeroSystemVisual.tsx`, `app/KVStoreDemo.tsx`, and `app/CollaborativeDemo.tsx`.
 
 ## Deployment
 

@@ -34,11 +34,10 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /<title>Harsh Dobariya \| Software Engineer<\/title>/i);
   assert.match(html, /Harsh/);
   assert.match(html, /Dobariya/);
-  assert.match(html, /Selected systems/i);
-  assert.match(html, /AgentTime/);
+  assert.match(html, /Selected work/i);
+  assert.match(html, /Systems built end to end/i);
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
-  assert.match(html, /AI Resume Analyzer/);
   assert.match(html, /Arizona State University/);
   assert.match(html, /Tempe, Arizona, USA/);
   assert.match(html, /Open to relocate/);
@@ -49,22 +48,22 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /HarshDobariya1801/);
   assert.match(html, /og\.png/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, /Let&#x27;s build something useful/i);
-  assert.match(html, /stay fast when things get/i);
-  assert.match(html, /The engineering is the interface/i);
-  assert.match(html, /SnapshotRepository\.swift/i);
-  assert.match(html, /Run request/i);
+  assert.match(html, /Have something worth building/i);
+  assert.match(html, /reliable software from interface to/i);
+  assert.match(html, /Illustrative system flow/i);
+  assert.match(html, /GET, SET, and DEL commands/i);
+  assert.match(html, /Send an edit/i);
   assert.match(html, /Redis Pub\/Sub/i);
   assert.match(html, /PostgreSQL/i);
-  assert.match(html, /35%/);
-  assert.match(html, /Depth in the system\. Care at the surface/i);
-  assert.match(html, /Tools I reach for/i);
-  assert.match(html, /Ollama/);
+  assert.match(html, /25%/);
+  assert.match(html, /Backend depth, full-stack perspective/i);
+  assert.match(html, /Tools I use/i);
+  assert.match(html, /GitHub Actions/);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
   assert.doesNotMatch(
     html,
-    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png|harsh\.profile|understand the whole system|placeholder|lorem ipsum/i,
+    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });

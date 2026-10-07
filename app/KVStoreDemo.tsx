@@ -2,63 +2,103 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Phase = "idle" | "hashing" | "routing" | "stored";
+type Operation = "SET" | "GET" | "DEL";
+
+const commands: Record<Operation, string> = {
+  SET: 'SET user:104 "Harsh"',
+  GET: "GET user:104",
+  DEL: "DEL user:104",
+};
+
+const stages = ["Client", "TCP listener", "Worker pool", "KV engine", "Memory"] as const;
 
 export default function KVStoreDemo() {
-  const [phase, setPhase] = useState<Phase>("idle");
-  const timeouts = useRef<number[]>([]);
+  const [operation, setOperation] = useState<Operation>("SET");
+  const [phase, setPhase] = useState(-1);
+  const [hasValue, setHasValue] = useState(false);
+  const [result, setResult] = useState("Choose a command to trace its path");
+  const timers = useRef<number[]>([]);
 
   const clearTimers = () => {
-    timeouts.current.forEach((timer) => window.clearTimeout(timer));
-    timeouts.current = [];
+    timers.current.forEach((timer) => window.clearTimeout(timer));
+    timers.current = [];
   };
 
   useEffect(() => clearTimers, []);
 
-  const runRequest = () => {
-    clearTimers();
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      setPhase("stored");
-      return;
+  const complete = (next: Operation) => {
+    if (next === "SET") {
+      setHasValue(true);
+      setResult("OK, value stored");
+    } else if (next === "GET") {
+      setResult(hasValue ? '"Harsh"' : "(nil), key not found");
+    } else {
+      setResult(hasValue ? "1 key removed" : "0 keys removed");
+      setHasValue(false);
     }
-    setPhase("hashing");
-    timeouts.current.push(window.setTimeout(() => setPhase("routing"), 450));
-    timeouts.current.push(window.setTimeout(() => setPhase("stored"), 1050));
   };
 
-  const message = {
-    idle: "Ready for a request",
-    hashing: "Hashing user:104",
-    routing: "Routing to Node 3",
-    stored: "Stored on Node 3",
-  }[phase];
+  const run = (next: Operation) => {
+    clearTimers();
+    setOperation(next);
+    setResult(`Routing ${next} command`);
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setPhase(4);
+      complete(next);
+      return;
+    }
+
+    setPhase(0);
+    [1, 2, 3, 4].forEach((stage, index) => {
+      timers.current.push(window.setTimeout(() => {
+        setPhase(stage);
+        if (stage === 4) complete(next);
+      }, (index + 1) * 240));
+    });
+  };
 
   return (
     <div className="kv-demo" data-phase={phase}>
-      <div className="kv-command-bar">
-        <div className="kv-command"><span>PUT</span><code>user:104</code><small>&quot;Harsh&quot;</small></div>
-        <button type="button" onClick={runRequest}>{phase === "idle" ? "Run request" : "Run again"}</button>
+      <div className="demo-toolbar">
+        <div className="command-controls" aria-label="Key-value commands">
+          {(["SET", "GET", "DEL"] as const).map((command) => (
+            <button
+              type="button"
+              key={command}
+              onClick={() => run(command)}
+              aria-pressed={operation === command}
+            >
+              {command}
+            </button>
+          ))}
+        </div>
+        <div className="demo-status"><i /><span>Ready for commands</span></div>
       </div>
-      <div className="kv-route" aria-hidden="true">
-        <span>Client</span><i /><span>hash(key)</span><i /><span>Node ring</span>
+
+      <div className="kv-command-readout">
+        <span>client</span>
+        <code>{commands[operation]}</code>
+        <strong aria-live="polite">{result}</strong>
       </div>
-      <div className="kv-nodes" aria-label="Five node cluster">
-        {[1, 2, 3, 4, 5].map((node) => (
-          <div className={node === 3 && (phase === "routing" || phase === "stored") ? "kv-node is-target" : "kv-node"} key={node}>
-            <span><i />Node {node}</span>
-            <strong>{node === 3 && phase === "stored" ? "user:104" : "ready"}</strong>
-          </div>
-        ))}
-      </div>
-      <div className="kv-status" aria-live="polite">
-        <span className="kv-status-message"><i />{message}</span>
-        <ul>
-          <li><strong>5</strong><span>nodes</span></li>
-          <li><strong>TCP</strong><span>transport</span></li>
-          <li><strong>TTL + LRU</strong><span>memory policy</span></li>
-          <li><strong>AOF</strong><span>persistence</span></li>
-        </ul>
+
+      <div className="kv-architecture" role="img" aria-label="Command flow through the distributed key-value store">
+        <div className="layer-labels" aria-hidden="true"><span>Network</span><span>Compute</span><span>State</span></div>
+        <div className="kv-flow" aria-hidden="true">
+          {stages.map((stage, index) => (
+            <div className={phase === index ? "flow-stage is-active" : phase > index ? "flow-stage is-done" : "flow-stage"} key={stage}>
+              <span><i />{stage}</span>
+              <small>{index === 0 ? operation : index === 1 ? "TCP" : index === 2 ? "bounded" : index === 3 ? "execute" : hasValue ? "user:104" : "empty"}</small>
+              {index < stages.length - 1 && <b />}
+            </div>
+          ))}
+        </div>
+        <div className="kv-policies" aria-hidden="true">
+          <span><small>Expiry</small><strong>TTL</strong></span>
+          <span><small>Eviction</small><strong>LRU</strong></span>
+          <span><small>Persistence</small><strong>AOF</strong></span>
+        </div>
       </div>
     </div>
   );
