@@ -34,35 +34,37 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /<title>Harsh Dobariya \| Software Engineer<\/title>/i);
   assert.match(html, /Harsh/);
   assert.match(html, /Dobariya/);
-  assert.match(html, /Selected work/i);
+  assert.match(html, /Selected systems/i);
+  assert.match(html, /AgentTime/);
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
+  assert.match(html, /AI Resume Analyzer/);
   assert.match(html, /Arizona State University/);
   assert.match(html, /Tempe, Arizona, USA/);
   assert.match(html, /Open to relocate/);
+  assert.match(html, /Community Dreams Foundation/);
   assert.match(html, /Ninja Technolabs/);
   assert.match(html, /Harsh_Dobariya_Resume\.pdf/);
   assert.match(html, /harsh-dobariya-962238183/);
   assert.match(html, /HarshDobariya1801/);
   assert.match(html, /og\.png/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, /Have something worth building/i);
-  assert.match(html, /interface to infrastructure/i);
-  assert.match(html, /One engineer, across the stack/i);
-  assert.match(html, /Toggle color theme/i);
-  assert.match(html, /Request Gateway/i);
-  assert.match(html, /Worker Pool/i);
+  assert.match(html, /Let&#x27;s build something useful/i);
+  assert.match(html, /stay fast when things get/i);
+  assert.match(html, /The engineering is the interface/i);
+  assert.match(html, /SnapshotRepository\.swift/i);
+  assert.match(html, /Run request/i);
   assert.match(html, /Redis Pub\/Sub/i);
   assert.match(html, /PostgreSQL/i);
-  assert.match(html, /1,000\+ algorithm and data structure problems/);
   assert.match(html, /35%/);
-  assert.match(html, /Backend depth, full-stack perspective/i);
-  assert.match(html, /Build the right thing/i);
+  assert.match(html, /Depth in the system\. Care at the surface/i);
+  assert.match(html, /Tools I reach for/i);
+  assert.match(html, /Ollama/);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
-  assert.doesNotMatch(html, /blueprint-tools/i);
+  assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
   assert.doesNotMatch(
     html,
-    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png|harsh\.profile|understand the whole system/i,
+    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png|harsh\.profile|understand the whole system|placeholder|lorem ipsum/i,
   );
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });

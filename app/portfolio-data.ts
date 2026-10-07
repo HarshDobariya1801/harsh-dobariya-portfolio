@@ -1,119 +1,77 @@
 export const profile = {
   name: "Harsh Dobariya",
   email: "dobariyaharsh10@gmail.com",
-  phone: "+16232977900",
-  phoneLabel: "+1 (623) 297-7900",
   linkedin: "https://www.linkedin.com/in/harsh-dobariya-962238183/",
   github: "https://github.com/HarshDobariya1801",
   location: "Tempe, Arizona, USA",
 };
 
-export const projects = [
-  {
-    index: "01",
-    category: "Systems",
-    title: "Distributed Key-Value Store",
-    diagram: "kv" as const,
-  },
-  {
-    index: "02",
-    category: "Real-time product",
-    title: "Real-Time Collaborative Workspace",
-    diagram: "realtime" as const,
-  },
-] as const;
-
-export type Project = (typeof projects)[number];
-
 export const experience = [
   {
-    index: "01",
+    company: "Community Dreams Foundation",
+    role: "Software Developer",
+    period: "Feb 2026 - Present",
+    location: "Remote, USA",
+    summary:
+      "Building and maintaining React workflows, REST APIs, task tracking, forms, and user-facing dashboards for volunteer and project operations.",
+    metrics: [],
+  },
+  {
     company: "Ninja Technolabs",
     role: "Software Engineer, Full Stack",
-    period: "Jan 2023 – Nov 2023",
+    period: "Jan 2023 - Nov 2023",
     location: "Ahmedabad, India",
-    stack: "React · Node.js · MySQL",
     summary:
-      "Modernized a billing system used by around 3,000 users.",
-    impact: [
+      "Reworked a legacy billing workflow across React, Node.js, and MySQL, improving how invoices moved through a product used by approximately 3,000 people each month.",
+    metrics: [
       { value: "15%", label: "fewer invoice propagation errors" },
-      { value: "2,000+", label: "invoices migrated each month" },
-      { value: "28%", label: "less duplicated interface code" },
+      { value: "2,000+", label: "invoices processed monthly" },
+      { value: "28%", label: "less duplicate UI code" },
       { value: "70%+", label: "test coverage on core flows" },
     ],
   },
   {
-    index: "02",
     company: "BrainyBeam Technologies",
     role: "Software Engineer Intern",
-    period: "Aug 2022 – Nov 2022",
+    period: "Aug 2022 - Nov 2022",
     location: "Ahmedabad, India",
-    stack: "Python · Search · Data tooling",
     summary:
-      "Helped build internal search and data tools for analysts.",
-    impact: [
-      { value: "35%", label: "faster PR-to-production process" },
+      "Consolidated MySQL data for internal search and visualization tools, then improved the CI/CD path from pull request to production.",
+    metrics: [
       { value: "20+", label: "analysts supported" },
+      { value: "35%", label: "faster PR-to-production workflow" },
     ],
   },
   {
-    index: "03",
     company: "Freelance",
     role: "Web Developer",
-    period: "Jan 2022 – Jul 2022",
+    period: "Jan 2022 - Jul 2022",
     location: "Ahmedabad, India",
-    stack: "React · Node.js · REST APIs",
     summary:
-      "Built a React and Node.js application for a client.",
-    impact: [{ value: "25%", label: "improvement in Lighthouse LCP" }],
+      "Built a React and Node.js application with REST APIs and authentication for a startup client.",
+    metrics: [],
   },
 ] as const;
 
 export const toolGroups = [
+  { label: "Languages", tools: ["C++", "Java", "Python", "TypeScript", "JavaScript", "SQL"] },
+  { label: "Backend", tools: ["Node.js", "Express", "PostgreSQL", "MySQL", "Redis", "WebSockets"] },
+  { label: "Frontend", tools: ["React", "Next.js", "HTML", "CSS"] },
+  { label: "Infrastructure", tools: ["AWS", "Docker", "Kubernetes", "GitHub Actions"] },
+  { label: "AI tooling", tools: ["Ollama", "PGVector", "n8n", "Agent frameworks"] },
+] as const;
+
+export const education = [
   {
-    label: "Languages",
-    skills: [
-      { name: "C++", strong: true },
-      { name: "TypeScript", strong: true },
-      { name: "Java", strong: false },
-      { name: "Python", strong: false },
-      { name: "JavaScript", strong: false },
-      { name: "SQL", strong: true },
-    ],
+    school: "Arizona State University",
+    degree: "M.S. Information Technology",
+    period: "2024 - 2025",
+    location: "Tempe, Arizona",
   },
   {
-    label: "Frontend",
-    skills: [
-      { name: "React", strong: true },
-      { name: "HTML", strong: false },
-      { name: "CSS", strong: false },
-    ],
-  },
-  {
-    label: "Backend",
-    skills: [
-      { name: "Node.js", strong: true },
-      { name: "Express", strong: false },
-      { name: "REST APIs", strong: true },
-      { name: "WebSockets", strong: true },
-    ],
-  },
-  {
-    label: "Data",
-    skills: [
-      { name: "PostgreSQL", strong: true },
-      { name: "MySQL", strong: false },
-      { name: "Redis", strong: true },
-      { name: "MongoDB", strong: false },
-    ],
-  },
-  {
-    label: "Cloud / DevOps",
-    skills: [
-      { name: "AWS", strong: true },
-      { name: "Docker", strong: true },
-      { name: "Kubernetes", strong: false },
-      { name: "GitHub Actions", strong: false },
-    ],
+    school: "Gujarat Technological University",
+    degree: "B.E. Information Technology",
+    period: "2019 - 2023",
+    location: "Gujarat, India",
   },
 ] as const;

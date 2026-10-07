@@ -48,12 +48,10 @@ export default function ScrollMotion() {
     const closeMenu = () => {
       if (!menu?.open) return;
       menu.open = false;
-      document.body.classList.remove("menu-open");
     };
 
     const handleMenuToggle = () => {
       const open = Boolean(menu?.open);
-      document.body.classList.toggle("menu-open", open);
       if (open) {
         window.requestAnimationFrame(() => menu?.querySelector<HTMLAnchorElement>("a")?.focus());
       }
@@ -89,7 +87,6 @@ export default function ScrollMotion() {
       menu?.removeEventListener("toggle", handleMenuToggle);
       menu?.querySelectorAll("a").forEach((link) => link.removeEventListener("click", closeMenu));
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.classList.remove("menu-open");
       root.classList.remove("reveal-ready");
     };
   }, []);

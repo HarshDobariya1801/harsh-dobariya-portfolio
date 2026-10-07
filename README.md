@@ -1,6 +1,6 @@
 # Harsh Dobariya Portfolio
 
-Personal portfolio for [harshdobariya.com](https://harshdobariya.com), designed for recruiters and engineering managers evaluating backend, full-stack, and distributed-systems work.
+Product-led personal site for [harshdobariya.com](https://harshdobariya.com), designed for recruiters and engineering managers evaluating backend, full-stack, and distributed-systems work.
 
 ## Stack
 
@@ -9,7 +9,7 @@ Personal portfolio for [harshdobariya.com](https://harshdobariya.com), designed 
 - CSS design tokens and responsive layouts
 - Cloudflare-backed Sites hosting
 
-The site avoids third-party font and animation downloads. Motion is implemented with CSS and IntersectionObserver, and respects `prefers-reduced-motion`.
+The site avoids third-party font and animation downloads. Its AgentTime, distributed key-value store, and collaborative workspace demonstrations are built as accessible React interfaces. Motion is implemented with CSS and IntersectionObserver and respects `prefers-reduced-motion`.
 
 ## Run locally
 
@@ -38,7 +38,7 @@ npm test
 
 ## Editing content
 
-Structured profile, project, experience, education, and skill content lives in `app/portfolio-data.ts`. Project architecture diagrams are built as responsive interface components in `app/ProjectDiagram.tsx`.
+Structured profile, experience, education, and tool content lives in `app/portfolio-data.ts`. Interactive system demonstrations live in `app/SystemShowcase.tsx`, `app/KVStoreDemo.tsx`, and `app/CollaborativeDemo.tsx`.
 
 ## Deployment
 

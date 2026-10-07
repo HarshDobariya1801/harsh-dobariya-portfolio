@@ -1,221 +1,170 @@
-import CopyEmail from "./CopyEmail";
+import CollaborativeDemo from "./CollaborativeDemo";
 import CountUp from "./CountUp";
-import CustomCursor from "./CustomCursor";
-import ProjectDiagram from "./ProjectDiagram";
+import KVStoreDemo from "./KVStoreDemo";
 import ScrollMotion from "./ScrollMotion";
-import ThemeToggle from "./ThemeToggle";
-import { experience, profile, projects, toolGroups, type Project } from "./portfolio-data";
+import SystemShowcase from "./SystemShowcase";
+import { education, experience, profile, toolGroups } from "./portfolio-data";
 
 function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
   return (
     <>
-      <a href="#work" data-nav-link>{mobile && <span>01</span>}Projects</a>
-      <a href="#focus" data-nav-link>{mobile && <span>02</span>}What I do</a>
-      <a href="#experience" data-nav-link>{mobile && <span>03</span>}Experience</a>
-      <a href="#about" data-nav-link>{mobile && <span>04</span>}About</a>
+      <a href="#work" data-nav-link>Work</a>
+      <a href="#experience" data-nav-link>Experience</a>
+      <a href="#about" data-nav-link>About</a>
+      <a href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
+      <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+      {mobile && <a className="mobile-contact-link" href="#contact">Contact</a>}
     </>
   );
 }
 
-function SectionIntro({
-  label,
+function SectionHeading({
+  eyebrow,
   title,
   description,
-  headingId,
+  id,
 }: {
-  label: string;
+  eyebrow: string;
   title: string;
   description?: string;
-  headingId: string;
+  id: string;
 }) {
   return (
-    <header className="section-intro" data-reveal>
-      <p className="section-label"><i />{label}</p>
-      <div className="section-intro-copy">
-        <h2 id={headingId}>{title}</h2>
+    <header className="section-heading" data-reveal>
+      <p className="eyebrow">{eyebrow}</p>
+      <div>
+        <h2 id={id}>{title}</h2>
         {description && <p>{description}</p>}
       </div>
     </header>
   );
 }
 
-function HeroBlueprint() {
-  return (
-    <div className="hero-blueprint" aria-label="Harsh's end-to-end engineering approach" role="img" data-reveal>
-      <div className="blueprint-heading" aria-hidden="true">
-        <span>Engineering focus</span>
-        <b><i />Backend + full-stack</b>
-      </div>
-      <div className="blueprint-body" aria-hidden="true">
-        <p className="blueprint-kicker">From product intent to production systems</p>
-        <p className="blueprint-statement">
-          Build the right thing.<br /><em>Make it dependable.</em>
-        </p>
-        <ol className="blueprint-flow">
-          <li>
-            <span>01</span>
-            <div><strong>Product</strong><small>Clear interfaces and useful feedback</small></div>
-          </li>
-          <li>
-            <span>02</span>
-            <div><strong>Services</strong><small>Typed APIs and observable behavior</small></div>
-          </li>
-          <li>
-            <span>03</span>
-            <div><strong>Data + cloud</strong><small>Durable state and repeatable delivery</small></div>
-          </li>
-        </ol>
-      </div>
-    </div>
-  );
-}
-
-function ProjectCard({ project }: { project: Project }) {
-  return (
-    <article className="project-card" data-reveal>
-      <ProjectDiagram kind={project.diagram} />
-      <div className="project-card-copy">
-        <p className="project-index">{project.index}</p>
-        <div>
-          <h3>{project.title}</h3>
-          <p>{project.category}</p>
-        </div>
-        <span className="project-state"><i />Architecture</span>
-      </div>
-    </article>
-  );
-}
-
-const focusAreas = [
-  {
-    number: "01",
-    title: "Product engineering",
-    description: "Full-stack applications shaped from the interface through the API, data model, and production behavior.",
-  },
-  {
-    number: "02",
-    title: "Systems and infrastructure",
-    description: "Concurrent services, real-time communication, caching, persistence, and failure paths designed as one system.",
-  },
-  {
-    number: "03",
-    title: "Cloud and delivery",
-    description: "Docker, AWS, Kubernetes, and CI/CD workflows that make software repeatable to build, test, and ship.",
-  },
-] as const;
-
 export default function Home() {
   return (
     <main id="top">
       <ScrollMotion />
-      <CustomCursor />
       <a className="skip-link" href="#main-content">Skip to content</a>
 
       <header className="site-header" data-site-header>
         <div className="site-header-inner section-shell">
-          <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">harsh<span>.</span>dobariya</a>
+          <a className="wordmark" href="#top" aria-label="Harsh Dobariya, home">Harsh Dobariya</a>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <NavigationLinks />
           </nav>
-          <div className="header-actions">
-            <ThemeToggle />
-            <a className="header-resume" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Résumé</a>
-            <a className="header-contact" href="#contact">Get in touch</a>
-            <details className="mobile-nav" data-mobile-nav>
-              <summary>Menu</summary>
-              <div className="mobile-menu-panel">
-                <nav aria-label="Mobile navigation">
-                  <NavigationLinks mobile />
-                  <a href="/Harsh_Dobariya_Resume.pdf" target="_blank"><span>05</span>Résumé</a>
-                  <a href="#contact"><span>06</span>Contact</a>
-                </nav>
-                <p>{profile.location}<br />Open to relocate for the right opportunity</p>
-              </div>
-            </details>
-          </div>
+          <a className="nav-contact" href="#contact">Contact</a>
+          <details className="mobile-nav" data-mobile-nav>
+            <summary>Menu</summary>
+            <div className="mobile-menu-panel">
+              <nav aria-label="Mobile navigation"><NavigationLinks mobile /></nav>
+              <p>{profile.location}<br />Open to relocate for the right opportunity</p>
+            </div>
+          </details>
         </div>
       </header>
 
       <div id="main-content">
         <section className="hero section-shell" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <p className="availability" data-reveal><i />Open to Software Engineer roles</p>
+            <p className="hero-name" data-reveal>Harsh Dobariya <span>Software Engineer</span></p>
             <h1 id="hero-title" data-reveal>
-              I build reliable software from <em>interface to infrastructure.</em>
+              I build systems that stay fast when things get <em>messy.</em>
             </h1>
             <p className="hero-summary" data-reveal>
-              Full-stack products and backend systems built with clear boundaries,
-              dependable data flows, and the discipline to hold up in production.
+              Backend infrastructure, distributed systems, and product engineering.
+              From APIs and databases to real-time applications.
             </p>
             <div className="hero-actions" data-reveal>
-              <a className="button button-primary" href="#work">See the work</a>
-              <a className="button button-quiet" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Résumé</a>
+              <a className="button button-primary" href="#work">View my work</a>
+              <a className="text-link" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+              <a className="text-link" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
             </div>
-            <dl className="hero-meta" data-reveal>
-              <div><dt>Based in</dt><dd>{profile.location}</dd></div>
-              <div><dt>Availability</dt><dd>Open to relocate</dd></div>
-            </dl>
-          </div>
-          <HeroBlueprint />
-        </section>
-
-        <section className="work section-shell" id="work" data-nav-section aria-labelledby="work-title">
-          <SectionIntro
-            label="Selected work"
-            title="Systems built end to end."
-            headingId="work-title"
-            description="Two projects that show how I think about concurrency, real-time behavior, storage, and the boundaries between them."
-          />
-          <div className="project-grid">
-            <ProjectCard project={projects[0]} />
-            <ProjectCard project={projects[1]} />
+            <p className="hero-context" data-reveal>
+              <i />
+              <span>Based in Tempe, Arizona</span>
+              <b>·</b>
+              <span>Open to Software Engineer roles</span>
+              <b>·</b>
+              <span>Open to relocate</span>
+            </p>
           </div>
         </section>
 
-        <section className="focus section-shell" id="focus" data-nav-section aria-labelledby="focus-title">
-          <SectionIntro
-            label="What I do"
-            title="One engineer, across the stack."
-            headingId="focus-title"
-          />
-          <ol className="focus-list">
-            {focusAreas.map((item) => (
-              <li key={item.number} data-reveal>
-                <span>{item.number}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </li>
-            ))}
-          </ol>
+        <SystemShowcase />
+
+        <section className="project-story section-shell" aria-labelledby="kv-title">
+          <div className="story-copy" data-reveal>
+            <p className="eyebrow">Distributed Key-Value Store</p>
+            <h2 id="kv-title">What happens after <code>PUT(key, value)</code>?</h2>
+            <p>
+              Five nodes, TCP connections, and concurrent clients. Requests are routed by key while TTL expiry,
+              LRU eviction, and append-only persistence keep the system predictable under load.
+            </p>
+            <ul className="inline-specs" aria-label="Distributed key-value store technologies">
+              <li>C++</li><li>TCP/IP</li><li>Multithreading</li><li>CMake</li>
+            </ul>
+          </div>
+          <div data-reveal><KVStoreDemo /></div>
+        </section>
+
+        <section className="project-story collaborative-story section-shell" aria-labelledby="collab-title">
+          <div className="story-copy" data-reveal>
+            <p className="eyebrow">Real-Time Collaborative Workspace</p>
+            <h2 id="collab-title">Realtime without refreshes.</h2>
+            <p>
+              WebSockets move low-latency updates, Redis Pub/Sub carries events between Node.js instances,
+              and PostgreSQL keeps durable workspace history.
+            </p>
+            <ul className="inline-specs" aria-label="Collaborative workspace technologies">
+              <li>TypeScript</li><li>React</li><li>Node.js</li><li>Redis</li><li>PostgreSQL</li>
+            </ul>
+          </div>
+          <div data-reveal><CollaborativeDemo /></div>
+        </section>
+
+        <section className="more-work section-shell" aria-labelledby="more-work-title">
+          <div className="more-work-heading" data-reveal>
+            <p className="eyebrow">More work</p>
+            <h2 id="more-work-title">Smaller explorations, same standard.</h2>
+          </div>
+          <div className="more-work-list">
+            <article data-reveal>
+              <span>04</span>
+              <div><h3>AI Resume Analyzer</h3><p>Document structure, role signals, and a focused review workflow.</p></div>
+              <small>AI tooling</small>
+            </article>
+            <article data-reveal>
+              <span>05</span>
+              <div><h3>Competitive Programming</h3><p>Algorithm practice across graphs, dynamic programming, data structures, and optimization.</p></div>
+              <small>C++</small>
+            </article>
+          </div>
         </section>
 
         <section className="experience section-shell" id="experience" data-nav-section aria-labelledby="experience-title">
-          <SectionIntro
-            label="Experience"
-            title="A path through product and platform work."
-            headingId="experience-title"
+          <SectionHeading
+            eyebrow="Experience"
+            title="Software that had to work outside a demo."
+            description="Product delivery, legacy modernization, internal tooling, and the engineering details that kept each system moving."
+            id="experience-title"
           />
           <ol className="experience-list">
             {experience.map((item) => (
-              <li className="experience-row" key={item.company} data-reveal>
-                <div className="experience-meta">
-                  <span>{item.period}</span>
-                  <span>{item.location}</span>
-                </div>
-                <div className="experience-role">
-                  <p>{item.company}</p>
-                  <h3>{item.role}</h3>
-                  <span>{item.stack}</span>
-                </div>
-                <div className="experience-outcome">
+              <li className="experience-row" key={`${item.company}-${item.period}`} data-reveal>
+                <div className="experience-period"><time>{item.period}</time><span>{item.location}</span></div>
+                <div className="experience-role"><h3>{item.company}</h3><p>{item.role}</p></div>
+                <div className="experience-impact">
                   <p>{item.summary}</p>
-                  <div className="impact-list">
-                    {item.impact.map((metric) => (
-                      <span key={metric.label}>
-                        <strong><CountUp value={metric.value} /></strong>{metric.label}
-                      </span>
-                    ))}
-                  </div>
+                  {item.metrics.length > 0 && (
+                    <div className="metric-strip">
+                      {item.metrics.map((metric) => (
+                        <div key={metric.label}>
+                          <strong><CountUp value={metric.value} /></strong>
+                          <span>{metric.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </li>
             ))}
@@ -223,56 +172,39 @@ export default function Home() {
         </section>
 
         <section className="about section-shell" id="about" data-nav-section aria-labelledby="about-title">
-          <SectionIntro
-            label="About"
-            title="Backend depth, full-stack perspective."
-            headingId="about-title"
-          />
-          <div className="about-grid">
-            <div className="about-story" data-reveal>
+          <SectionHeading eyebrow="About" title="Depth in the system. Care at the surface." id="about-title" />
+          <div className="about-layout">
+            <div className="about-copy" data-reveal>
               <p>
-                I am a software engineer based in Tempe, Arizona, focused on backend and
-                full-stack development. I turn complex requirements into dependable products
-                with clear APIs, maintainable code, and thoughtful data design.
+                I enjoy understanding how software behaves beneath the abstraction: databases, networks,
+                concurrency, and distributed systems, while still caring deeply about what the end user experiences.
               </p>
               <p>
-                Problem solving is a daily practice for me. I have solved 1,000+ algorithm and
-                data structure problems across LeetCode, Codeforces, CodeChef, and GeeksforGeeks.
+                I completed my Master&apos;s in Information Technology at Arizona State University and continue
+                building systems that help me understand software at a deeper level.
               </p>
-              <ol className="principle-list" aria-label="How I work">
-                <li><span>01</span>Start with the user and the problem.</li>
-                <li><span>02</span>Make technical tradeoffs clear.</li>
-                <li><span>03</span>Design for failures, not just demos.</li>
-                <li><span>04</span>Keep the next change easy.</li>
-              </ol>
+              <div className="interest-list" aria-label="Engineering interests">
+                <span>Distributed systems</span><span>System design</span><span>AI tooling</span><span>Product engineering</span>
+              </div>
             </div>
 
             <div className="about-details">
-              <section className="education-panel" aria-labelledby="education-title" data-reveal>
-                <p className="detail-label" id="education-title">Education</p>
-                <article>
-                  <div><h3>Arizona State University</h3><p>M.S. Information Technology</p></div>
-                  <time>2024 – 2025</time>
-                </article>
-                <article>
-                  <div><h3>Gujarat Technological University</h3><p>B.E. Information Technology</p></div>
-                  <time>2019 – 2023</time>
-                </article>
+              <section className="detail-block" aria-labelledby="education-title" data-reveal>
+                <h3 id="education-title">Education</h3>
+                {education.map((item) => (
+                  <article key={item.school}>
+                    <div><strong>{item.school}</strong><span>{item.degree}</span></div>
+                    <p>{item.period}<br />{item.location}</p>
+                  </article>
+                ))}
               </section>
-
-              <section className="skills-panel" aria-labelledby="skills-title" data-reveal>
-                <p className="detail-label" id="skills-title">Tools I use</p>
+              <section className="detail-block tools-block" aria-labelledby="tools-title" data-reveal>
+                <h3 id="tools-title">Tools I reach for</h3>
                 <dl>
                   {toolGroups.map((group) => (
                     <div key={group.label}>
                       <dt>{group.label}</dt>
-                      <dd>
-                        {group.skills.map((skill) => (
-                          skill.strong
-                            ? <strong key={skill.name}>{skill.name}</strong>
-                            : <span key={skill.name}>{skill.name}</span>
-                        ))}
-                      </dd>
+                      <dd>{group.tools.join(" · ")}</dd>
                     </div>
                   ))}
                 </dl>
@@ -282,32 +214,28 @@ export default function Home() {
         </section>
 
         <section className="contact" id="contact" data-nav-section aria-labelledby="contact-title">
-          <div className="contact-inner section-shell">
-            <p className="section-label"><i />Contact</p>
-            <div className="contact-copy" data-reveal>
-              <h2 id="contact-title">Have something worth building?</h2>
-              <p>I&apos;m available for Software Engineer roles and open to relocating for the right opportunity.</p>
-            </div>
-            <div className="contact-actions" data-reveal>
-              <div className="contact-email">
-                <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                <CopyEmail email={profile.email} />
-              </div>
-              <nav aria-label="Social links">
-                <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-                <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
-                <a href="/Harsh_Dobariya_Resume.pdf" target="_blank">Résumé</a>
-              </nav>
-            </div>
+          <div className="contact-inner section-shell" data-reveal>
+            <p className="eyebrow">Contact</p>
+            <h2 id="contact-title">Let&apos;s build something useful.</h2>
+            <p>I&apos;m currently open to software engineering opportunities.</p>
+            <nav aria-label="Contact links">
+              <a className="button button-primary" href={`mailto:${profile.email}`}>Email me</a>
+              <a className="text-link" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+              <a className="text-link" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+              <a className="text-link" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
+            </nav>
           </div>
         </section>
       </div>
 
       <footer className="site-footer section-shell">
-        <a className="footer-mark" href="#top">harsh<span>.</span>dobariya</a>
-        <p>Software Engineer<br />{profile.location}</p>
+        <div><strong>Harsh Dobariya</strong><span>Software Engineer</span></div>
+        <nav aria-label="Footer links">
+          <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+          <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href={`mailto:${profile.email}`}>Email</a>
+        </nav>
         <p>© {new Date().getFullYear()} Harsh Dobariya</p>
-        <a href="#top">Back to top</a>
       </footer>
     </main>
   );
