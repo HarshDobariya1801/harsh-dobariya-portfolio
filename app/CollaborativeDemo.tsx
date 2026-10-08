@@ -1,78 +1,205 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent, ReactNode, UIEvent } from "react";
 
-type SyncPhase = "idle" | "gateway" | "redis" | "node" | "persist" | "synced";
+type EditorId = "harsh" | "guest";
 type MobileView = "editor" | "architecture";
+type SyncPhase = "idle" | "server-a" | "redis" | "server-b" | "persist" | "synced";
 
-const sentences = [
-  "Design systems should make change predictable.",
-  "Reliability starts at clear boundaries.",
-] as const;
+const initialCode = `const workspace = {
+  status: "connected",
+  collaborators: 2,
+};
+
+function applyChange(change) {
+  return { ...workspace, ...change };
+}`;
+
+const tokenPattern = /(\/\/.*?$|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b(?:const|let|var|function|return|if|else|async|await|true|false|null|undefined)\b|\b\d+(?:\.\d+)?\b)/gm;
+
+function highlightCode(code: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let cursor = 0;
+
+  for (const match of code.matchAll(tokenPattern)) {
+    const index = match.index ?? 0;
+    const token = match[0];
+    if (index > cursor) nodes.push(code.slice(cursor, index));
+
+    const tokenClass = token.startsWith("//") || token.startsWith("/*")
+      ? "token-comment"
+      : /^["'`]/.test(token)
+        ? "token-string"
+        : /^\d/.test(token)
+          ? "token-number"
+          : "token-keyword";
+
+    nodes.push(<span className={tokenClass} key={`${index}-${token}`}>{token}</span>);
+    cursor = index + token.length;
+  }
+
+  if (cursor < code.length) nodes.push(code.slice(cursor));
+  return nodes;
+}
+
+type CodeEditorProps = {
+  id: EditorId;
+  name: string;
+  avatar: string;
+  value: string;
+  status: string;
+  isReceiving: boolean;
+  onChange: (editor: EditorId, value: string) => void;
+  onFocus: (editor: EditorId) => void;
+  onBlur: (editor: EditorId) => void;
+};
+
+function CodeEditor({ id, name, avatar, value, status, isReceiving, onChange, onFocus, onBlur }: CodeEditorProps) {
+  const highlightRef = useRef<HTMLPreElement>(null);
+  const numbersRef = useRef<HTMLPreElement>(null);
+  const lineCount = Math.max(1, value.split("\n").length);
+
+  const syncScroll = (event: UIEvent<HTMLTextAreaElement>) => {
+    const editor = event.currentTarget;
+    if (highlightRef.current) {
+      highlightRef.current.scrollTop = editor.scrollTop;
+      highlightRef.current.scrollLeft = editor.scrollLeft;
+    }
+    if (numbersRef.current) numbersRef.current.scrollTop = editor.scrollTop;
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key !== "Tab") return;
+    event.preventDefault();
+    const editor = event.currentTarget;
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const nextValue = `${value.slice(0, start)}  ${value.slice(end)}`;
+    onChange(id, nextValue);
+    window.requestAnimationFrame(() => editor.setSelectionRange(start + 2, start + 2));
+  };
+
+  return (
+    <section className={`editor-window${isReceiving ? " is-receiving" : ""}`} aria-label={`${name} editor`}>
+      <header>
+        <span className={`avatar${id === "guest" ? " guest" : ""}`}>{avatar}</span>
+        <strong>{name}</strong>
+        <small aria-live="polite">{status}</small>
+      </header>
+      <div className="code-editor-frame">
+        <pre className="editor-line-numbers" ref={numbersRef} aria-hidden="true">
+          {Array.from({ length: lineCount }, (_, index) => String(index + 1).padStart(2, "0")).join("\n")}
+        </pre>
+        <div className="code-editor-viewport">
+          <pre className="editor-highlight" ref={highlightRef} aria-hidden="true"><code>{highlightCode(value)}{"\n"}</code></pre>
+          <textarea
+            value={value}
+            aria-label={`${name} code editor`}
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck={false}
+            wrap="off"
+            onBlur={() => onBlur(id)}
+            onChange={(event) => onChange(id, event.target.value)}
+            onFocus={() => onFocus(id)}
+            onKeyDown={handleKeyDown}
+            onScroll={syncScroll}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ArchitectureNode({ className, title, detail }: { className: string; title: string; detail: string }) {
+  return (
+    <span className={`sync-node ${className}`}>
+      <strong>{title}</strong>
+      <small>{detail}</small>
+    </span>
+  );
+}
+
+function SyncLink({ className }: { className: string }) {
+  return <span className={`sync-link ${className}`} aria-hidden="true"><i /></span>;
+}
 
 export default function CollaborativeDemo() {
+  const [code, setCode] = useState(initialCode);
   const [phase, setPhase] = useState<SyncPhase>("idle");
-  const [version, setVersion] = useState(0);
-  const [localText, setLocalText] = useState(sentences[0]);
-  const [remoteText, setRemoteText] = useState(sentences[0]);
+  const [source, setSource] = useState<EditorId | null>(null);
+  const [activeEditor, setActiveEditor] = useState<EditorId | null>(null);
+  const [routeVersion, setRouteVersion] = useState(0);
   const [view, setView] = useState<MobileView>("editor");
   const timers = useRef<number[]>([]);
-  const typingTimer = useRef<number | null>(null);
 
   const clearTimers = () => {
     timers.current.forEach((timer) => window.clearTimeout(timer));
     timers.current = [];
-    if (typingTimer.current) window.clearInterval(typingTimer.current);
-    typingTimer.current = null;
   };
 
   useEffect(() => clearTimers, []);
 
-  const sendEdit = () => {
+  const runSync = (editor: EditorId) => {
     clearTimers();
-    const next = sentences[(version + 1) % sentences.length];
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setLocalText(next);
-    setRemoteText(reduced ? next : "");
+    setSource(editor);
+    setRouteVersion((value) => value + 1);
 
-    if (reduced) {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
       setPhase("synced");
-      setVersion((value) => value + 1);
       return;
     }
 
-    setPhase("gateway");
-    timers.current.push(window.setTimeout(() => setPhase("redis"), 280));
-    timers.current.push(window.setTimeout(() => setPhase("node"), 560));
-    timers.current.push(window.setTimeout(() => setPhase("persist"), 920));
-    timers.current.push(window.setTimeout(() => {
-      setPhase("synced");
-      setRemoteText(next);
-      setVersion((value) => value + 1);
-    }, 1320));
+    const route: SyncPhase[] = editor === "harsh"
+      ? ["server-a", "redis", "server-b", "persist", "synced"]
+      : ["server-b", "redis", "server-a", "persist", "synced"];
 
-    let index = 0;
-    timers.current.push(window.setTimeout(() => {
-      typingTimer.current = window.setInterval(() => {
-        index += 1;
-        setRemoteText(next.slice(0, index));
-        if (index >= next.length && typingTimer.current) {
-          window.clearInterval(typingTimer.current);
-          typingTimer.current = null;
-        }
-      }, 23);
-    }, 320));
+    setPhase(route[0]);
+    route.slice(1).forEach((nextPhase, index) => {
+      timers.current.push(window.setTimeout(() => setPhase(nextPhase), (index + 1) * 170));
+    });
+  };
+
+  const handleChange = (editor: EditorId, value: string) => {
+    setCode(value);
+    runSync(editor);
+  };
+
+  const resetDemo = () => {
+    clearTimers();
+    setCode(initialCode);
+    setPhase("idle");
+    setSource(null);
+    setActiveEditor(null);
+    setRouteVersion((value) => value + 1);
   };
 
   const syncing = phase !== "idle" && phase !== "synced";
+  const editorStatus = (editor: EditorId) => {
+    if (activeEditor === editor || (syncing && source === editor)) return "editing";
+    if (syncing) return "syncing";
+    return "synced";
+  };
 
   return (
-    <div className="collaborative-demo" data-phase={phase} data-view={view}>
+    <div
+      className="collaborative-demo"
+      data-phase={phase}
+      data-source={source ?? "none"}
+      data-view={view}
+    >
       <div className="demo-toolbar collab-toolbar">
         <div className="presence-status">
-          <span><i />Connected</span><span>2 collaborators</span><span>{syncing ? "Syncing" : "Synced"}</span>
+          <span><i />Connected</span><span>2 collaborators</span><span aria-live="polite">{syncing ? "Syncing" : "Synced"}</span>
         </div>
-        <button type="button" onClick={sendEdit} disabled={syncing}>Send an edit</button>
+        <button type="button" onClick={resetDemo}>Reset demo</button>
+      </div>
+
+      <div className="collab-instruction">
+        <strong>Interactive synchronization simulation</strong>
+        <span>Edit either window and watch the change sync live.</span>
       </div>
 
       <div className="mobile-demo-tabs" role="tablist" aria-label="Collaborative demo views">
@@ -80,26 +207,63 @@ export default function CollaborativeDemo() {
         <button type="button" role="tab" id="architecture-tab" aria-controls="architecture-panel" aria-selected={view === "architecture"} onClick={() => setView("architecture")}>Architecture</button>
       </div>
 
-      <div className="collab-editors collab-pane" id="editor-panel" aria-live="polite">
-        <section className="editor-window" aria-label="Harsh editor">
-          <header><span className="avatar">H</span><strong>Harsh</strong><small>editing</small></header>
-          <div className="editor-body"><span>01</span><p>{localText}<i /></p></div>
-        </section>
-        <section className={syncing ? "editor-window is-receiving" : "editor-window"} aria-label="Guest editor">
-          <header><span className="avatar guest">G</span><strong>Guest</strong><small>{syncing ? "receiving" : "up to date"}</small></header>
-          <div className="editor-body"><span>01</span><p>{remoteText || "Receiving change..."}</p></div>
-        </section>
+      <div className="collab-editors collab-pane" id="editor-panel" role="tabpanel" aria-labelledby="editor-tab">
+        <CodeEditor
+          id="harsh"
+          name="Harsh"
+          avatar="H"
+          value={code}
+          status={editorStatus("harsh")}
+          isReceiving={syncing && source === "guest"}
+          onChange={handleChange}
+          onFocus={setActiveEditor}
+          onBlur={(editor) => setActiveEditor((current) => current === editor ? null : current)}
+        />
+        <CodeEditor
+          id="guest"
+          name="Guest"
+          avatar="G"
+          value={code}
+          status={editorStatus("guest")}
+          isReceiving={syncing && source === "harsh"}
+          onChange={handleChange}
+          onFocus={setActiveEditor}
+          onBlur={(editor) => setActiveEditor((current) => current === editor ? null : current)}
+        />
       </div>
 
-      <div className="collab-architecture collab-pane" id="architecture-panel" role="img" aria-label="Realtime synchronization path">
-        <div className="event-path" aria-hidden="true">
-          <span className="arch-node client-a">Client A</span><i />
-          <span className="arch-node gateway">WebSocket</span><i />
-          <span className="arch-node node-one">Node 01</span><i />
-          <span className="arch-node redis">Redis</span><i />
-          <span className="arch-node node-two">Node 02</span><i />
-          <span className="arch-node client-b">Client B</span>
-          <b className="arch-node postgres">PostgreSQL<small>durable state</small></b>
+      <div className="collab-architecture collab-pane" id="architecture-panel" role="tabpanel" aria-labelledby="architecture-tab">
+        <div className="architecture-heading">
+          <strong>Live synchronization path</strong>
+          <span>Bidirectional events with separate durable persistence</span>
+        </div>
+        <div
+          className="sync-diagram"
+          role="img"
+          aria-label="Client A connects bidirectionally to Node Server A, Redis Pub/Sub, Node Server B, and Client B. Both Node servers write durable state to PostgreSQL."
+          key={routeVersion}
+        >
+          <div className="sync-flow">
+            <ArchitectureNode className="client-a" title="Client A" detail="Harsh editor" />
+            <SyncLink className="link-client-a" />
+            <ArchitectureNode className="server-a" title="Node Server A" detail="WebSocket" />
+            <SyncLink className="link-server-a" />
+            <ArchitectureNode className="redis" title="Redis Pub/Sub" detail="event channel" />
+            <SyncLink className="link-server-b" />
+            <ArchitectureNode className="server-b" title="Node Server B" detail="WebSocket" />
+            <SyncLink className="link-client-b" />
+            <ArchitectureNode className="client-b" title="Client B" detail="Guest editor" />
+          </div>
+
+          <div className="persistence-tier">
+            <span className="persistence-label">Persistence layer</span>
+            <div className="persistence-sources" aria-hidden="true"><span>Node Server A</span><span>Node Server B</span></div>
+            <div className="persistence-lines" aria-hidden="true">
+              <span className="persist-from-a"><i /></span>
+              <span className="persist-from-b"><i /></span>
+            </div>
+            <ArchitectureNode className="postgres" title="PostgreSQL" detail="durable state" />
+          </div>
         </div>
       </div>
     </div>
