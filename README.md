@@ -38,7 +38,7 @@ npm test
 
 ## Editing content
 
-Structured profile, experience, education, and tool content lives in `app/portfolio-data.ts`. The abstract hero composition and project demonstrations live in `app/HeroAbstractVisual.tsx`, `app/KVStoreDemo.tsx`, and `app/CollaborativeDemo.tsx`.
+Structured profile, experience, education, and tool content lives in `app/portfolio-data.ts`. The 3D hero sculpture and project demonstrations live in `app/HeroSculptureVisual.tsx`, `app/KVStoreDemo.tsx`, and `app/CollaborativeDemo.tsx`.
 
 ## Deployment
 

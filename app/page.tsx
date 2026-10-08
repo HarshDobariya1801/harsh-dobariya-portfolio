@@ -1,7 +1,7 @@
 import CollaborativeDemo from "./CollaborativeDemo";
 import CopyEmail from "./CopyEmail";
 import CountUp from "./CountUp";
-import HeroAbstractVisual from "./HeroAbstractVisual";
+import HeroSculptureVisual from "./HeroSculptureVisual";
 import KVStoreDemo from "./KVStoreDemo";
 import ScrollMotion from "./ScrollMotion";
 import { education, experience, profile, toolGroups } from "./portfolio-data";
@@ -117,7 +117,7 @@ export default function Home() {
             </p>
           </div>
           <div className="hero-visual" data-reveal>
-            <HeroAbstractVisual />
+            <HeroSculptureVisual />
           </div>
         </section>
 
