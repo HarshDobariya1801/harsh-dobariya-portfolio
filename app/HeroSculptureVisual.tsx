@@ -9,7 +9,7 @@ export default function HeroSculptureVisual() {
         srcSet="/hero-workstation-640.webp 640w, /hero-workstation-960.webp 960w, /hero-workstation.webp 1254w"
         width="1254"
         height="1254"
-        alt="Contemporary developer workstation with an abstract systems display"
+        alt="Layered modular compute unit under smoked glass"
         sizes="(max-width: 900px) 88vw, (max-width: 1200px) 42vw, 36rem"
         loading="eager"
         fetchPriority="high"
