@@ -15,6 +15,7 @@
   --accent: #4868d9;
   --accent-dark: #3654bb;
   --accent-soft: #edf1ff;
+  --hero-accent: #a84f36;
   --success: #267a59;
   --success-soft: #eaf5ef;
   --sans: Inter, Geist, "SF Pro Display", "Helvetica Neue", Arial, ui-sans-serif, sans-serif;
@@ -96,19 +97,19 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .hero-name { display: flex; align-items: center; gap: .75rem; margin: 0 0 2rem; font-size: .92rem; font-weight: 650; }
 .hero-name span { padding-left: .75rem; border-left: 1px solid var(--line-strong); color: var(--muted); font-weight: 460; }
 .hero h1 { max-width: 11.5ch; margin: 0; font-size: var(--type-hero); font-weight: 570; letter-spacing: -.063em; line-height: .97; text-wrap: balance; }
-.hero h1 em { color: var(--muted-strong); font-style: normal; font-weight: inherit; }
+.hero h1 em { color: var(--hero-accent); font-style: normal; font-weight: inherit; }
 .hero-summary { max-width: 37rem; margin: 2rem 0 0; color: var(--muted); font-size: clamp(1.08rem, 1.45vw, 1.2rem); line-height: 1.65; text-wrap: pretty; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.35rem; margin-top: 2.25rem; }
 .hero-context { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 3rem 0 0; color: var(--muted); font-size: .82rem; }
 .hero-context i { width: .4rem; height: .4rem; display: inline-block; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px var(--success-soft); }
 .hero-context b { color: #bbbdbf; font-weight: 400; }
 .hero-visual { min-width: 0; display: grid; place-items: center; }
-.hero-sculpture { width: min(100%, 36rem); aspect-ratio: 1 / 1.06; position: relative; display: grid; place-items: center; overflow: hidden; isolation: isolate; }
-.hero-sculpture::before { width: 74%; height: 74%; position: absolute; z-index: -1; content: ""; border: 1px solid rgba(23,24,26,.07); border-radius: 50%; background: rgba(242,243,241,.68); box-shadow: 0 28px 80px rgba(18,20,24,.055), inset 0 1px 0 rgba(255,255,255,.72); }
-.hero-sculpture img { width: 106%; height: 112%; display: block; object-fit: contain; filter: drop-shadow(0 26px 30px rgba(20,22,24,.12)); transform: translate3d(0, -.4%, 0) rotate(-.35deg); animation: sculpture-float 12s ease-in-out infinite alternate; user-select: none; }
+.hero-sculpture { width: min(100%, 36rem); aspect-ratio: 1; position: relative; display: grid; place-items: center; overflow: hidden; isolation: isolate; }
+.hero-sculpture::before { width: 79%; height: 79%; position: absolute; z-index: -1; content: ""; border: 1px solid rgba(168,79,54,.09); border-radius: 43% 57% 48% 52% / 55% 44% 56% 45%; background: rgba(245,241,236,.78); box-shadow: 0 30px 90px rgba(71,51,40,.065), inset 0 1px 0 rgba(255,255,255,.76); transform: rotate(-8deg); }
+.hero-sculpture img { width: 107%; height: 107%; display: block; object-fit: contain; filter: drop-shadow(0 28px 32px rgba(36,29,25,.15)); transform: translate3d(0, -.35%, 0) rotate(-.2deg); animation: sculpture-float 12s ease-in-out infinite alternate; user-select: none; }
 @keyframes sculpture-float {
-  from { transform: translate3d(0, -.7%, 0) rotate(-.45deg); }
-  to { transform: translate3d(0, .7%, 0) rotate(.4deg); }
+  from { transform: translate3d(0, -.65%, 0) rotate(-.3deg); }
+  to { transform: translate3d(0, .65%, 0) rotate(.28deg); }
 }
 
 .eyebrow { display: flex; align-items: center; gap: .75rem; margin: 0; color: var(--muted); font-family: var(--mono); font-size: var(--type-label); font-weight: 600; letter-spacing: .065em; text-transform: uppercase; }
@@ -337,8 +338,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .hero-context i { grid-row: 1; }
   .hero-context span { grid-column: 2; }
   .hero-context b { display: none; }
-  .hero-sculpture { width: min(100%,32rem); aspect-ratio: 1.14 / 1; }
-  .hero-sculpture img { width: 101%; height: 118%; }
+  .hero-sculpture { width: min(100%,32rem); aspect-ratio: 1.08 / 1; }
+  .hero-sculpture img { width: 105%; height: 105%; }
   .work-intro { padding-block: 5.5rem 3rem; }
   .section-heading > div { grid-template-columns: 1fr; gap: 1.25rem; }
   .section-heading h2 { font-size: clamp(2.65rem,12vw,3.6rem); }
@@ -402,7 +403,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 @media (max-width: 400px) {
   .section-shell { width: calc(100% - 2rem); }
   .hero h1 { font-size: 2.75rem; }
-  .hero-sculpture { aspect-ratio: 1.05 / 1; }
+  .hero-sculpture { aspect-ratio: 1.02 / 1; }
   .kv-policies { flex-wrap: wrap; }
 }
 
