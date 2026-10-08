@@ -103,12 +103,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .hero-context { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 3rem 0 0; color: var(--muted); font-size: .82rem; }
 .hero-context i { width: .4rem; height: .4rem; display: inline-block; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px var(--success-soft); }
 .hero-context b { color: #bbbdbf; font-weight: 400; }
-.hero-visual { min-width: 0; display: grid; place-items: center; }
-.hero-sculpture { width: min(100%, 36rem); aspect-ratio: 1; position: relative; display: grid; place-items: center; overflow: hidden; }
-.hero-sculpture img { width: 107%; height: 107%; display: block; object-fit: contain; filter: drop-shadow(0 28px 32px rgba(36,29,25,.15)); transform: translate3d(0, -.35%, 0) rotate(-.2deg); animation: sculpture-float 12s ease-in-out infinite alternate; user-select: none; }
+.hero-visual { min-width: 0; display: grid; place-items: center; isolation: isolate; }
+.hero-sculpture { width: min(100%, 36rem); aspect-ratio: 1; position: relative; display: grid; place-items: center; overflow: visible; isolation: isolate; }
+.hero-sculpture::before { width: 90%; height: 78%; position: absolute; z-index: -1; content: ""; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(168,79,54,.052), rgba(168,79,54,.016) 44%, transparent 72%); filter: blur(18px); transform: translate3d(4%,3%,0); pointer-events: none; }
+.hero-sculpture img { width: 110%; height: auto; max-width: none; display: block; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(32,29,27,.105)); transform: translate3d(0,0,0); animation: sculpture-float 16s var(--ease) infinite alternate; user-select: none; }
 @keyframes sculpture-float {
-  from { transform: translate3d(0, -.65%, 0) rotate(-.3deg); }
-  to { transform: translate3d(0, .65%, 0) rotate(.28deg); }
+  from { transform: translate3d(0,-.22rem,0); }
+  to { transform: translate3d(0,.22rem,0); }
 }
 
 .eyebrow { display: flex; align-items: center; gap: .75rem; margin: 0; color: var(--muted); font-family: var(--mono); font-size: var(--type-label); font-weight: 600; letter-spacing: .065em; text-transform: uppercase; }
@@ -347,7 +348,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .mobile-menu-panel > p { margin: .9rem .65rem .45rem; color: var(--muted); font-size: .7rem; }
   .hero { min-height: auto; grid-template-columns: 1fr; gap: 4.5rem; padding-block: 5rem; }
   .hero h1 { max-width: 11.5ch; font-size: clamp(3.7rem,10vw,5.2rem); }
-  .hero-visual { width: min(100%,32rem); margin-inline: auto; }
+  .hero-visual { width: min(100%,32rem); margin: -1rem auto 0; }
   .section-heading { grid-template-columns: 1fr; gap: 1.25rem; }
   .section-heading > div { grid-template-columns: 1.25fr .75fr; }
   .project-overview { grid-template-columns: 4rem 1fr; }
@@ -382,8 +383,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .hero-context i { grid-row: 1; }
   .hero-context span { grid-column: 2; }
   .hero-context b { display: none; }
-  .hero-sculpture { width: min(100%,32rem); aspect-ratio: 1.08 / 1; }
-  .hero-sculpture img { width: 105%; height: 105%; }
+  .hero-sculpture { width: min(100%,32rem); aspect-ratio: 1; }
+  .hero-sculpture::before { width: 94%; height: 82%; transform: translate3d(2%,3%,0); }
+  .hero-sculpture img { width: 104%; }
   .work-intro { padding-block: 5.5rem 3rem; }
   .section-heading > div { grid-template-columns: 1fr; gap: 1.25rem; }
   .section-heading h2 { font-size: clamp(2.65rem,12vw,3.6rem); }
@@ -465,7 +467,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 @media (max-width: 400px) {
   .section-shell { width: calc(100% - 2rem); }
   .hero h1 { font-size: 2.75rem; }
-  .hero-sculpture { aspect-ratio: 1.02 / 1; }
+  .hero-sculpture { aspect-ratio: 1; }
   .kv-policies { flex-wrap: wrap; }
 }
 

@@ -50,7 +50,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /Have something worth building/i);
   assert.match(html, /reliable software from interface to/i);
-  assert.match(html, /retro-futurist computing workstation/i);
+  assert.match(html, /contemporary developer workstation/i);
   assert.match(html, /GET, SET, and DEL commands/i);
   assert.match(html, /Interactive synchronization simulation/i);
   assert.match(html, /Edit either window and watch the change sync live/i);
