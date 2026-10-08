@@ -94,7 +94,7 @@ test("external profile links are not missing", async ({ page, request }, testInf
   }
 });
 
-test("critical project and contact interactions work", async ({ context, page }) => {
+test("critical project and contact interactions work", async ({ context, page }, testInfo) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/", { waitUntil: "networkidle" });
 
@@ -106,9 +106,27 @@ test("critical project and contact interactions work", async ({ context, page })
   await page.getByRole("button", { name: "DEL", exact: true }).click();
   await expect(result).toContainText("key removed");
 
-  await page.getByRole("button", { name: "Send an edit" }).click();
-  await expect(page.getByText("Synced", { exact: true })).toBeVisible();
-  await expect(page.getByLabel("Guest editor")).toContainText("Reliability starts at clear boundaries.");
+  const harshEditor = page.getByLabel("Harsh code editor");
+  const guestEditor = page.getByLabel("Guest code editor");
+  const harshChange = "const message = \"Hello from Harsh\";\nreturn message;";
+  const guestChange = "const message = \"Guest replied\";\n\nreturn message.toUpperCase();";
+
+  await harshEditor.fill(harshChange);
+  await expect(guestEditor).toHaveValue(harshChange);
+  await guestEditor.fill(guestChange);
+  await expect(harshEditor).toHaveValue(guestChange);
+
+  await page.getByRole("button", { name: "Reset demo" }).click();
+  await expect(harshEditor).toHaveValue(/const workspace/);
+  await expect(guestEditor).toHaveValue(/collaborators: 2/);
+
+  if (testInfo.project.name === "mobile") {
+    await page.getByRole("tab", { name: "Architecture" }).click();
+  }
+  const diagram = page.getByRole("img", { name: /Client A connects bidirectionally/ });
+  await expect(diagram).toBeVisible();
+  await expect(diagram.getByText("Redis Pub/Sub", { exact: true })).toBeVisible();
+  await expect(diagram.getByText("PostgreSQL", { exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: /^Copy email:/ }).click();
   await expect(page.getByRole("button", { name: /^Copied:/ })).toBeVisible();
