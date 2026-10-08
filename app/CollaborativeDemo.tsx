@@ -13,8 +13,8 @@ const sentences = [
 export default function CollaborativeDemo() {
   const [phase, setPhase] = useState<SyncPhase>("idle");
   const [version, setVersion] = useState(0);
-  const [localText, setLocalText] = useState(sentences[0]);
-  const [remoteText, setRemoteText] = useState(sentences[0]);
+  const [localText, setLocalText] = useState<string>(sentences[0]);
+  const [remoteText, setRemoteText] = useState<string>(sentences[0]);
   const [view, setView] = useState<MobileView>("editor");
   const timers = useRef<number[]>([]);
   const typingTimer = useRef<number | null>(null);

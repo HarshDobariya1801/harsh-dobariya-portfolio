@@ -1,0 +1,11 @@
+*, *::before, *::after {
+  animation: none !important;
+  caret-color: transparent !important;
+  scroll-behavior: auto !important;
+  transition: none !important;
+}
+
+[data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
