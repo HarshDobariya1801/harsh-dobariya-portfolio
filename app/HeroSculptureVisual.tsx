@@ -5,12 +5,13 @@ export default function HeroSculptureVisual() {
           srcset prevents the full-resolution hero from reaching small screens. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/hero-retro-workstation-clean-960.webp"
-        srcSet="/hero-retro-workstation-clean-640.webp 640w, /hero-retro-workstation-clean-960.webp 960w, /hero-retro-workstation-clean.webp 1254w"
-        width="1254"
-        height="1254"
-        alt="Original retro-futurist computing workstation with an amber abstract display"
-        sizes="(max-width: 900px) 88vw, (max-width: 1200px) 42vw, 36rem"
+        src="/hero-system-diagram.webp"
+        srcSet="/hero-system-diagram-640.webp 640w, /hero-system-diagram.webp 852w"
+        width="852"
+        height="941"
+        alt=""
+        aria-hidden="true"
+        sizes="(max-width: 900px) 82vw, 42vw"
         loading="eager"
         fetchPriority="high"
         decoding="async"

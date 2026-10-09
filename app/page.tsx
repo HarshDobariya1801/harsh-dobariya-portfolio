@@ -95,7 +95,7 @@ export default function Home() {
         <section className="hero section-shell" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="hero-name" data-reveal>Harsh Dobariya <span>Software Engineer</span></p>
-            <h1 id="hero-title">
+            <h1 id="hero-title" data-reveal>
               I build reliable software from interface to <em>infrastructure.</em>
             </h1>
             <p className="hero-summary" data-reveal>
