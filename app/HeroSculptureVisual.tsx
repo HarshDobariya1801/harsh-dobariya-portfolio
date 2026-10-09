@@ -5,10 +5,10 @@ export default function HeroSculptureVisual() {
           srcset prevents the full-resolution hero from reaching small screens. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/hero-system-diagram.webp"
-        srcSet="/hero-system-diagram-640.webp 640w, /hero-system-diagram.webp 852w"
-        width="852"
-        height="941"
+        src="/hero-system-diagram-refined.webp"
+        srcSet="/hero-system-diagram-refined-768.webp 768w, /hero-system-diagram-refined-960.webp 960w, /hero-system-diagram-refined.webp 1194w"
+        width="1194"
+        height="1317"
         alt=""
         aria-hidden="true"
         sizes="(max-width: 640px) 23rem, (max-width: 900px) 29rem, 34rem"
