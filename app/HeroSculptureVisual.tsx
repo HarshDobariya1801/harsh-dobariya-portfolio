@@ -11,7 +11,7 @@ export default function HeroSculptureVisual() {
         height="941"
         alt=""
         aria-hidden="true"
-        sizes="(max-width: 900px) 82vw, 42vw"
+        sizes="(max-width: 640px) 23rem, (max-width: 900px) 29rem, 34rem"
         loading="eager"
         fetchPriority="high"
         decoding="async"
