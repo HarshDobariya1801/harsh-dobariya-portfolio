@@ -133,6 +133,10 @@ export default function CollaborativeDemo() {
   const [routeVersion, setRouteVersion] = useState(0);
   const [view, setView] = useState<MobileView>("editor");
   const timers = useRef<number[]>([]);
+  const tabRefs = useRef<Record<MobileView, HTMLButtonElement | null>>({
+    editor: null,
+    architecture: null,
+  });
 
   const clearTimers = () => {
     timers.current.forEach((timer) => window.clearTimeout(timer));
@@ -176,6 +180,26 @@ export default function CollaborativeDemo() {
     setRouteVersion((value) => value + 1);
   };
 
+  const selectMobileView = (nextView: MobileView) => {
+    setView(nextView);
+    tabRefs.current[nextView]?.focus();
+  };
+
+  const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, currentView: MobileView) => {
+    let nextView: MobileView | undefined;
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      nextView = currentView === "editor" ? "architecture" : "editor";
+    } else if (event.key === "Home") {
+      nextView = "editor";
+    } else if (event.key === "End") {
+      nextView = "architecture";
+    }
+
+    if (!nextView) return;
+    event.preventDefault();
+    selectMobileView(nextView);
+  };
+
   const syncing = phase !== "idle" && phase !== "synced";
   const editorStatus = (editor: EditorId) => {
     if (activeEditor === editor || (syncing && source === editor)) return "editing";
@@ -202,9 +226,33 @@ export default function CollaborativeDemo() {
         <span>Edit either window and watch the change sync live.</span>
       </div>
 
-      <div className="mobile-demo-tabs" role="tablist" aria-label="Collaborative demo views">
-        <button type="button" role="tab" id="editor-tab" aria-controls="editor-panel" aria-selected={view === "editor"} onClick={() => setView("editor")}>Editor</button>
-        <button type="button" role="tab" id="architecture-tab" aria-controls="architecture-panel" aria-selected={view === "architecture"} onClick={() => setView("architecture")}>Architecture</button>
+      <div className="mobile-demo-tabs" role="tablist" aria-label="Collaborative demo views" aria-orientation="horizontal">
+        <button
+          ref={(node) => { tabRefs.current.editor = node; }}
+          type="button"
+          role="tab"
+          id="editor-tab"
+          aria-controls="editor-panel"
+          aria-selected={view === "editor"}
+          tabIndex={view === "editor" ? 0 : -1}
+          onClick={() => setView("editor")}
+          onKeyDown={(event) => handleTabKeyDown(event, "editor")}
+        >
+          Editor
+        </button>
+        <button
+          ref={(node) => { tabRefs.current.architecture = node; }}
+          type="button"
+          role="tab"
+          id="architecture-tab"
+          aria-controls="architecture-panel"
+          aria-selected={view === "architecture"}
+          tabIndex={view === "architecture" ? 0 : -1}
+          onClick={() => setView("architecture")}
+          onKeyDown={(event) => handleTabKeyDown(event, "architecture")}
+        >
+          Architecture
+        </button>
       </div>
 
       <div className="collab-editors collab-pane" id="editor-panel" role="tabpanel" aria-labelledby="editor-tab">

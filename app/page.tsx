@@ -5,6 +5,7 @@ import HeroSculptureVisual from "./HeroSculptureVisual";
 import KVStoreDemo from "./KVStoreDemo";
 import ScrollMotion from "./ScrollMotion";
 import { education, experience, profile, toolGroups } from "./portfolio-data";
+import ActionLink from "./ui/ActionLink";
 
 function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
   return (
@@ -80,7 +81,7 @@ export default function Home() {
           <nav className="desktop-nav" aria-label="Primary navigation">
             <NavigationLinks />
           </nav>
-          <a className="nav-contact" href="#contact">Contact</a>
+          <ActionLink className="nav-contact" href="#contact" variant="outline">Contact</ActionLink>
           <details className="mobile-nav" data-mobile-nav>
             <summary>Menu</summary>
             <div className="mobile-menu-panel">
@@ -103,9 +104,9 @@ export default function Home() {
               durable data flows, and interfaces built for real users.
             </p>
             <div className="hero-actions" data-reveal>
-              <a className="button button-primary" href="#work">View my work</a>
-              <a className="text-link" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
-              <a className="text-link" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
+              <ActionLink href="#work" icon="arrow" variant="primary">View my work</ActionLink>
+              <ActionLink href={profile.github} icon="external" target="_blank" rel="noreferrer">GitHub</ActionLink>
+              <ActionLink href="/Harsh_Dobariya_Resume.pdf" icon="external" target="_blank">Resume</ActionLink>
             </div>
             <p className="hero-context" data-reveal>
               <i />
@@ -290,9 +291,9 @@ export default function Home() {
               <CopyEmail email={profile.email} />
             </div>
             <nav aria-label="Contact links">
-              <a className="text-link" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-              <a className="text-link" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
-              <a className="text-link" href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
+              <ActionLink href={profile.linkedin} icon="external" target="_blank" rel="noreferrer">LinkedIn</ActionLink>
+              <ActionLink href={profile.github} icon="external" target="_blank" rel="noreferrer">GitHub</ActionLink>
+              <ActionLink href="/Harsh_Dobariya_Resume.pdf" icon="external" target="_blank">Resume</ActionLink>
             </nav>
           </div>
         </section>

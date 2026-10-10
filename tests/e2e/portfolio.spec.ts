@@ -121,7 +121,14 @@ test("critical project and contact interactions work", async ({ context, page },
   await expect(guestEditor).toHaveValue(/collaborators: 2/);
 
   if (testInfo.project.name === "mobile") {
-    await page.getByRole("tab", { name: "Architecture" }).click();
+    const architectureTab = page.getByRole("tab", { name: "Architecture" });
+    const editorTab = page.getByRole("tab", { name: "Editor" });
+    await architectureTab.click();
+    await expect(architectureTab).toHaveAttribute("aria-selected", "true");
+    await architectureTab.press("ArrowLeft");
+    await expect(editorTab).toHaveAttribute("aria-selected", "true");
+    await editorTab.press("End");
+    await expect(architectureTab).toHaveAttribute("aria-selected", "true");
   }
   const diagram = page.getByRole("img", { name: /Client A connects bidirectionally/ });
   await expect(diagram).toBeVisible();

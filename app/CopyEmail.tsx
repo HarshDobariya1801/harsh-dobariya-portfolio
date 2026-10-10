@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CheckIcon, CopyIcon } from "./ui/Icons";
 
 export default function CopyEmail({ email }: { email: string }) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
@@ -25,9 +26,11 @@ export default function CopyEmail({ email }: { email: string }) {
   const label = state === "copied" ? "Copied" : state === "failed" ? "Copy failed" : "Copy email";
 
   return (
-    <button className="copy-email" type="button" onClick={copy} aria-label={`${label}: ${email}`}>
+    <button className="copy-email" type="button" onClick={copy} aria-label={`${label}: ${email}`} data-state={state}>
+      <span className="copy-email-icon" aria-hidden="true">
+        {state === "copied" ? <CheckIcon /> : <CopyIcon />}
+      </span>
       <span aria-live="polite">{label}</span>
-      {state === "copied" && <i aria-hidden="true">✓</i>}
     </button>
   );
 }

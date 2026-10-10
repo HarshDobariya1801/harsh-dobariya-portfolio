@@ -62,7 +62,7 @@ export default function KVStoreDemo() {
   return (
     <div className="kv-demo" data-phase={phase}>
       <div className="demo-toolbar">
-        <div className="command-controls" aria-label="Key-value commands">
+        <div className="command-controls" role="group" aria-label="Key-value commands">
           {(["SET", "GET", "DEL"] as const).map((command) => (
             <button
               type="button"
