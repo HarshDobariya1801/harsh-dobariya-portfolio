@@ -7,6 +7,8 @@ type EditorId = "harsh" | "guest";
 type MobileView = "editor" | "architecture";
 type SyncPhase = "idle" | "server-a" | "redis" | "server-b" | "persist" | "synced";
 
+const editorHints = ["Try editing this code...", "Your changes sync live!"];
+
 const initialCode = `const workspace = {
   status: "connected",
   collaborators: 2,
@@ -50,12 +52,15 @@ type CodeEditorProps = {
   value: string;
   status: string;
   isReceiving: boolean;
+  hint?: string;
+  showHint?: boolean;
   onChange: (editor: EditorId, value: string) => void;
   onFocus: (editor: EditorId) => void;
   onBlur: (editor: EditorId) => void;
+  onInteraction: () => void;
 };
 
-function CodeEditor({ id, name, avatar, value, status, isReceiving, onChange, onFocus, onBlur }: CodeEditorProps) {
+function CodeEditor({ id, name, avatar, value, status, isReceiving, hint, showHint = false, onChange, onFocus, onBlur, onInteraction }: CodeEditorProps) {
   const highlightRef = useRef<HTMLPreElement>(null);
   const numbersRef = useRef<HTMLPreElement>(null);
   const lineCount = Math.max(1, value.split("\n").length);
@@ -70,6 +75,7 @@ function CodeEditor({ id, name, avatar, value, status, isReceiving, onChange, on
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    onInteraction();
     if (event.key !== "Tab") return;
     event.preventDefault();
     const editor = event.currentTarget;
@@ -93,6 +99,11 @@ function CodeEditor({ id, name, avatar, value, status, isReceiving, onChange, on
         </pre>
         <div className="code-editor-viewport">
           <pre className="editor-highlight" ref={highlightRef} aria-hidden="true"><code>{highlightCode(value)}{"\n"}</code></pre>
+          {showHint ? (
+            <span className="editor-typing-hint" data-editor-hint aria-hidden="true">
+              <span>{hint}</span><i />
+            </span>
+          ) : null}
           <textarea
             value={value}
             aria-label={`${name} code editor`}
@@ -101,9 +112,17 @@ function CodeEditor({ id, name, avatar, value, status, isReceiving, onChange, on
             spellCheck={false}
             wrap="off"
             onBlur={() => onBlur(id)}
-            onChange={(event) => onChange(id, event.target.value)}
-            onFocus={() => onFocus(id)}
+            onChange={(event) => {
+              onInteraction();
+              onChange(id, event.target.value);
+            }}
+            onFocus={() => {
+              onInteraction();
+              onFocus(id);
+            }}
             onKeyDown={handleKeyDown}
+            onPaste={onInteraction}
+            onPointerDown={onInteraction}
             onScroll={syncScroll}
           />
         </div>
@@ -132,6 +151,11 @@ export default function CollaborativeDemo() {
   const [activeEditor, setActiveEditor] = useState<EditorId | null>(null);
   const [routeVersion, setRouteVersion] = useState(0);
   const [view, setView] = useState<MobileView>("editor");
+  const [hintText, setHintText] = useState("");
+  const [hintDismissed, setHintDismissed] = useState(false);
+  const [hintInView, setHintInView] = useState(false);
+  const [hintCycle, setHintCycle] = useState(0);
+  const demoRef = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
   const tabRefs = useRef<Record<MobileView, HTMLButtonElement | null>>({
     editor: null,
@@ -144,6 +168,64 @@ export default function CollaborativeDemo() {
   };
 
   useEffect(() => clearTimers, []);
+
+  useEffect(() => {
+    const demo = demoRef.current;
+    if (!demo) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setHintInView(entry.isIntersecting),
+      { rootMargin: "0px 0px -10%", threshold: 0.2 },
+    );
+
+    observer.observe(demo);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!hintInView || hintDismissed) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let phraseIndex = 0;
+    let characterIndex = 0;
+    let deleting = false;
+    let timer = 0;
+
+    const step = () => {
+      const phrase = editorHints[phraseIndex];
+
+      if (deleting) {
+        characterIndex -= 1;
+        setHintText(phrase.slice(0, characterIndex));
+
+        if (characterIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % editorHints.length;
+          timer = window.setTimeout(step, 360);
+        } else {
+          timer = window.setTimeout(step, 48);
+        }
+        return;
+      }
+
+      characterIndex += 1;
+      setHintText(phrase.slice(0, characterIndex));
+
+      if (characterIndex === phrase.length) {
+        deleting = true;
+        timer = window.setTimeout(step, 1150);
+      } else {
+        timer = window.setTimeout(step, 86);
+      }
+    };
+
+    timer = window.setTimeout(() => {
+      setHintText(reducedMotion ? editorHints[0] : "");
+      if (!reducedMotion) step();
+    }, reducedMotion ? 0 : 240);
+
+    return () => window.clearTimeout(timer);
+  }, [hintCycle, hintDismissed, hintInView]);
 
   const runSync = (editor: EditorId) => {
     clearTimers();
@@ -178,6 +260,8 @@ export default function CollaborativeDemo() {
     setSource(null);
     setActiveEditor(null);
     setRouteVersion((value) => value + 1);
+    setHintDismissed(false);
+    setHintCycle((value) => value + 1);
   };
 
   const selectMobileView = (nextView: MobileView) => {
@@ -209,6 +293,7 @@ export default function CollaborativeDemo() {
 
   return (
     <div
+      ref={demoRef}
       className="collaborative-demo"
       data-phase={phase}
       data-source={source ?? "none"}
@@ -263,9 +348,12 @@ export default function CollaborativeDemo() {
           value={code}
           status={editorStatus("harsh")}
           isReceiving={syncing && source === "guest"}
+          hint={hintText}
+          showHint={hintInView && !hintDismissed}
           onChange={handleChange}
           onFocus={setActiveEditor}
           onBlur={(editor) => setActiveEditor((current) => current === editor ? null : current)}
+          onInteraction={() => setHintDismissed(true)}
         />
         <CodeEditor
           id="guest"
@@ -277,6 +365,7 @@ export default function CollaborativeDemo() {
           onChange={handleChange}
           onFocus={setActiveEditor}
           onBlur={(editor) => setActiveEditor((current) => current === editor ? null : current)}
+          onInteraction={() => setHintDismissed(true)}
         />
       </div>
 
