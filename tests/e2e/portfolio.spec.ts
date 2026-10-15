@@ -108,17 +108,29 @@ test("critical project and contact interactions work", async ({ context, page },
 
   const harshEditor = page.getByLabel("Harsh code editor");
   const guestEditor = page.getByLabel("Guest code editor");
+  const editorHint = page.locator("[data-editor-hint]");
   const harshChange = "const message = \"Hello from Harsh\";\nreturn message;";
   const guestChange = "const message = \"Guest replied\";\n\nreturn message.toUpperCase();";
 
+  await harshEditor.scrollIntoViewIfNeeded();
+  await expect(editorHint).toBeVisible();
+  await guestEditor.click();
+  await expect(editorHint).not.toBeAttached();
+
   await harshEditor.fill(harshChange);
   await expect(guestEditor).toHaveValue(harshChange);
-  await guestEditor.fill(guestChange);
+  await harshEditor.pressSequentially("\n// rapid edit", { delay: 0 });
+  await expect(guestEditor).toHaveValue(`${harshChange}\n// rapid edit`);
+
+  await guestEditor.selectText();
+  await page.evaluate((text) => navigator.clipboard.writeText(text), guestChange);
+  await page.keyboard.press(process.platform === "darwin" ? "Meta+V" : "Control+V");
   await expect(harshEditor).toHaveValue(guestChange);
 
   await page.getByRole("button", { name: "Reset demo" }).click();
   await expect(harshEditor).toHaveValue(/const workspace/);
   await expect(guestEditor).toHaveValue(/collaborators: 2/);
+  await expect(editorHint).toBeVisible();
 
   if (testInfo.project.name === "mobile") {
     const architectureTab = page.getByRole("tab", { name: "Architecture" });
@@ -140,6 +152,38 @@ test("critical project and contact interactions work", async ({ context, page },
 
   await page.getByRole("link", { name: "View my work" }).click();
   await expect(page).toHaveURL(/#work$/);
+});
+
+test("collaborative editor hint types, cycles, and dismisses", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "One animation lifecycle check is sufficient.");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const harshEditor = page.getByLabel("Harsh code editor");
+  const hint = page.locator("[data-editor-hint]");
+  await harshEditor.scrollIntoViewIfNeeded();
+
+  await expect(hint).toBeVisible();
+  await expect(hint.locator("i")).toBeVisible();
+  await expect(hint).toContainText("Try editing this code...", { timeout: 4_000 });
+  await expect(hint).toContainText("Your changes sync live!", { timeout: 7_500 });
+
+  await harshEditor.click();
+  await expect(hint).not.toBeAttached();
+});
+
+test("collaborative editor hint is static with reduced motion", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "One reduced-motion check is sufficient.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const harshEditor = page.getByLabel("Harsh code editor");
+  const hint = page.locator("[data-editor-hint]");
+  await harshEditor.scrollIntoViewIfNeeded();
+
+  await expect(hint).toContainText("Try editing this code...");
+  await page.waitForTimeout(1_000);
+  await expect(hint).toContainText("Try editing this code...");
 });
 
 test("mobile menu opens, traps focus, and closes with Escape", async ({ page }, testInfo) => {

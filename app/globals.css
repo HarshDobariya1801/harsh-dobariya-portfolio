@@ -196,10 +196,14 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .editor-highlight code { font: inherit; }
 .code-editor-viewport textarea { z-index: 1; resize: none; background: transparent; caret-color: var(--accent-dark); color: transparent; -webkit-text-fill-color: transparent; outline: none; }
 .code-editor-viewport textarea::selection { background: rgba(72,104,217,.2); }
+.editor-typing-hint { position: absolute; right: 1rem; bottom: .85rem; z-index: 2; display: inline-flex; align-items: center; color: #727781; font-family: var(--mono); font-size: .7rem; font-weight: 500; line-height: 1.25; pointer-events: none; user-select: none; }
+.editor-typing-hint i { width: 1px; height: 1.05em; display: inline-block; margin-left: .16rem; background: var(--accent-dark); animation: editor-caret-blink 900ms steps(1,end) infinite; }
 .token-comment { color: #7b817c; font-style: italic; }
 .token-string { color: #9b542d; }
 .token-number { color: #2d6f64; }
 .token-keyword { color: #405fbf; font-weight: 650; }
+
+@keyframes editor-caret-blink { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
 
 .collab-architecture { padding: 1.4rem 1.5rem 1.75rem; background: #fbfbfa; }
 .architecture-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
@@ -432,6 +436,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .collab-editors { padding: .85rem; }
   .code-editor-frame { height: 13.5rem; grid-template-columns: 2.7rem minmax(0,1fr); }
   .editor-highlight, .code-editor-viewport textarea { font-size: .7rem; }
+  .editor-typing-hint { right: .8rem; bottom: .75rem; font-size: .66rem; }
   .collab-architecture { padding: 1.1rem; }
   .architecture-heading { align-items: flex-start; flex-direction: column; gap: .2rem; }
   .sync-flow { grid-template-columns: minmax(0,1fr); width: min(100%,20rem); margin-inline: auto; }

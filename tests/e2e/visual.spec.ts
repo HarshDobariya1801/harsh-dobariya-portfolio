@@ -12,3 +12,15 @@ test("portfolio matches the reviewed full-page baseline", async ({ page }) => {
     stylePath: stabilityStyles,
   });
 });
+
+test("collaborative editor hint matches the reviewed component baseline", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.locator(".site-header").evaluate((header) => { (header as HTMLElement).style.display = "none"; });
+  const demo = page.locator(".collaborative-demo");
+  await demo.scrollIntoViewIfNeeded();
+  await expect(page.locator("[data-editor-hint]")).toContainText("Try editing this code...");
+
+  await expect(demo).toHaveScreenshot("collaborative-editor-hint.png", {
+    stylePath: stabilityStyles,
+  });
+});
