@@ -3,7 +3,7 @@ export const profile = {
   email: "dobariyaharsh10@gmail.com",
   linkedin: "https://www.linkedin.com/in/harsh-dobariya-962238183/",
   github: "https://github.com/HarshDobariya1801",
-  location: "Tempe, Arizona, USA",
+  location: "Seattle, Washington, USA",
 };
 
 export const experience = [

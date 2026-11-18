@@ -39,7 +39,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
-  assert.match(html, /Tempe, Arizona, USA/);
+  assert.match(html, /Seattle, Washington, USA/);
   assert.match(html, /Open to relocate/);
   assert.match(html, /Community Dreams Foundation/);
   assert.match(html, /Ninja Technolabs/);
