@@ -110,7 +110,7 @@ export default function Home() {
             </div>
             <p className="hero-context" data-reveal>
               <i />
-              <span>Tempe, Arizona</span>
+              <span>Seattle, Washington</span>
               <b>·</b>
               <span>Backend + Full Stack</span>
               <b>·</b>
@@ -238,7 +238,7 @@ export default function Home() {
             <div className="about-editorial">
               <div className="about-copy" data-reveal>
                 <p>
-                  I am a software engineer based in Tempe, focused on backend and full-stack systems.
+                  I am a software engineer based in Seattle, focused on backend and full-stack systems.
                   I turn complex requirements into dependable products with clear APIs, maintainable code,
                   and thoughtful data design.
                 </p>
@@ -301,7 +301,7 @@ export default function Home() {
 
       <footer className="site-footer section-shell">
         <div><strong>harsh.dobariya</strong><span>Software Engineer</span></div>
-        <p>Tempe, Arizona</p>
+        <p>Seattle, Washington</p>
         <nav aria-label="Footer links">
           <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
           <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>

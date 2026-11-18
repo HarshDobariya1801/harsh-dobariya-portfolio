@@ -58,8 +58,8 @@ const personSchema = {
   email: "mailto:dobariyaharsh10@gmail.com",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Tempe",
-    addressRegion: "Arizona",
+    addressLocality: "Seattle",
+    addressRegion: "Washington",
     addressCountry: "US",
   },
   alumniOf: [
