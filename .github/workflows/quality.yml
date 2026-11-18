@@ -14,9 +14,9 @@ concurrency:
 jobs:
   verify:
     name: Type, lint, render, and browser checks
-    # Visual baselines were reviewed on macOS; pin the runner to avoid
-    # cross-platform font rasterization creating false screenshot failures.
-    runs-on: macos-14
+    # Visual baselines were reviewed on macOS; pin to a supported macOS image
+    # to avoid cross-platform font rasterization creating false failures.
+    runs-on: macos-15
     timeout-minutes: 20
 
     steps:
