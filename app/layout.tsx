@@ -81,18 +81,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preload" href="/project-demos.css" as="style" />
-        {/* This media-scoped stylesheet is intentionally non-blocking on mobile. */}
-        {/* eslint-disable-next-line @next/next/no-css-tags */}
-        <link
-          rel="stylesheet"
-          href="/journey-desktop.css"
-          media="(min-width: 1120px) and (min-height: 720px) and (prefers-reduced-motion: no-preference)"
-        />
         <noscript>
-          {/* No-JavaScript fallback for the deferred, below-fold project demos. */}
+          {/* No-JavaScript fallback for deferred, below-fold presentation styles. */}
           {/* eslint-disable-next-line @next/next/no-css-tags */}
           <link rel="stylesheet" href="/project-demos.css" />
+          {/* eslint-disable-next-line @next/next/no-css-tags */}
+          <link rel="stylesheet" href="/journey-scenes.css" />
+          {/* eslint-disable-next-line @next/next/no-css-tags */}
+          <link
+            rel="stylesheet"
+            href="/journey-desktop.css"
+            media="(min-width: 1120px) and (min-height: 720px) and (prefers-reduced-motion: no-preference)"
+          />
         </noscript>
       </head>
       <body>

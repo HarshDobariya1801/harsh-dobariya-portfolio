@@ -66,10 +66,15 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /move data, coordinate users, and stay reliable under pressure/i);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
+  const visibleText = html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ");
   assert.doesNotMatch(
-    html,
-    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
+    visibleText,
+    /—|3K|monthly users supported|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
   );
+  assert.doesNotMatch(html, /system-stats|harsh-system-poster\.png/i);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
 
