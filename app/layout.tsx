@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import DeferredStyles from "./DeferredStyles";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -79,7 +80,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" href="/project-demos.css" as="style" />
+        {/* This media-scoped stylesheet is intentionally non-blocking on mobile. */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link
+          rel="stylesheet"
+          href="/journey-desktop.css"
+          media="(min-width: 1120px) and (min-height: 720px) and (prefers-reduced-motion: no-preference)"
+        />
+        <noscript>
+          {/* No-JavaScript fallback for the deferred, below-fold project demos. */}
+          {/* eslint-disable-next-line @next/next/no-css-tags */}
+          <link rel="stylesheet" href="/project-demos.css" />
+        </noscript>
+      </head>
       <body>
+        <DeferredStyles />
         {children}
         <script
           type="application/ld+json"

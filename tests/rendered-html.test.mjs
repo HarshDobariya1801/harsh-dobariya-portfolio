@@ -61,6 +61,9 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /Backend depth, full-stack perspective/i);
   assert.match(html, /Tools I use/i);
   assert.match(html, /GitHub Actions/);
+  assert.match(html, /Portfolio journey/i);
+  assert.match(html, /data-journey-card/i);
+  assert.match(html, /move data, coordinate users, and stay reliable under pressure/i);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
   assert.doesNotMatch(

@@ -186,6 +186,46 @@ test("collaborative editor hint is static with reduced motion", async ({ page },
   await expect(hint).toContainText("Try editing this code...");
 });
 
+test("desktop journey uses native scroll with a responsive card stack", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "The cinematic stack is desktop-only.");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const cards = page.locator("[data-journey-card]");
+  const journeyNav = page.getByRole("navigation", { name: "Portfolio journey" });
+  await expect(cards).toHaveCount(7);
+  await expect(journeyNav).toBeVisible();
+  await expect(page.locator("html")).toHaveClass(/journey-ready/);
+
+  const introPosition = await cards.first().evaluate((card) => getComputedStyle(card).position);
+  expect(introPosition).toBe("sticky");
+
+  await page.locator("#engineering").scrollIntoViewIfNeeded();
+  await expect(journeyNav.locator('a[href="#engineering"]')).toHaveAttribute("aria-current", "step");
+
+  const introTransform = await cards.first().evaluate((card) => getComputedStyle(card).transform);
+  expect(introTransform).not.toBe("none");
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe("smooth");
+});
+
+test("mobile and reduced motion keep the journey in normal document flow", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "One mobile fallback check is sufficient.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  await expect(page.locator("[data-journey-card]")).toHaveCount(7);
+  await expect(page.getByRole("navigation", { name: "Portfolio journey" })).toBeHidden();
+
+  const styles = await page.locator("[data-journey-card]").evaluateAll((cards) =>
+    cards.map((card) => ({
+      position: getComputedStyle(card).position,
+      transform: getComputedStyle(card).transform,
+    })),
+  );
+  expect(styles.every(({ position }) => position !== "sticky")).toBe(true);
+  expect(styles.every(({ transform }) => transform === "none")).toBe(true);
+});
+
 test("mobile menu opens, traps focus, and closes with Escape", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile", "The menu is a mobile-only interaction.");
   await page.goto("/", { waitUntil: "networkidle" });
