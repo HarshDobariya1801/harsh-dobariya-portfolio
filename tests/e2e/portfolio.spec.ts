@@ -98,6 +98,8 @@ test("critical project and contact interactions work", async ({ context, page },
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/", { waitUntil: "networkidle" });
 
+  await page.locator("#work").scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-demo-kind="kv"]')).toHaveAttribute("data-demo-ready", "true");
   const result = page.locator(".kv-command-readout strong");
   await page.getByRole("button", { name: "SET", exact: true }).click();
   await expect(result).toContainText("value stored");
@@ -112,6 +114,8 @@ test("critical project and contact interactions work", async ({ context, page },
   const harshChange = "const message = \"Hello from Harsh\";\nreturn message;";
   const guestChange = "const message = \"Guest replied\";\n\nreturn message.toUpperCase();";
 
+  await page.locator("#collab-work").scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-demo-kind="collaborative"]')).toHaveAttribute("data-demo-ready", "true");
   await harshEditor.scrollIntoViewIfNeeded();
   await expect(editorHint).toBeVisible();
   await guestEditor.click();
@@ -159,6 +163,8 @@ test("collaborative editor hint types, cycles, and dismisses", async ({ page }, 
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/", { waitUntil: "networkidle" });
 
+  await page.locator("#collab-work").scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-demo-kind="collaborative"]')).toHaveAttribute("data-demo-ready", "true");
   const harshEditor = page.getByLabel("Harsh code editor");
   const hint = page.locator("[data-editor-hint]");
   await harshEditor.scrollIntoViewIfNeeded();
@@ -177,6 +183,8 @@ test("collaborative editor hint is static with reduced motion", async ({ page },
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/", { waitUntil: "networkidle" });
 
+  await page.locator("#collab-work").scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-demo-kind="collaborative"]')).toHaveAttribute("data-demo-ready", "true");
   const harshEditor = page.getByLabel("Harsh code editor");
   const hint = page.locator("[data-editor-hint]");
   await harshEditor.scrollIntoViewIfNeeded();

@@ -52,11 +52,9 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /reliable software from interface to/i);
   assert.match(html, /hero-system-diagram-refined\.webp/i);
   assert.match(html, /GET, SET, and DEL commands/i);
-  assert.match(html, /Interactive synchronization simulation/i);
-  assert.match(html, /Edit either window and watch the change sync live/i);
-  assert.match(html, /Node Server A/i);
-  assert.match(html, /Redis Pub\/Sub/i);
-  assert.match(html, /PostgreSQL/i);
+  assert.match(html, /data-demo-kind="kv"/i);
+  assert.match(html, /data-demo-kind="collaborative"/i);
+  assert.match(html, /Loading as it enters view/i);
   assert.match(html, /25%/);
   assert.match(html, /Backend depth, full-stack perspective/i);
   assert.match(html, /Tools I use/i);

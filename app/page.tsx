@@ -1,8 +1,7 @@
-import CollaborativeDemo from "./CollaborativeDemo";
 import CopyEmail from "./CopyEmail";
 import CountUp from "./CountUp";
 import HeroSculptureVisual from "./HeroSculptureVisual";
-import KVStoreDemo from "./KVStoreDemo";
+import LazyProjectDemo from "./LazyProjectDemo";
 import ScrollMotion from "./ScrollMotion";
 import { education, experience, profile, toolGroups } from "./portfolio-data";
 import ActionLink from "./ui/ActionLink";
@@ -273,7 +272,7 @@ export default function Home() {
                 </ul>
               </div>
             </header>
-            <div className="project-visual" data-reveal><KVStoreDemo /></div>
+            <div className="project-visual" data-reveal><LazyProjectDemo kind="kv" /></div>
             <div className="project-notes" data-reveal>
               <article><span>What</span><p>GET, SET, and DEL commands move through a bounded concurrent execution path.</p></article>
               <article><span>How</span><p>A TCP listener hands work to a worker pool before the key-value engine owns state changes.</p></article>
@@ -307,7 +306,7 @@ export default function Home() {
                 </ul>
               </div>
             </header>
-            <div className="project-visual" data-reveal><CollaborativeDemo /></div>
+            <div className="project-visual" data-reveal><LazyProjectDemo kind="collaborative" /></div>
             <div className="project-notes" data-reveal>
               <article><span>What</span><p>A shared workspace keeps active collaborators in sync without page refreshes.</p></article>
               <article><span>How</span><p>WebSocket sessions publish events through Redis so separate Node.js processes agree.</p></article>
