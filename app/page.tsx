@@ -21,12 +21,11 @@ function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
 
 const journeyScenes = [
   { number: "01", label: "Intro", href: "#intro" },
-  { number: "02", label: "Engineering", href: "#engineering" },
-  { number: "03", label: "Experience", href: "#experience" },
-  { number: "04", label: "Key-value store", href: "#work" },
-  { number: "05", label: "Collaboration", href: "#collab-work" },
-  { number: "06", label: "About", href: "#about" },
-  { number: "07", label: "Contact", href: "#contact" },
+  { number: "02", label: "Experience", href: "#experience" },
+  { number: "03", label: "Key-value store", href: "#work" },
+  { number: "04", label: "Collaboration", href: "#collab-work" },
+  { number: "05", label: "About", href: "#about" },
+  { number: "06", label: "Contact", href: "#contact" },
 ] as const;
 
 function JourneyNavigation() {
@@ -71,46 +70,6 @@ function SectionHeading({
   );
 }
 
-function EngineeringDiagram() {
-  return (
-    <div
-      className="engineering-diagram"
-      role="img"
-      aria-label="Client requests move through an API and service before reaching Redis and PostgreSQL"
-      data-reveal
-    >
-      <div className="engineering-node node-client"><span>01</span><strong>Client</strong><small>intent</small></div>
-      <i className="engineering-link link-down" aria-hidden="true"><b /></i>
-      <div className="engineering-node node-api"><span>02</span><strong>API</strong><small>contract</small></div>
-      <i className="engineering-link link-down" aria-hidden="true"><b /></i>
-      <div className="engineering-node node-service"><span>03</span><strong>Service</strong><small>ownership</small></div>
-      <div className="engineering-branch" aria-hidden="true"><i /><i /></div>
-      <div className="engineering-destinations">
-        <div className="engineering-node"><span>04A</span><strong>Redis</strong><small>speed</small></div>
-        <div className="engineering-node"><span>04B</span><strong>PostgreSQL</strong><small>durability</small></div>
-      </div>
-    </div>
-  );
-}
-
-const capabilities = [
-  {
-    number: "01",
-    title: "Product engineering",
-    description: "Interfaces, APIs, and data models designed as one product instead of separate layers.",
-  },
-  {
-    number: "02",
-    title: "Systems and infrastructure",
-    description: "Concurrent services, real-time communication, caching, persistence, and failure paths.",
-  },
-  {
-    number: "03",
-    title: "Cloud and delivery",
-    description: "Docker, AWS, Kubernetes, and CI/CD workflows that make releases repeatable.",
-  },
-] as const;
-
 const principles = [
   "Start with the problem.",
   "Make tradeoffs explicit.",
@@ -149,7 +108,7 @@ export default function Home() {
           id="intro"
           data-journey-card
           data-journey-label="Intro"
-          data-scene-tone="lavender"
+          data-scene-tone="champagne"
           aria-labelledby="hero-title"
         >
           <div className="hero-copy">
@@ -179,34 +138,9 @@ export default function Home() {
           <div className="hero-visual">
             <HeroSculptureVisual />
           </div>
-          <a className="scroll-cue" href="#engineering" aria-label="Scroll to engineering scene">
+          <a className="scroll-cue" href="#experience" aria-label="Scroll to experience scene">
             <span>Scroll to explore</span><i aria-hidden="true" />
           </a>
-        </section>
-
-        <section
-          className="journey-card scene-engineering capabilities"
-          id="engineering"
-          data-journey-card
-          data-journey-label="Engineering"
-          data-scene-tone="silver"
-          aria-labelledby="engineering-title"
-        >
-          <div className="engineering-copy">
-            <p className="scene-kicker" data-reveal><span>02</span>What I build</p>
-            <h2 id="engineering-title" data-reveal>
-              I build systems that move data, coordinate users, and stay reliable under pressure.
-            </h2>
-            <div className="capability-list">
-              {capabilities.map((item) => (
-                <article key={item.number} data-reveal>
-                  <span>{item.number}</span>
-                  <div><h3>{item.title}</h3><p>{item.description}</p></div>
-                </article>
-              ))}
-            </div>
-          </div>
-          <EngineeringDiagram />
         </section>
 
         <section
@@ -219,7 +153,7 @@ export default function Home() {
           aria-labelledby="experience-title"
         >
           <SectionHeading
-            number="03"
+            number="02"
             eyebrow="Experience"
             title="Software that had to work outside a demo."
             description="Product delivery, legacy modernization, internal tooling, and the engineering details that kept each system moving."
@@ -260,7 +194,7 @@ export default function Home() {
         >
           <div className="project-case">
             <header className="project-overview" data-reveal>
-              <p className="scene-kicker"><span>04</span>Selected work · 01 / 02</p>
+              <p className="scene-kicker"><span>03</span>Selected work · 01 / 02</p>
               <p className="project-collection-title">Systems built end to end.</p>
               <div>
                 <p className="eyebrow">C++ systems project</p>
@@ -296,7 +230,7 @@ export default function Home() {
         >
           <div className="project-case">
             <header className="project-overview" data-reveal>
-              <p className="scene-kicker"><span>05</span>Selected work · 02 / 02</p>
+              <p className="scene-kicker"><span>04</span>Selected work · 02 / 02</p>
               <div>
                 <p className="eyebrow">Real-time product system</p>
                 <h2 id="collab-title">Real-Time Collaborative Workspace</h2>
@@ -330,7 +264,7 @@ export default function Home() {
           data-scene-tone="silver"
           aria-labelledby="about-title"
         >
-          <SectionHeading number="06" eyebrow="About" title="Backend depth, full-stack perspective." id="about-title" />
+          <SectionHeading number="05" eyebrow="About" title="Backend depth, full-stack perspective." id="about-title" />
           <div className="about-editorial">
             <div className="about-copy" data-reveal>
               <p>
@@ -382,11 +316,11 @@ export default function Home() {
           data-nav-section
           data-journey-card
           data-journey-label="Contact"
-          data-scene-tone="lavender"
+          data-scene-tone="champagne"
           aria-labelledby="contact-title"
         >
           <div className="contact-inner" data-reveal>
-            <p className="eyebrow"><span>07</span>What I can build next</p>
+            <p className="eyebrow"><span>06</span>What I can build next</p>
             <h2 id="contact-title">Have something worth building?</h2>
             <p>I&apos;m currently open to software engineering opportunities.</p>
             <div className="email-row">
