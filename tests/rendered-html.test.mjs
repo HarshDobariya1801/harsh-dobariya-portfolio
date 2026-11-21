@@ -62,9 +62,10 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /GitHub Actions/);
   assert.match(html, /Portfolio journey/i);
   assert.match(html, /data-journey-card/i);
-  assert.match(html, /move data, coordinate users, and stay reliable under pressure/i);
+  assert.equal((html.match(/<section[^>]*data-journey-card/gi) ?? []).length, 6);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
   assert.doesNotMatch(html, /<footer\b|Footer links|©/i);
+  assert.doesNotMatch(html, /id="engineering"|href="#engineering"|What I build/i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
   const visibleText = html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")

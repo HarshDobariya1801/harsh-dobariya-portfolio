@@ -204,21 +204,78 @@ test("desktop journey uses native scroll with a responsive card stack", async ({
 
   const cards = page.locator("[data-journey-card]");
   const journeyNav = page.getByRole("navigation", { name: "Portfolio journey" });
-  await expect(cards).toHaveCount(7);
+  await expect(cards).toHaveCount(6);
   await expect(journeyNav).toBeVisible();
   await expect(page.locator("html")).toHaveClass(/journey-ready/);
-  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "lavender");
+  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "champagne");
+  await expect(page.locator("#engineering")).toHaveCount(0);
 
   const introPosition = await cards.first().evaluate((card) => getComputedStyle(card).position);
   expect(introPosition).toBe("sticky");
 
-  await page.locator("#engineering").scrollIntoViewIfNeeded();
-  await expect(journeyNav.locator('a[href="#engineering"]')).toHaveAttribute("aria-current", "step");
-  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "silver");
+  await page.getByRole("link", { name: "Scroll to experience scene" }).click();
+  await expect(page).toHaveURL(/#experience$/);
+  await expect(journeyNav.locator('a[href="#experience"]')).toHaveAttribute("aria-current", "step");
+  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "gold");
 
   const introTransform = await cards.first().evaluate((card) => getComputedStyle(card).transform);
   expect(introTransform).not.toBe("none");
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe("smooth");
+});
+
+test("final contact card completes the shared desktop stack boundary", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "The cinematic stack is desktop-only.");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const journeyNav = page.getByRole("navigation", { name: "Portfolio journey" });
+  const aboutLink = journeyNav.locator('a[href="#about"]');
+  const contactLink = journeyNav.locator('a[href="#contact"]');
+
+  await contactLink.focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#contact$/);
+  await expect(contactLink).toHaveAttribute("aria-current", "step");
+
+  await aboutLink.click();
+  await expect(aboutLink).toHaveAttribute("aria-current", "step");
+  await contactLink.click();
+  await expect(contactLink).toHaveAttribute("aria-current", "step");
+
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = "auto";
+  });
+
+  for (const viewport of [
+    { width: 1920, height: 1080 },
+    { width: 1440, height: 900 },
+    { width: 1280, height: 800 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForFunction(() => Math.abs(window.scrollY - (document.documentElement.scrollHeight - window.innerHeight)) <= 1);
+    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+
+    const boundary = await page.locator("#contact").evaluate((card) => {
+      const rect = card.getBoundingClientRect();
+      const styles = getComputedStyle(card);
+      return {
+        active: card.classList.contains("is-active"),
+        bottom: rect.bottom,
+        opacity: Number(styles.opacity),
+        position: styles.position,
+        stickyTop: Number.parseFloat(styles.top),
+        top: rect.top,
+        viewportHeight: window.innerHeight,
+      };
+    });
+
+    expect(boundary.position, `${viewport.width}x${viewport.height} contact position`).toBe("sticky");
+    expect(boundary.active, `${viewport.width}x${viewport.height} contact active state`).toBe(true);
+    expect(boundary.opacity, `${viewport.width}x${viewport.height} contact opacity`).toBe(1);
+    expect(Math.abs(boundary.top - boundary.stickyTop), `${viewport.width}x${viewport.height} contact top boundary`).toBeLessThanOrEqual(2);
+    expect(Math.abs(boundary.bottom - boundary.viewportHeight), `${viewport.width}x${viewport.height} contact bottom boundary`).toBeLessThanOrEqual(2);
+  }
 });
 
 test("mobile and reduced motion keep the journey in normal document flow", async ({ page }, testInfo) => {
@@ -226,7 +283,7 @@ test("mobile and reduced motion keep the journey in normal document flow", async
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/", { waitUntil: "networkidle" });
 
-  await expect(page.locator("[data-journey-card]")).toHaveCount(7);
+  await expect(page.locator("[data-journey-card]")).toHaveCount(6);
   await expect(page.getByRole("navigation", { name: "Portfolio journey" })).toBeHidden();
 
   const styles = await page.locator("[data-journey-card]").evaluateAll((cards) =>

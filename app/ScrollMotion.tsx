@@ -31,9 +31,25 @@ export default function ScrollMotion() {
     const journey = document.querySelector<HTMLElement>("[data-journey]");
     const journeyCards = Array.from(document.querySelectorAll<HTMLElement>("[data-journey-card]"));
     const journeyLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-journey-link]"));
+    const journeyAnchorLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')).filter((link) => {
+      const hash = link.getAttribute("href");
+      if (!hash || hash === "#") return false;
+      return document.querySelector<HTMLElement>(hash)?.hasAttribute("data-journey-card") ?? false;
+    });
     const journeyProgress = document.querySelector<HTMLElement>("[data-journey-progress]");
     const menu = document.querySelector<HTMLDetailsElement>("[data-mobile-nav]");
     const menuSummary = menu?.querySelector<HTMLElement>("summary");
+
+    const measureJourneyCardTops = () => {
+      let cursor = journey ? documentTop(journey) : 0;
+      return journeyCards.map((card) => {
+        const styles = getComputedStyle(card);
+        cursor += Number.parseFloat(styles.marginTop) || 0;
+        const top = cursor;
+        cursor += card.offsetHeight + (Number.parseFloat(styles.marginBottom) || 0);
+        return top;
+      });
+    };
 
     let revealObserver: IntersectionObserver | undefined;
     if (reduceMotion) {
@@ -63,6 +79,7 @@ export default function ScrollMotion() {
       const scrollY = window.scrollY;
       const marker = scrollY + viewportHeight * 0.44;
       const stageTop = clamp(viewportHeight * 0.09, 76, 94);
+      const journeyCardTops = measureJourneyCardTops();
       let activeIndex = 0;
 
       root.classList.toggle("journey-ready", cinematicQuery.matches);
@@ -70,7 +87,11 @@ export default function ScrollMotion() {
 
       const currentSection = [...sections]
         .reverse()
-        .find((section) => documentTop(section) <= scrollY + viewportHeight * 0.34);
+        .find((section) => {
+          const cardIndex = journeyCards.indexOf(section);
+          const top = cardIndex >= 0 ? journeyCardTops[cardIndex] : documentTop(section);
+          return top <= scrollY + viewportHeight * 0.34;
+        });
       navLinks.forEach((link) => {
         const active = Boolean(currentSection && link.hash === `#${currentSection.id}`);
         if (active) link.setAttribute("aria-current", "location");
@@ -78,9 +99,11 @@ export default function ScrollMotion() {
       });
 
       journeyCards.forEach((card, index) => {
-        const top = documentTop(card);
+        const top = journeyCardTops[index];
         const transitionDistance = Math.max(card.offsetHeight * 0.86, viewportHeight * 0.74);
-        const exit = clamp((scrollY + stageTop - top) / transitionDistance);
+        const exit = index === journeyCards.length - 1
+          ? 0
+          : clamp((scrollY + stageTop - top) / transitionDistance);
         const naturalTop = top - scrollY;
         const entry = clamp((viewportHeight - naturalTop) / Math.max(viewportHeight - stageTop, 1));
         const scale = 0.985 + entry * 0.015 - exit * 0.045;
@@ -104,7 +127,7 @@ export default function ScrollMotion() {
       });
 
       if (activeIndex !== lastActiveIndex) {
-        root.dataset.activeScene = journeyCards[activeIndex]?.dataset.sceneTone ?? "lavender";
+        root.dataset.activeScene = journeyCards[activeIndex]?.dataset.sceneTone ?? "champagne";
         lastActiveIndex = activeIndex;
       }
 
@@ -126,11 +149,40 @@ export default function ScrollMotion() {
       animationFrame = window.requestAnimationFrame(updateJourney);
     };
 
+    const scrollToJourneyTarget = (hash: string, behavior: ScrollBehavior) => {
+      const target = document.querySelector<HTMLElement>(hash);
+      if (!target?.hasAttribute("data-journey-card")) return;
+      const targetIndex = journeyCards.indexOf(target);
+      if (targetIndex < 0) return;
+      const offset = cinematicQuery.matches
+        ? clamp(window.innerHeight * 0.09, 76, 94)
+        : Math.min((header?.offsetHeight ?? 0) + 12, 96);
+      window.scrollTo({
+        top: Math.max(0, measureJourneyCardTops()[targetIndex] - offset),
+        behavior,
+      });
+    };
+
+    const handleJourneyAnchorClick = (event: MouseEvent) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.currentTarget as HTMLAnchorElement;
+      event.preventDefault();
+      if (window.location.hash !== link.hash) window.history.pushState(null, "", link.hash);
+      scrollToJourneyTarget(link.hash, reduceMotion ? "auto" : "smooth");
+    };
+
+    const handleHashChange = () => {
+      if (window.location.hash) scrollToJourneyTarget(window.location.hash, "auto");
+    };
+
     updateJourney();
     window.addEventListener("scroll", scheduleJourneyUpdate, { passive: true });
     window.addEventListener("resize", scheduleJourneyUpdate);
     cinematicQuery.addEventListener("change", scheduleJourneyUpdate);
     document.fonts.ready.then(scheduleJourneyUpdate).catch(() => undefined);
+    journeyAnchorLinks.forEach((link) => link.addEventListener("click", handleJourneyAnchorClick));
+    window.addEventListener("hashchange", handleHashChange);
+    if (window.location.hash) window.requestAnimationFrame(handleHashChange);
 
     const closeMenu = () => {
       if (!menu?.open) return;
@@ -173,6 +225,8 @@ export default function ScrollMotion() {
       window.removeEventListener("scroll", scheduleJourneyUpdate);
       window.removeEventListener("resize", scheduleJourneyUpdate);
       cinematicQuery.removeEventListener("change", scheduleJourneyUpdate);
+      journeyAnchorLinks.forEach((link) => link.removeEventListener("click", handleJourneyAnchorClick));
+      window.removeEventListener("hashchange", handleHashChange);
       menu?.removeEventListener("toggle", handleMenuToggle);
       menu?.querySelectorAll("a").forEach((link) => link.removeEventListener("click", closeMenu));
       document.removeEventListener("keydown", handleKeyDown);
