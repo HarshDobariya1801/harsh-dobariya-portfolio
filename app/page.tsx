@@ -149,6 +149,7 @@ export default function Home() {
           id="intro"
           data-journey-card
           data-journey-label="Intro"
+          data-scene-tone="lavender"
           aria-labelledby="hero-title"
         >
           <div className="hero-copy">
@@ -188,6 +189,7 @@ export default function Home() {
           id="engineering"
           data-journey-card
           data-journey-label="Engineering"
+          data-scene-tone="silver"
           aria-labelledby="engineering-title"
         >
           <div className="engineering-copy">
@@ -213,6 +215,7 @@ export default function Home() {
           data-nav-section
           data-journey-card
           data-journey-label="Experience"
+          data-scene-tone="gold"
           aria-labelledby="experience-title"
         >
           <SectionHeading
@@ -252,6 +255,7 @@ export default function Home() {
           data-nav-section
           data-journey-card
           data-journey-label="Key-value store"
+          data-scene-tone="blue"
           aria-labelledby="kv-title"
         >
           <div className="project-case">
@@ -287,6 +291,7 @@ export default function Home() {
           id="collab-work"
           data-journey-card
           data-journey-label="Collaboration"
+          data-scene-tone="teal"
           aria-labelledby="collab-title"
         >
           <div className="project-case">
@@ -322,6 +327,7 @@ export default function Home() {
           data-nav-section
           data-journey-card
           data-journey-label="About"
+          data-scene-tone="silver"
           aria-labelledby="about-title"
         >
           <SectionHeading number="06" eyebrow="About" title="Backend depth, full-stack perspective." id="about-title" />
@@ -376,6 +382,7 @@ export default function Home() {
           data-nav-section
           data-journey-card
           data-journey-label="Contact"
+          data-scene-tone="lavender"
           aria-labelledby="contact-title"
         >
           <div className="contact-inner" data-reveal>
@@ -391,20 +398,10 @@ export default function Home() {
               <ActionLink href={profile.github} icon="external" target="_blank" rel="noreferrer">GitHub</ActionLink>
               <ActionLink href="/Harsh_Dobariya_Resume.pdf" icon="external" target="_blank">Resume</ActionLink>
             </nav>
+            <a className="back-to-top" href="#top"><span>01</span>Back to introduction</a>
           </div>
         </section>
       </div>
-
-      <footer className="site-footer section-shell">
-        <div><strong>harsh.dobariya</strong><span>Software Engineer</span></div>
-        <p>Seattle, Washington</p>
-        <nav aria-label="Footer links">
-          <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-          <a href={`mailto:${profile.email}`}>Email</a>
-        </nav>
-        <p>© {new Date().getFullYear()} Harsh Dobariya</p>
-      </footer>
     </main>
   );
 }

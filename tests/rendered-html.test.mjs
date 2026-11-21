@@ -49,6 +49,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /og\.png/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /Have something worth building/i);
+  assert.match(html, /Back to introduction/i);
   assert.match(html, /reliable software from interface to/i);
   assert.match(html, /hero-system-diagram-refined\.webp/i);
   assert.match(html, /GET, SET, and DEL commands/i);
@@ -63,6 +64,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /data-journey-card/i);
   assert.match(html, /move data, coordinate users, and stay reliable under pressure/i);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
+  assert.doesNotMatch(html, /<footer\b|Footer links|©/i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
   const visibleText = html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")

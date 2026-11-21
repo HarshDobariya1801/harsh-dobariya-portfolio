@@ -2,7 +2,7 @@
   .journey {
     perspective: 1500px;
     perspective-origin: 50% 34%;
-    padding-bottom: 16vh;
+    padding-bottom: 8vh;
   }
 
   .journey-card {
@@ -29,6 +29,8 @@
 
   .journey-card.is-behind {
     pointer-events: none;
+    border-color: rgba(244,244,245,.07);
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset, 0 24px 70px rgba(0,0,0,.28);
   }
 
   .journey-card.is-active {
@@ -84,12 +86,12 @@
 
   .scene-experience .experience-role p {
     margin-top: .25rem;
-    font-size: .85rem;
+    font-size: .92rem;
   }
 
   .scene-experience .experience-impact > p {
-    font-size: .9rem;
-    line-height: 1.48;
+    font-size: .98rem;
+    line-height: 1.58;
   }
 
   .scene-experience .metric-strip {
@@ -100,12 +102,12 @@
   }
 
   .scene-experience .metric-strip strong {
-    font-size: 1.45rem;
+    font-size: 1.55rem;
   }
 
   .scene-experience .metric-strip span {
-    font-size: .72rem;
-    line-height: 1.3;
+    font-size: .875rem;
+    line-height: 1.4;
   }
 
   .scene-project .project-case {
@@ -150,10 +152,10 @@
     z-index: 45;
     display: block;
     padding: .55rem .4rem;
-    border: 1px solid rgba(21,23,26,.1);
+    border: 1px solid var(--line-strong);
     border-radius: 2rem;
-    background: rgba(250,250,249,.78);
-    box-shadow: 0 10px 35px rgba(18,20,24,.08);
+    background: rgba(20,20,25,.82);
+    box-shadow: 0 12px 38px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.035);
     -webkit-backdrop-filter: blur(14px) saturate(130%);
     backdrop-filter: blur(14px) saturate(130%);
     transform: translateY(-50%);
@@ -174,7 +176,7 @@
     display: grid;
     place-items: center;
     border-radius: 50%;
-    color: #7b7e84;
+    color: var(--muted);
     font-family: var(--mono);
     font-size: .61rem;
     transition: color 180ms ease, background-color 180ms ease, transform 200ms var(--ease);
@@ -186,8 +188,9 @@
   }
 
   .journey-nav a[aria-current="step"] {
-    background: var(--surface-strong);
-    color: white;
+    background: var(--ambient-color);
+    color: var(--bg);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--ambient-color) 11%, transparent);
   }
 
   .journey-nav a b {
@@ -197,7 +200,7 @@
     padding: .32rem .5rem;
     border: 1px solid var(--line);
     border-radius: .35rem;
-    background: rgba(250,250,249,.94);
+    background: rgba(28,28,35,.97);
     color: var(--text);
     font-family: var(--sans);
     font-size: .65rem;
@@ -224,14 +227,14 @@
     z-index: -1;
     display: block;
     overflow: hidden;
-    background: rgba(21,23,26,.1);
+    background: var(--line);
   }
 
   .journey-nav > i span {
     width: 100%;
     height: 100%;
     display: block;
-    background: var(--accent);
+    background: var(--ambient-color);
     transform: scaleY(var(--journey-progress, 0));
     transform-origin: top;
   }

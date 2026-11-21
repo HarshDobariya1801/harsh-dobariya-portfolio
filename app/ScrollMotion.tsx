@@ -55,6 +55,7 @@ export default function ScrollMotion() {
     }
 
     let animationFrame = 0;
+    let lastActiveIndex = -1;
 
     const updateJourney = () => {
       animationFrame = 0;
@@ -101,6 +102,11 @@ export default function ScrollMotion() {
         card.classList.toggle("is-active", index === activeIndex);
         card.classList.toggle("is-behind", index < activeIndex);
       });
+
+      if (activeIndex !== lastActiveIndex) {
+        root.dataset.activeScene = journeyCards[activeIndex]?.dataset.sceneTone ?? "lavender";
+        lastActiveIndex = activeIndex;
+      }
 
       journeyLinks.forEach((link, index) => {
         if (index === activeIndex) link.setAttribute("aria-current", "step");
@@ -171,6 +177,7 @@ export default function ScrollMotion() {
       menu?.querySelectorAll("a").forEach((link) => link.removeEventListener("click", closeMenu));
       document.removeEventListener("keydown", handleKeyDown);
       root.classList.remove("reveal-ready", "journey-ready");
+      delete root.dataset.activeScene;
     };
   }, []);
 
