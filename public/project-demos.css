@@ -108,3 +108,185 @@
 @keyframes sync-signal-horizontal { from { left: 0; } to { left: calc(100% - .48rem); } }
 @keyframes persist-signal { from { opacity: 0; transform: scale(.65); } to { opacity: 1; transform: scale(1); } }
 
+/* Obsidian demo surfaces: color communicates state and system ownership. */
+.kv-demo {
+  --demo-accent: var(--scene-blue);
+  --demo-accent-soft: rgba(96,165,250,.12);
+}
+
+.collaborative-demo {
+  --demo-accent: var(--scene-teal);
+  --demo-accent-soft: rgba(94,234,212,.11);
+}
+
+.kv-demo,
+.collaborative-demo {
+  border-color: var(--line-strong);
+  background: #101116;
+  box-shadow: 0 1px 0 rgba(255,255,255,.035) inset, 0 24px 65px rgba(0,0,0,.3);
+}
+
+.demo-toolbar,
+.collab-instruction,
+.collab-editors,
+.collab-architecture,
+.kv-command-readout {
+  border-color: var(--line);
+  background: #121319;
+}
+
+.command-controls {
+  background: #1a1b22;
+}
+
+.command-controls button[aria-pressed="true"] {
+  background: #272a34;
+  color: var(--demo-accent);
+  box-shadow: 0 1px 0 rgba(255,255,255,.055) inset, 0 5px 15px rgba(0,0,0,.22);
+}
+
+.command-controls button:active,
+.collab-toolbar > button:active {
+  transform: scale(.96);
+}
+
+.kv-command-readout strong {
+  color: var(--demo-accent);
+}
+
+.flow-stage {
+  --stage-accent: var(--scene-blue);
+  border-color: var(--line);
+  background: #17181e;
+}
+
+.flow-stage:nth-child(3),
+.flow-stage:nth-child(4) {
+  --stage-accent: var(--scene-lavender);
+}
+
+.flow-stage:nth-child(5) {
+  --stage-accent: var(--scene-teal);
+}
+
+.flow-stage b,
+.sync-link,
+.persistence-lines > span {
+  background: #353641;
+}
+
+.flow-stage b::after,
+.sync-link::before,
+.sync-link::after {
+  border-color: #676976;
+}
+
+.flow-stage.is-done {
+  border-color: color-mix(in srgb, var(--stage-accent) 28%, var(--line));
+  background: color-mix(in srgb, var(--stage-accent) 5%, #17181e);
+}
+
+.flow-stage.is-done > span i,
+.flow-stage.is-active > span i {
+  background: var(--stage-accent);
+}
+
+.flow-stage.is-done b {
+  background: color-mix(in srgb, var(--stage-accent) 54%, #353641);
+}
+
+.flow-stage.is-active {
+  border-color: color-mix(in srgb, var(--stage-accent) 72%, var(--line-strong));
+  background: color-mix(in srgb, var(--stage-accent) 9%, #17181e);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--stage-accent) 8%, transparent), 0 12px 25px rgba(0,0,0,.24);
+}
+
+.flow-stage.is-active > span i {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--stage-accent) 14%, transparent);
+}
+
+.collab-toolbar > button,
+.editor-window,
+.sync-node {
+  border-color: var(--line-strong);
+  background: var(--surface-elevated);
+  color: var(--text);
+}
+
+.collab-toolbar > button:hover {
+  border-color: color-mix(in srgb, var(--demo-accent) 48%, var(--line-strong));
+  box-shadow: var(--shadow-control);
+}
+
+.presence-status span:first-child {
+  color: var(--demo-accent);
+}
+
+.collab-instruction strong {
+  color: var(--muted-strong);
+}
+
+.editor-window.is-receiving,
+.editor-window:focus-within {
+  border-color: color-mix(in srgb, var(--demo-accent) 62%, var(--line-strong));
+  box-shadow: 0 0 0 4px var(--demo-accent-soft);
+}
+
+.avatar {
+  background: rgba(167,139,250,.13);
+  color: var(--accent-dark);
+}
+
+.avatar.guest {
+  background: var(--demo-accent-soft);
+  color: var(--demo-accent);
+}
+
+.code-editor-frame,
+.editor-highlight,
+.code-editor-viewport textarea {
+  background: #111217;
+}
+
+.editor-line-numbers {
+  border-color: var(--line);
+  color: #777984;
+}
+
+.editor-highlight { color: #d4d4da; }
+.code-editor-viewport textarea { background: transparent; caret-color: var(--demo-accent); }
+.code-editor-viewport textarea::selection { background: rgba(94,234,212,.18); }
+.editor-typing-hint { color: var(--muted); }
+.editor-typing-hint i { background: var(--demo-accent); }
+.token-comment { color: #7f887f; }
+.token-string { color: #e5bd80; }
+.token-number { color: #5eead4; }
+.token-keyword { color: #9cbcff; }
+
+.sync-diagram {
+  border-color: var(--line);
+}
+
+.sync-link > i,
+.persistence-lines i {
+  border-color: #121319;
+  background: var(--demo-accent);
+  box-shadow: 0 0 0 3px var(--demo-accent-soft);
+}
+
+.collaborative-demo[data-phase="server-a"] .server-a,
+.collaborative-demo[data-phase="redis"] .redis,
+.collaborative-demo[data-phase="server-b"] .server-b,
+.collaborative-demo[data-phase="persist"] .postgres,
+.collaborative-demo[data-phase="synced"][data-source="harsh"] .client-b,
+.collaborative-demo[data-phase="synced"][data-source="guest"] .client-a {
+  border-color: color-mix(in srgb, var(--demo-accent) 68%, var(--line-strong));
+  background: color-mix(in srgb, var(--demo-accent) 8%, var(--surface-elevated));
+  box-shadow: 0 0 0 4px var(--demo-accent-soft);
+}
+
+.collaborative-demo[data-phase="persist"][data-source="harsh"] .persist-from-a,
+.collaborative-demo[data-phase="persist"][data-source="guest"] .persist-from-b {
+  background: var(--demo-accent);
+}
+

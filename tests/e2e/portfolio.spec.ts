@@ -35,7 +35,7 @@ function collectRuntimeSignals(page: Page): RuntimeSignals {
 test("loads without runtime failures or horizontal overflow", async ({ page }) => {
   const signals = collectRuntimeSignals(page);
   await page.goto("/", { waitUntil: "networkidle" });
-  await page.locator("footer").scrollIntoViewIfNeeded();
+  await page.locator("#contact").scrollIntoViewIfNeeded();
 
   const overflow = await page.evaluate(() => ({
     body: document.body.scrollWidth - document.body.clientWidth,
@@ -154,6 +154,9 @@ test("critical project and contact interactions work", async ({ context, page },
   await page.getByRole("button", { name: /^Copy email:/ }).click();
   await expect(page.getByRole("button", { name: /^Copied:/ })).toBeVisible();
 
+  await page.getByRole("link", { name: "Back to introduction" }).click();
+  await expect(page).toHaveURL(/#top$/);
+
   await page.getByRole("link", { name: "View my work" }).click();
   await expect(page).toHaveURL(/#work$/);
 });
@@ -204,12 +207,14 @@ test("desktop journey uses native scroll with a responsive card stack", async ({
   await expect(cards).toHaveCount(7);
   await expect(journeyNav).toBeVisible();
   await expect(page.locator("html")).toHaveClass(/journey-ready/);
+  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "lavender");
 
   const introPosition = await cards.first().evaluate((card) => getComputedStyle(card).position);
   expect(introPosition).toBe("sticky");
 
   await page.locator("#engineering").scrollIntoViewIfNeeded();
   await expect(journeyNav.locator('a[href="#engineering"]')).toHaveAttribute("aria-current", "step");
+  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "silver");
 
   const introTransform = await cards.first().evaluate((card) => getComputedStyle(card).transform);
   expect(introTransform).not.toBe("none");
