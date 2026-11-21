@@ -6,12 +6,12 @@ export default function HeroSculptureVisual() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/hero-system-diagram-refined.webp"
-        srcSet="/hero-system-diagram-refined-768.webp 768w, /hero-system-diagram-refined-960.webp 960w, /hero-system-diagram-refined.webp 1194w"
+        srcSet="/hero-system-diagram-refined-480.webp 480w, /hero-system-diagram-refined-640.webp 640w, /hero-system-diagram-refined-768.webp 768w, /hero-system-diagram-refined-960.webp 960w, /hero-system-diagram-refined.webp 1194w"
         width="1194"
         height="1317"
         alt=""
         aria-hidden="true"
-        sizes="(max-width: 640px) 23rem, (max-width: 900px) 29rem, 34rem"
+        sizes="(max-width: 640px) 20rem, (max-width: 900px) 29rem, 34rem"
         loading="eager"
         fetchPriority="high"
         decoding="async"

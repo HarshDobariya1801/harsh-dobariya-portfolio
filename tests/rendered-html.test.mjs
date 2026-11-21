@@ -52,21 +52,27 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /reliable software from interface to/i);
   assert.match(html, /hero-system-diagram-refined\.webp/i);
   assert.match(html, /GET, SET, and DEL commands/i);
-  assert.match(html, /Interactive synchronization simulation/i);
-  assert.match(html, /Edit either window and watch the change sync live/i);
-  assert.match(html, /Node Server A/i);
-  assert.match(html, /Redis Pub\/Sub/i);
-  assert.match(html, /PostgreSQL/i);
+  assert.match(html, /data-demo-kind="kv"/i);
+  assert.match(html, /data-demo-kind="collaborative"/i);
+  assert.match(html, /Loading as it enters view/i);
   assert.match(html, /25%/);
   assert.match(html, /Backend depth, full-stack perspective/i);
   assert.match(html, /Tools I use/i);
   assert.match(html, /GitHub Actions/);
+  assert.match(html, /Portfolio journey/i);
+  assert.match(html, /data-journey-card/i);
+  assert.match(html, /move data, coordinate users, and stay reliable under pressure/i);
   assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
+  const visibleText = html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ");
   assert.doesNotMatch(
-    html,
-    /—|3K|monthly users supported|system-stats|harsh-system-poster\.png|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
+    visibleText,
+    /—|3K|monthly users supported|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
   );
+  assert.doesNotMatch(html, /system-stats|harsh-system-poster\.png/i);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
 
