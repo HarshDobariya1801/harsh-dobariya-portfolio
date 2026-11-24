@@ -18,7 +18,7 @@ This is a small, coherent portfolio application rather than a candidate for re-p
 ## Application architecture
 
 - `app/layout.tsx` owns global metadata, Open Graph/Twitter metadata, canonical URL, favicon, and Person JSON-LD.
-- `app/page.tsx` server-renders the single portfolio route as five editorial collections: introduction, education, experience, projects, and about/contact.
+- `app/page.tsx` server-renders the single portfolio route in recruiter-first order: introduction, experience, projects, education, and about/contact.
 - `app/portfolio-data.ts` is the source of truth for profile, experience, education, projects, metrics, and skills content.
 - `app/KVStoreDemo.tsx` and `app/CollaborativeDemo.tsx` are isolated client-side demonstrations with local state only.
 - `app/ScrollMotion.tsx` handles reveal observers, active navigation state, mobile-menu focus/keyboard behavior, progressive volume controls, and pointer tilt.

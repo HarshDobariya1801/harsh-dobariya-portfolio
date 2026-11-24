@@ -34,8 +34,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /<title>Harsh Dobariya \| Software Engineer<\/title>/i);
   assert.match(html, /Harsh/);
   assert.match(html, /Dobariya/);
-  assert.match(html, /Engineering Projects/i);
-  assert.match(html, /technical publications/i);
+  assert.match(html, /Selected Projects/i);
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
@@ -57,7 +56,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /Let(?:'|&apos;)s build something dependable/i);
   assert.match(html, /Back to introduction/i);
-  assert.match(html, /reliable systems and thoughtful software products/i);
+  assert.match(html, /building backend systems, distributed infrastructure, and polished products/i);
   assert.match(html, /GET, SET, and DEL behavior/i);
   assert.match(html, /data-demo-kind="kv"/i);
   assert.match(html, /data-demo-kind="collaborative"/i);
@@ -66,8 +65,10 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /About and Contact/i);
   assert.match(html, /Working set/i);
   assert.match(html, /GitHub Actions/);
-  assert.match(html, /Academic collection/i);
-  assert.match(html, /Professional experience collection/i);
+  assert.match(html, /aria-label="Education"/i);
+  assert.match(html, /aria-label="Professional experience"/i);
+  assert.match(html, /experience-preview-metrics/i);
+  assert.match(html, /View architecture \+ demo/i);
   assert.equal((html.match(/<details[^>]*data-volume/gi) ?? []).length, 8);
   assert.match(html, /Open Arizona State University details/i);
   assert.match(html, /Open Distributed Key-Value Store project/i);
@@ -85,6 +86,15 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   );
   assert.doesNotMatch(html, /system-stats|harsh-system-poster\.png|hero-system-diagram/i);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
+  assert.doesNotMatch(html, /Academic volume|technical publication|VOL\./i);
+
+  const experiencePosition = html.indexOf('id="experience"');
+  const projectsPosition = html.indexOf('id="work"');
+  const educationPosition = html.indexOf('id="education"');
+  const aboutPosition = html.indexOf('id="about"');
+  assert.ok(experiencePosition > -1 && experiencePosition < projectsPosition);
+  assert.ok(projectsPosition < educationPosition);
+  assert.ok(educationPosition < aboutPosition);
 });
 
 test("removes project case-study routes and sitemap entries", async () => {

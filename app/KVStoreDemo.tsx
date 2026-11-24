@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 type Operation = "SET" | "GET" | "DEL";
+type ActivePolicy = "LRU" | "AOF" | null;
 
 const commands: Record<Operation, string> = {
   SET: 'SET user:104 "Harsh"',
@@ -17,6 +18,7 @@ export default function KVStoreDemo() {
   const [phase, setPhase] = useState(-1);
   const [hasValue, setHasValue] = useState(false);
   const [result, setResult] = useState("Choose a command to trace its path");
+  const [activePolicy, setActivePolicy] = useState<ActivePolicy>(null);
   const timers = useRef<number[]>([]);
 
   const clearTimers = () => {
@@ -30,11 +32,14 @@ export default function KVStoreDemo() {
     if (next === "SET") {
       setHasValue(true);
       setResult("OK, value stored");
+      setActivePolicy("AOF");
     } else if (next === "GET") {
       setResult(hasValue ? '"Harsh"' : "(nil), key not found");
+      setActivePolicy("LRU");
     } else {
       setResult(hasValue ? "1 key removed" : "0 keys removed");
       setHasValue(false);
+      setActivePolicy("AOF");
     }
   };
 
@@ -42,6 +47,7 @@ export default function KVStoreDemo() {
     clearTimers();
     setOperation(next);
     setResult(`Routing ${next} command`);
+    setActivePolicy(null);
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
@@ -60,7 +66,7 @@ export default function KVStoreDemo() {
   };
 
   return (
-    <div className="kv-demo" data-phase={phase}>
+    <div className="kv-demo" data-phase={phase} data-operation={operation} data-policy={activePolicy ?? "none"}>
       <div className="demo-toolbar">
         <div className="command-controls" role="group" aria-label="Key-value commands">
           {(["SET", "GET", "DEL"] as const).map((command) => (
@@ -74,7 +80,7 @@ export default function KVStoreDemo() {
             </button>
           ))}
         </div>
-        <div className="demo-status"><i /><span>Ready for commands</span></div>
+        <div className="demo-status"><i /><span>{phase < 0 ? "Ready for commands" : phase < 4 ? "Tracing command" : "Command complete"}</span></div>
       </div>
 
       <div className="kv-command-readout">
@@ -94,10 +100,10 @@ export default function KVStoreDemo() {
             </div>
           ))}
         </div>
-        <div className="kv-policies" aria-hidden="true">
+        <div className="kv-policies" aria-label="Memory and persistence policies">
           <span><small>Expiry</small><strong>TTL</strong></span>
-          <span><small>Eviction</small><strong>LRU</strong></span>
-          <span><small>Persistence</small><strong>AOF</strong></span>
+          <span className={activePolicy === "LRU" ? "is-active" : ""}><small>Eviction</small><strong>LRU</strong></span>
+          <span className={activePolicy === "AOF" ? "is-active" : ""}><small>Persistence</small><strong>AOF</strong></span>
         </div>
       </div>
     </div>
