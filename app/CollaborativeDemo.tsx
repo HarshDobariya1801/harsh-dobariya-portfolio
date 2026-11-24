@@ -286,8 +286,9 @@ export default function CollaborativeDemo() {
 
   const syncing = phase !== "idle" && phase !== "synced";
   const editorStatus = (editor: EditorId) => {
-    if (activeEditor === editor || (syncing && source === editor)) return "editing";
-    if (syncing) return "syncing";
+    if (syncing && source === editor) return "sending";
+    if (syncing) return "receiving";
+    if (activeEditor === editor) return "editing";
     return "synced";
   };
 

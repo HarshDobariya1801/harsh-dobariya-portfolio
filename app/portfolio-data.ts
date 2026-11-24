@@ -61,9 +61,9 @@ export const experience = [
       "Collaborated through Git and GitHub on 30+ code changes and pull requests.",
     ],
     metrics: [
-      { value: "3+", label: "product workflows" },
-      { value: "10+", label: "REST endpoints" },
-      { value: "20+", label: "issues resolved" },
+      { value: "3+", label: "product workflows", featured: true },
+      { value: "10+", label: "REST endpoints", featured: true },
+      { value: "20+", label: "issues resolved", featured: true },
     ],
     theme: "olive",
   },
@@ -83,10 +83,10 @@ export const experience = [
       "Added transactional database updates with Jest and Supertest coverage on critical journeys.",
     ],
     metrics: [
-      { value: "15%", label: "fewer invoice propagation errors" },
-      { value: "2,000+", label: "invoices processed monthly" },
+      { value: "15%", label: "fewer invoice propagation errors", featured: true },
+      { value: "2,000+", label: "invoices processed monthly", featured: true },
       { value: "28%", label: "less duplicate UI code" },
-      { value: "70%", label: "coverage on core flows" },
+      { value: "70%", label: "coverage on core flows", featured: true },
     ],
     theme: "maroon",
   },
@@ -105,8 +105,8 @@ export const experience = [
       "Added Slack notifications and GitHub status checks for build visibility and error reporting.",
     ],
     metrics: [
-      { value: "35%", label: "faster PR-to-production path" },
-      { value: "35", label: "engineers supported" },
+      { value: "35%", label: "faster PR-to-production path", featured: true },
+      { value: "35", label: "engineers supported", featured: true },
     ],
     theme: "navy",
   },
@@ -124,7 +124,7 @@ export const experience = [
       "Connected REST APIs across the frontend and backend.",
       "Implemented JWT authentication for protected user access.",
     ],
-    metrics: [{ value: "25%", label: "improvement in Lighthouse page load performance" }],
+    metrics: [{ value: "25%", label: "improvement in Lighthouse page load performance", featured: true }],
     theme: "gold",
   },
 ] as const;
@@ -166,8 +166,8 @@ export const projects = [
 
 export const toolGroups = [
   { label: "Languages", tools: ["C++", "Java", "Python", "TypeScript", "JavaScript", "SQL"] },
-  { label: "Frontend", tools: ["React", "Next.js", "HTML", "CSS"] },
   { label: "Backend", tools: ["Node.js", "Express", "REST APIs", "WebSockets"] },
+  { label: "Frontend", tools: ["React", "Next.js", "HTML", "CSS"] },
   { label: "Data", tools: ["PostgreSQL", "MySQL", "Redis", "MongoDB"] },
-  { label: "Cloud / DevOps", tools: ["AWS", "Docker", "Kubernetes", "GitHub Actions"] },
+  { label: "Infrastructure / Cloud", tools: ["AWS", "Docker", "Kubernetes", "GitHub Actions"] },
 ] as const;

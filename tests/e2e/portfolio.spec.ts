@@ -60,6 +60,24 @@ test("loads without runtime failures or horizontal overflow", async ({ page }) =
   expect(signals.failedResponses, "HTTP error responses").toEqual([]);
 });
 
+test("remains composed at the additional review breakpoints", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "One breakpoint sweep is sufficient.");
+
+  for (const width of [1280, 1024, 430]) {
+    await page.setViewportSize({ width, height: width === 430 ? 932 : 900 });
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+
+    const overflow = await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow, `${width}px viewport has horizontal overflow`).toBeLessThanOrEqual(1);
+    await expect(page.locator("#experience")).toBeAttached();
+    await expect(page.locator("#work")).toBeAttached();
+    await expect(page.locator("#education")).toBeAttached();
+  }
+});
+
 test("links have valid targets and local destinations resolve", async ({ page, request }) => {
   await page.goto("/", { waitUntil: "networkidle" });
   const hrefs = await page.locator("a[href]").evaluateAll((links) =>
@@ -107,13 +125,19 @@ test("external profile links are not missing", async ({ page, request }, testInf
 test("editorial volumes are keyboard accessible and only one opens per collection", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
 
+  const ninjaPreview = page.locator("#experience-ninja-technolabs summary");
+  await expect(ninjaPreview.getByText("15%", { exact: true })).toBeVisible();
+  await expect(ninjaPreview.getByText("2,000+", { exact: true })).toBeVisible();
+  await expect(ninjaPreview.getByText("70%", { exact: true })).toBeVisible();
+  await expect(ninjaPreview.getByText("Reworked a legacy billing workflow", { exact: false })).toBeVisible();
+
   const asuVolume = page.locator("#education-asu");
   const asuSummary = asuVolume.locator("summary");
   await asuSummary.focus();
   await asuSummary.press("Enter");
   await expect(asuVolume).toHaveAttribute("open", "");
   await expect(asuVolume.getByRole("heading", { name: "Arizona State University" })).toBeVisible();
-  await expect(asuVolume.getByText("3.5 / 4.0", { exact: true })).toBeVisible();
+  await expect(asuVolume.locator(".reader-metadata").getByText("3.5 / 4.0", { exact: true })).toBeVisible();
   await expect(asuVolume.getByText("IFT 511: Analyzing Big Data", { exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(asuVolume).not.toHaveAttribute("open", "");

@@ -6,18 +6,17 @@ import { education, experience, profile, projects, toolGroups } from "./portfoli
 import ActionLink from "./ui/ActionLink";
 
 const navigation = [
-  { href: "#intro", label: "Intro" },
-  { href: "#education", label: "Education" },
-  { href: "#experience", label: "Experience" },
-  { href: "#work", label: "Projects" },
-  { href: "#about", label: "About" },
+  { href: "#experience", label: "Experience", number: "02" },
+  { href: "#work", label: "Projects", number: "03" },
+  { href: "#education", label: "Education", number: "04" },
+  { href: "#about", label: "About", number: "05" },
 ] as const;
 
 function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
   return (
     <>
       {navigation.map((item) => (
-        <a href={item.href} data-nav-link key={item.href}>{item.label}</a>
+        <a href={item.href} data-nav-link key={item.href}><span aria-hidden="true">{item.number}</span>{item.label}</a>
       ))}
       {mobile ? (
         <>
@@ -43,7 +42,7 @@ function CollectionHeading({
 }) {
   return (
     <header className="collection-heading" data-reveal>
-      <p className="collection-number">Collection {number}</p>
+      <p className="collection-number"><span>{number}</span> / {title}</p>
       <div>
         <h2 id={id}>{title}</h2>
         <p>{description}</p>
@@ -60,31 +59,28 @@ function EducationCollection() {
   return (
     <section className="collection education-collection section-shell" id="education" data-nav-section aria-labelledby="education-title">
       <CollectionHeading
-        number="02"
+        number="04"
         title="Education"
-        description="Two institutions that shaped how I think about software, systems, and the discipline of learning."
+        description="Graduate and undergraduate foundations in data, networks, databases, systems, and software engineering."
         id="education-title"
       />
-      <div className="academic-shelf" aria-label="Academic collection">
+      <div className="academic-shelf" aria-label="Education">
         {education.map((item, index) => (
           <details className={`volume academic-volume theme-${item.theme}`} data-volume id={`education-${item.id}`} key={item.school}>
-            <summary className="book-object" data-tilt aria-label={`Open ${item.school} details`}>
-              <span className="book-shadow" aria-hidden="true" />
-              <span className="book-spine" aria-hidden="true"><b>{item.school}</b><i>0{index + 1}</i></span>
+            <summary className="book-object" aria-label={`Open ${item.school} details`}>
               <span className="book-cover">
-                <span className="book-kicker">Academic volume 0{index + 1}</span>
+                <span className="book-kicker">Education / 0{index + 1}</span>
                 <strong>{item.school}</strong>
                 <span className="book-degree">{item.degree}</span>
-                <span className="book-rule" aria-hidden="true" />
-                <small>{item.period}</small>
-                <i aria-hidden="true">Open +</i>
+                <span className="book-metadata"><small>{item.period}</small><small>{item.location}</small></span>
+                <span className="book-score"><small>{item.scoreLabel}</small><b>{item.score}</b></span>
+                <i aria-hidden="true">View coursework +</i>
               </span>
             </summary>
             <div className="volume-reader academic-reader">
               <CloseVolumeButton />
-              <div className="reader-folio" aria-hidden="true">ED / 0{index + 1}</div>
               <div className="reader-lead">
-                <p className="reader-label">{item.edition}</p>
+                <p className="reader-label">Education / 0{index + 1} / {item.edition}</p>
                 <h3>{item.school}</h3>
                 <p>{item.degree}</p>
               </div>
@@ -104,7 +100,7 @@ function EducationCollection() {
           </details>
         ))}
       </div>
-      <p className="shelf-instruction" data-reveal><span aria-hidden="true">↳</span> Select a volume to read the record. Use Escape to close.</p>
+      <p className="shelf-instruction" data-reveal><span aria-hidden="true">↳</span> Open a school to view selected coursework. Use Escape to close.</p>
     </section>
   );
 }
@@ -114,30 +110,36 @@ function ExperienceCollection() {
     <section className="collection experience-collection" id="experience" data-nav-section aria-labelledby="experience-title">
       <div className="section-shell">
         <CollectionHeading
-          number="03"
-          title="Professional Experience"
-          description="Product delivery, modernization, internal tooling, and the engineering details that kept each system moving."
+          number="02"
+          title="Experience"
+          description="Production work across full-stack delivery, backend systems, data flows, deployment pipelines, and product operations."
           id="experience-title"
         />
-        <div className="experience-library" aria-label="Professional experience collection">
+        <div className="experience-library" aria-label="Professional experience">
           {experience.map((item, index) => (
             <details className={`volume experience-volume theme-${item.theme}`} data-volume id={`experience-${item.id}`} key={item.company}>
-              <summary className="experience-cover" data-tilt aria-label={`Open ${item.company} experience`}>
-                <span className="experience-spine" aria-hidden="true">VOL. {String(index + 1).padStart(2, "0")}</span>
+              <summary className="experience-cover" aria-label={`Open ${item.company} experience`}>
                 <span className="experience-cover-copy">
-                  <small>{item.period}</small>
+                  <span className="experience-index">Experience / {String(index + 1).padStart(2, "0")}</span>
                   <strong>{item.shortCompany}</strong>
-                  <span>{item.role}</span>
-                  <i aria-hidden="true">Read record +</i>
+                  <span className="experience-role">{item.role}</span>
+                  <p>{item.summary}</p>
+                  <dl className="experience-preview-metrics" aria-label={`${item.company} highlights`}>
+                    {item.metrics.filter((metric) => "featured" in metric && metric.featured).map((metric) => (
+                      <div key={metric.label}><dt>{metric.value}</dt><dd>{metric.label}</dd></div>
+                    ))}
+                  </dl>
+                  <span className="experience-meta">{item.period}<br />{item.location}</span>
+                  <i aria-hidden="true">View details +</i>
                 </span>
               </summary>
               <div className="volume-reader experience-reader">
                 <CloseVolumeButton />
-                <div className="reader-folio" aria-hidden="true">EXP / {String(index + 1).padStart(2, "0")}</div>
                 <div className="experience-reader-heading">
-                  <p className="reader-label">{item.period} / {item.location}</p>
+                  <p className="reader-label">Experience / {String(index + 1).padStart(2, "0")}</p>
                   <h3>{item.company}</h3>
                   <p>{item.role}</p>
+                  <span className="experience-reader-meta">{item.period} / {item.location}</span>
                 </div>
                 <p className="experience-summary">{item.summary}</p>
                 <ul className="experience-details">
@@ -164,9 +166,9 @@ function ProjectCollection() {
   return (
     <section className="collection project-collection section-shell" id="work" data-nav-section aria-labelledby="work-title">
       <CollectionHeading
-        number="04"
-        title="Engineering Projects"
-        description="Two working systems presented as technical publications. Open a volume to inspect the architecture and use the live demonstration."
+        number="03"
+        title="Selected Projects"
+        description="Two working systems that make the architecture, engineering decisions, and runtime behavior visible."
         id="work-title"
       />
       <div className="publication-shelf">
@@ -178,33 +180,37 @@ function ProjectCollection() {
             key={project.id}
           >
             <summary className="publication-cover" data-tilt aria-label={`Open ${project.title} project`}>
-              <span className="publication-index">PROJECT / {project.number}</span>
+              <span className="publication-index">Project / {project.number}</span>
               <strong>{project.title}</strong>
               <span>{project.subtitle}</span>
               <ul aria-label={`${project.title} technologies`}>
                 {project.technologies.slice(0, 4).map((technology) => <li key={technology}>{technology}</li>)}
               </ul>
-              <i aria-hidden="true">Open publication +</i>
-              <b aria-hidden="true">{String(2025 - index).slice(-2)}</b>
+              <i aria-hidden="true">View architecture + demo</i>
+              <b aria-hidden="true">0{index + 1}</b>
             </summary>
             <div className="volume-reader project-reader">
               <CloseVolumeButton />
               <div className="project-reader-masthead">
-                <p className="reader-label">Technical publication / {project.number}</p>
+                <p className="reader-label">Project / {project.number}</p>
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
               </div>
               <ul className="technology-index" aria-label={`${project.title} technology index`}>
                 {project.technologies.map((technology) => <li key={technology}>{technology}</li>)}
               </ul>
-              <div className="decision-notes">
+              <nav className="project-jump-links" aria-label={`${project.title} sections`}>
+                <a href={`#${project.id}-architecture`}>Architecture</a>
+                <a href={`#${project.id}-demo`}>Interactive demo</a>
+              </nav>
+              <div className="decision-notes" id={`${project.id}-architecture`}>
                 <h4>Architecture notes</h4>
                 <ol>
                   {project.decisions.map((decision) => <li key={decision}>{decision}</li>)}
                 </ol>
               </div>
-              <div className="project-demo-frame">
-                <div className="demo-caption"><span>Interactive system plate</span><small>Use the controls below</small></div>
+              <div className="project-demo-frame" id={`${project.id}-demo`}>
+                <div className="demo-caption"><span>Interactive demo</span><small>Use the controls below</small></div>
                 <LazyProjectDemo kind={project.demo} />
               </div>
             </div>
@@ -232,7 +238,7 @@ export default function Home() {
           <details className="mobile-nav" data-mobile-nav>
             <summary>Index</summary>
             <div className="mobile-menu-panel">
-              <nav aria-label="Mobile navigation"><NavigationLinks mobile /></nav>
+              <nav aria-label="Mobile navigation"><a href="#intro" data-nav-link>Intro</a><NavigationLinks mobile /></nav>
               <p>{profile.location}<br />Open to relocate for the right opportunity</p>
             </div>
           </details>
@@ -245,10 +251,10 @@ export default function Home() {
             <p className="intro-kicker" data-reveal>Software Engineer / Seattle</p>
             <h1 id="hero-title" data-reveal>Harsh<br /><em>Dobariya</em></h1>
             <p className="intro-statement" data-reveal>
-              I build reliable systems and thoughtful software products, from interface to infrastructure.
+              Software Engineer building backend systems, distributed infrastructure, and polished products.
             </p>
             <p className="intro-summary" data-reveal>
-              Backend and full-stack engineering with clear APIs, durable data flows, and careful attention to the people using the product.
+              I work across backend and full-stack engineering, designing clear APIs, reliable data flows, and thoughtful product experiences.
             </p>
             <div className="intro-actions" data-reveal>
               <ActionLink href="/Harsh_Dobariya_Resume.pdf" icon="external" variant="primary" target="_blank">Resume</ActionLink>
@@ -256,32 +262,32 @@ export default function Home() {
               <ActionLink href={`mailto:${profile.email}`}>Email</ActionLink>
             </div>
             <div className="intro-status" data-reveal>
-              <span><i aria-hidden="true" />{profile.location}</span>
-              <span>Open to relocate for the right opportunity</span>
+              <span><i aria-hidden="true" />Available for software engineering opportunities</span>
+              <span>{profile.location} / Open to relocate</span>
             </div>
           </div>
           <aside className="archive-index" aria-label="Portfolio collection index" data-reveal>
             <div className="archive-monogram" aria-hidden="true"><span>H</span><span>D</span></div>
-            <p>Selected records in systems, products, and software engineering.</p>
+            <p>Backend systems, distributed infrastructure, and full-stack product engineering.</p>
             <ol>
-              {navigation.slice(1).map((item, index) => (
-                <li key={item.href}><a href={item.href}><span>0{index + 2}</span>{item.label}</a></li>
+              {navigation.map((item) => (
+                <li key={item.href}><a href={item.href}><span>{item.number}</span>{item.label}</a></li>
               ))}
             </ol>
-            <a className="browse-collection" href="#education">Browse the collection <span aria-hidden="true">↓</span></a>
+            <a className="browse-collection" href="#experience">View experience <span aria-hidden="true">↓</span></a>
           </aside>
         </section>
 
-        <EducationCollection />
         <ExperienceCollection />
         <ProjectCollection />
+        <EducationCollection />
 
         <section className="collection about-collection" id="about" data-nav-section aria-labelledby="about-title">
           <div className="section-shell">
             <CollectionHeading
               number="05"
               title="About and Contact"
-              description="A backend-focused full-stack engineer who values explicit tradeoffs, dependable systems, and software that stays understandable."
+              description="A backend-focused full-stack engineer who values dependable systems, explicit tradeoffs, and software that remains clear as it grows."
               id="about-title"
             />
             <div className="about-layout">
@@ -289,9 +295,12 @@ export default function Home() {
                 <p>
                   I am a software engineer based in Seattle. I turn complex requirements into dependable products with clear interfaces, maintainable code, and thoughtful data design.
                 </p>
-                <p>
-                  My work is guided by four habits: start with the problem, make tradeoffs explicit, design for failure, and leave the next change easy.
-                </p>
+                <ol className="work-principles" aria-label="How I work">
+                  <li><span>01</span><strong>Start with the problem</strong><small>Clarify the outcome before choosing the implementation.</small></li>
+                  <li><span>02</span><strong>Make tradeoffs explicit</strong><small>Prefer decisions that teammates can understand and revisit.</small></li>
+                  <li><span>03</span><strong>Design for failure</strong><small>Make recovery, observability, and edge cases part of the design.</small></li>
+                  <li><span>04</span><strong>Leave the next change easy</strong><small>Build clear boundaries so the product can evolve safely.</small></li>
+                </ol>
               </div>
               <div className="tool-index" data-reveal>
                 <p className="reader-label">Working set</p>
