@@ -70,10 +70,10 @@ function EducationCollection() {
           <details className={`volume academic-volume theme-${item.theme}`} data-volume id={`education-${item.id}`} key={item.school}>
             <summary className="book-object" data-tilt aria-label={`Open ${item.school} details`}>
               <span className="book-shadow" aria-hidden="true" />
-              <span className="book-spine" aria-hidden="true"><b>{item.shortName}</b><i>0{index + 1}</i></span>
+              <span className="book-spine" aria-hidden="true"><b>{item.school}</b><i>0{index + 1}</i></span>
               <span className="book-cover">
                 <span className="book-kicker">Academic volume 0{index + 1}</span>
-                <strong>{item.shortName}</strong>
+                <strong>{item.school}</strong>
                 <span className="book-degree">{item.degree}</span>
                 <span className="book-rule" aria-hidden="true" />
                 <small>{item.period}</small>
@@ -91,12 +91,13 @@ function EducationCollection() {
               <dl className="reader-metadata">
                 <div><dt>Study period</dt><dd>{item.period}</dd></div>
                 <div><dt>Location</dt><dd>{item.location}</dd></div>
+                <div><dt>{item.scoreLabel}</dt><dd>{item.score}</dd></div>
               </dl>
               <div className="reader-content">
-                <h4>Academic record</h4>
-                <p className="academic-record-copy">
-                  Degree, study period, and location are presented from the provided resume.
-                </p>
+                <h4>Selected coursework</h4>
+                <ul className="coursework-list">
+                  {item.subjects.map((subject) => <li key={subject}>{subject}</li>)}
+                </ul>
                 {"note" in item ? <p className="academic-note">{item.note}</p> : null}
               </div>
             </div>

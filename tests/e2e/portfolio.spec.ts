@@ -113,6 +113,8 @@ test("editorial volumes are keyboard accessible and only one opens per collectio
   await asuSummary.press("Enter");
   await expect(asuVolume).toHaveAttribute("open", "");
   await expect(asuVolume.getByRole("heading", { name: "Arizona State University" })).toBeVisible();
+  await expect(asuVolume.getByText("3.5 / 4.0", { exact: true })).toBeVisible();
+  await expect(asuVolume.getByText("IFT 511: Analyzing Big Data", { exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(asuVolume).not.toHaveAttribute("open", "");
   await expect(asuSummary).toBeFocused();

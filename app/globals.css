@@ -485,7 +485,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .book-spine b, .book-spine i { font-family: var(--mono); font-size: .62rem; font-style: normal; letter-spacing: .08em; }
 .book-shadow { position: absolute; inset: 8% 0 -5% 14%; background: rgba(49,39,29,.16); filter: blur(18px); transform: translateZ(-10px); }
 .book-kicker { position: relative; z-index: 1; font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; }
-.book-cover strong { max-width: 4ch; position: relative; z-index: 1; margin-top: 3.8rem; font-family: var(--serif); font-size: clamp(5.5rem, 11vw, 8.5rem); font-weight: 400; letter-spacing: -.08em; line-height: .75; }
+.book-cover strong { max-width: 10ch; position: relative; z-index: 1; margin-top: 3.8rem; font-family: var(--serif); font-size: clamp(2.6rem, 4vw, 3.4rem); font-weight: 400; letter-spacing: -.055em; line-height: .86; text-wrap: balance; }
 .book-degree { max-width: 15rem; position: relative; z-index: 1; margin-top: 2.3rem; font-family: var(--serif); font-size: 1.3rem; line-height: 1.12; }
 .book-rule { width: 3rem; height: 1px; margin-top: auto; background: currentColor; opacity: .65; }
 .book-cover small { margin-top: 1rem; font-family: var(--mono); font-size: .63rem; line-height: 1.5; }
@@ -506,7 +506,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .reader-metadata dt { color: var(--muted); font-family: var(--mono); font-size: .62rem; letter-spacing: .06em; text-transform: uppercase; }
 .reader-metadata dd { margin: .45rem 0 0; font-size: .92rem; }
 .reader-content h4, .decision-notes h4 { margin: 0 0 1.1rem; font-family: var(--serif); font-size: 1.5rem; font-weight: 400; }
-.academic-record-copy { margin: 0; color: var(--muted); font-size: .95rem; }
+.coursework-list { display: grid; gap: .72rem; margin: 0; padding: 0; list-style: none; }
+.coursework-list li { position: relative; padding-left: 1rem; color: var(--muted-strong); font-size: .9rem; line-height: 1.45; }
+.coursework-list li::before { position: absolute; top: .65em; left: 0; width: .28rem; height: .28rem; content: ""; border-radius: 50%; background: var(--cover); }
 .academic-note { margin: 1.5rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--line); font-family: var(--serif); font-size: 1.18rem; line-height: 1.45; }
 .shelf-instruction { margin: 1rem 0 0; color: var(--muted); font-family: var(--mono); font-size: .66rem; letter-spacing: .03em; text-align: center; }
 
@@ -741,7 +743,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .book-object { min-height: 25rem; padding-left: 1.65rem; }
   .book-cover { min-height: 25rem; padding: 1.35rem; }
   .book-spine { width: 1.65rem; }
-  .book-cover strong { margin-top: 3rem; font-size: clamp(4rem, 13vw, 6rem); }
+  .book-cover strong { margin-top: 3rem; font-size: clamp(2.5rem, 6.5vw, 3.8rem); }
   .book-degree { font-size: 1.05rem; }
   .academic-reader, .experience-reader, .project-reader, .about-layout { grid-template-columns: 1fr; }
   .experience-library { grid-template-columns: repeat(2, minmax(0, 1fr)); }

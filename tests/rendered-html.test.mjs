@@ -39,6 +39,13 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
+  assert.match(html, /Gujarat Technological University/);
+  assert.match(html, /3\.5 \/ 4\.0/);
+  assert.match(html, /8\.00 \/ 10/);
+  assert.match(html, /IFT 511: Analyzing Big Data/);
+  assert.match(html, /Advanced Database Management Systems/);
+  assert.match(html, /Computer Organization &amp; Architecture/);
+  assert.match(html, /Artificial Intelligence/);
   assert.match(html, /Seattle, Washington, USA/);
   assert.match(html, /Open to relocate/);
   assert.match(html, /Community Dreams Foundation/);
@@ -68,14 +75,13 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.doesNotMatch(html, /<footer\b|Footer links|©/i);
   assert.doesNotMatch(html, /id="engineering"|href="#engineering"|What I build/i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
-  assert.doesNotMatch(html, /GPA|CGPA/i);
   const visibleText = html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]+>/g, " ");
   assert.doesNotMatch(
     visibleText,
-    /—|3K|monthly users supported|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
+    /—|\bASU\b|\bGTU\b|3K|monthly users supported|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
   );
   assert.doesNotMatch(html, /system-stats|harsh-system-poster\.png|hero-system-diagram/i);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
