@@ -1,6 +1,6 @@
 # Harsh Dobariya Portfolio
 
-Product-led personal site for [harshdobariya.com](https://harshdobariya.com), designed for recruiters and engineering managers evaluating backend, full-stack, and distributed-systems work.
+Editorial personal site for [harshdobariya.com](https://harshdobariya.com), designed for recruiters and engineering managers evaluating backend, full-stack, and distributed-systems work.
 
 ## Stack
 
@@ -45,7 +45,7 @@ When a visual change is intentional, inspect it at all three viewports before ru
 
 ## Editing content
 
-Structured profile, experience, education, and tool content lives in `app/portfolio-data.ts`. The 3D hero sculpture and project demonstrations live in `app/HeroSculptureVisual.tsx`, `app/KVStoreDemo.tsx`, and `app/CollaborativeDemo.tsx`.
+Structured profile, experience, education, project, and tool content lives in `app/portfolio-data.ts`. The collection covers and reading views are composed in `app/page.tsx`; the live project demonstrations remain isolated in `app/KVStoreDemo.tsx` and `app/CollaborativeDemo.tsx`.
 
 ## Deployment
 

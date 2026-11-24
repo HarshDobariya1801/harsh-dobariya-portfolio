@@ -34,8 +34,8 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /<title>Harsh Dobariya \| Software Engineer<\/title>/i);
   assert.match(html, /Harsh/);
   assert.match(html, /Dobariya/);
-  assert.match(html, /Selected work/i);
-  assert.match(html, /Systems built end to end/i);
+  assert.match(html, /Engineering Projects/i);
+  assert.match(html, /technical publications/i);
   assert.match(html, /Distributed Key-Value Store/);
   assert.match(html, /Real-Time Collaborative Workspace/);
   assert.match(html, /Arizona State University/);
@@ -48,25 +48,27 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /HarshDobariya1801/);
   assert.match(html, /og\.png/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, /Have something worth building/i);
+  assert.match(html, /Let(?:'|&apos;)s build something dependable/i);
   assert.match(html, /Back to introduction/i);
-  assert.match(html, /reliable software from interface to/i);
-  assert.match(html, /hero-system-diagram-refined\.webp/i);
-  assert.match(html, /GET, SET, and DEL commands/i);
+  assert.match(html, /reliable systems and thoughtful software products/i);
+  assert.match(html, /GET, SET, and DEL behavior/i);
   assert.match(html, /data-demo-kind="kv"/i);
   assert.match(html, /data-demo-kind="collaborative"/i);
   assert.match(html, /Loading as it enters view/i);
   assert.match(html, /25%/);
-  assert.match(html, /Backend depth, full-stack perspective/i);
-  assert.match(html, /Tools I use/i);
+  assert.match(html, /About and Contact/i);
+  assert.match(html, /Working set/i);
   assert.match(html, /GitHub Actions/);
-  assert.match(html, /Portfolio journey/i);
-  assert.match(html, /data-journey-card/i);
-  assert.equal((html.match(/<section[^>]*data-journey-card/gi) ?? []).length, 6);
-  assert.doesNotMatch(html, /Case study|Screenshot needed|Live demo|href="\/work\//i);
+  assert.match(html, /Academic collection/i);
+  assert.match(html, /Professional experience collection/i);
+  assert.equal((html.match(/<details[^>]*data-volume/gi) ?? []).length, 8);
+  assert.match(html, /Open Arizona State University details/i);
+  assert.match(html, /Open Distributed Key-Value Store project/i);
+  assert.doesNotMatch(html, /Case study|Screenshot needed|href="\/work\//i);
   assert.doesNotMatch(html, /<footer\b|Footer links|©/i);
   assert.doesNotMatch(html, /id="engineering"|href="#engineering"|What I build/i);
   assert.doesNotMatch(html, /custom-cursor|Toggle color theme|hero-blueprint/i);
+  assert.doesNotMatch(html, /GPA|CGPA/i);
   const visibleText = html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
@@ -75,7 +77,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
     visibleText,
     /—|3K|monthly users supported|harsh\.profile|understand the whole system|placeholder|lorem ipsum|AgentTime|AI Resume Analyzer/i,
   );
-  assert.doesNotMatch(html, /system-stats|harsh-system-poster\.png/i);
+  assert.doesNotMatch(html, /system-stats|harsh-system-poster\.png|hero-system-diagram/i);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
 

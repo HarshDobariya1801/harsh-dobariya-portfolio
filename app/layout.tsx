@@ -82,17 +82,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <noscript>
-          {/* No-JavaScript fallback for deferred, below-fold presentation styles. */}
+          {/* No-JavaScript fallback for the below-fold interactive demo styles. */}
           {/* eslint-disable-next-line @next/next/no-css-tags */}
           <link rel="stylesheet" href="/project-demos.css" />
-          {/* eslint-disable-next-line @next/next/no-css-tags */}
-          <link rel="stylesheet" href="/journey-scenes.css" />
-          {/* eslint-disable-next-line @next/next/no-css-tags */}
-          <link
-            rel="stylesheet"
-            href="/journey-desktop.css"
-            media="(min-width: 1120px) and (min-height: 720px) and (prefers-reduced-motion: no-preference)"
-          />
         </noscript>
       </head>
       <body>
