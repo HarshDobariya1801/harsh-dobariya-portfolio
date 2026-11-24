@@ -2,204 +2,111 @@
 
 import { useEffect } from "react";
 
-const clamp = (value: number, minimum = 0, maximum = 1) =>
-  Math.min(maximum, Math.max(minimum, value));
-
-function documentTop(element: HTMLElement) {
-  let top = 0;
-  let node: HTMLElement | null = element;
-
-  while (node) {
-    top += node.offsetTop;
-    node = node.offsetParent instanceof HTMLElement ? node.offsetParent : null;
-  }
-
-  return top;
-}
-
 export default function ScrollMotion() {
   useEffect(() => {
     const root = document.documentElement;
-    const items = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const cinematicQuery = window.matchMedia(
-      "(min-width: 1120px) and (min-height: 720px) and (prefers-reduced-motion: no-preference)",
-    );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const header = document.querySelector<HTMLElement>("[data-site-header]");
-    const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-nav-section]"));
-    const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"));
-    const journey = document.querySelector<HTMLElement>("[data-journey]");
-    const journeyCards = Array.from(document.querySelectorAll<HTMLElement>("[data-journey-card]"));
-    const journeyLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-journey-link]"));
-    const journeyAnchorLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')).filter((link) => {
-      const hash = link.getAttribute("href");
-      if (!hash || hash === "#") return false;
-      return document.querySelector<HTMLElement>(hash)?.hasAttribute("data-journey-card") ?? false;
-    });
-    const journeyProgress = document.querySelector<HTMLElement>("[data-journey-progress]");
     const menu = document.querySelector<HTMLDetailsElement>("[data-mobile-nav]");
     const menuSummary = menu?.querySelector<HTMLElement>("summary");
-
-    const measureJourneyCardTops = () => {
-      let cursor = journey ? documentTop(journey) : 0;
-      return journeyCards.map((card) => {
-        const styles = getComputedStyle(card);
-        cursor += Number.parseFloat(styles.marginTop) || 0;
-        const top = cursor;
-        cursor += card.offsetHeight + (Number.parseFloat(styles.marginBottom) || 0);
-        return top;
-      });
-    };
+    const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-nav-section]"));
+    const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"));
+    const volumes = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-volume]"));
+    const tiltTargets = Array.from(document.querySelectorAll<HTMLElement>("[data-tilt]"));
+    const closeButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-volume-close]"));
 
     let revealObserver: IntersectionObserver | undefined;
-    if (reduceMotion) {
-      items.forEach((item) => item.classList.add("is-visible"));
+    if (reducedMotion) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
     } else {
-      root.classList.add("reveal-ready");
+      root.classList.add("motion-ready");
       revealObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              revealObserver?.unobserve(entry.target);
-            }
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            revealObserver?.unobserve(entry.target);
           });
         },
-        { rootMargin: "0px 0px -10%", threshold: 0.12 },
+        { rootMargin: "0px 0px -8%", threshold: 0.1 },
       );
-      items.forEach((item) => revealObserver?.observe(item));
+      revealItems.forEach((item) => revealObserver?.observe(item));
     }
 
     let animationFrame = 0;
-    let lastActiveIndex = -1;
-
-    const updateJourney = () => {
+    const updatePageState = () => {
       animationFrame = 0;
-      const viewportHeight = window.innerHeight;
-      const scrollY = window.scrollY;
-      const marker = scrollY + viewportHeight * 0.44;
-      const stageTop = clamp(viewportHeight * 0.09, 76, 94);
-      const journeyCardTops = measureJourneyCardTops();
-      let activeIndex = 0;
+      const marker = window.scrollY + Math.min(window.innerHeight * 0.34, 280);
+      header?.classList.toggle("is-scrolled", window.scrollY > 16);
 
-      root.classList.toggle("journey-ready", cinematicQuery.matches);
-      header?.classList.toggle("is-scrolled", scrollY > 18);
-
-      const currentSection = [...sections]
-        .reverse()
-        .find((section) => {
-          const cardIndex = journeyCards.indexOf(section);
-          const top = cardIndex >= 0 ? journeyCardTops[cardIndex] : documentTop(section);
-          return top <= scrollY + viewportHeight * 0.34;
-        });
+      const activeSection = [...sections].reverse().find((section) => section.offsetTop <= marker) ?? sections[0];
       navLinks.forEach((link) => {
-        const active = Boolean(currentSection && link.hash === `#${currentSection.id}`);
-        if (active) link.setAttribute("aria-current", "location");
+        if (activeSection && link.hash === `#${activeSection.id}`) link.setAttribute("aria-current", "location");
         else link.removeAttribute("aria-current");
       });
-
-      journeyCards.forEach((card, index) => {
-        const top = journeyCardTops[index];
-        const transitionDistance = Math.max(card.offsetHeight * 0.86, viewportHeight * 0.74);
-        const exit = index === journeyCards.length - 1
-          ? 0
-          : clamp((scrollY + stageTop - top) / transitionDistance);
-        const naturalTop = top - scrollY;
-        const entry = clamp((viewportHeight - naturalTop) / Math.max(viewportHeight - stageTop, 1));
-        const scale = 0.985 + entry * 0.015 - exit * 0.045;
-        const opacity = clamp(0.48 + entry * 0.52 - exit * 0.25);
-
-        card.style.setProperty("--journey-exit", exit.toFixed(4));
-        card.style.setProperty("--journey-entry", entry.toFixed(4));
-        card.style.setProperty("--journey-enter-y", `${((1 - entry) * 96).toFixed(2)}px`);
-        card.style.setProperty("--journey-exit-y", `${(-exit * 28).toFixed(2)}px`);
-        card.style.setProperty("--journey-z", `${(-exit * 84).toFixed(2)}px`);
-        card.style.setProperty("--journey-scale", scale.toFixed(4));
-        card.style.setProperty("--journey-rotate-x", `${(exit * 1.15).toFixed(2)}deg`);
-        card.style.setProperty("--journey-opacity", opacity.toFixed(4));
-        card.style.setProperty("--journey-blur", `${(exit * 0.8).toFixed(2)}px`);
-        if (top <= marker) activeIndex = index;
-      });
-
-      journeyCards.forEach((card, index) => {
-        card.classList.toggle("is-active", index === activeIndex);
-        card.classList.toggle("is-behind", index < activeIndex);
-      });
-
-      if (activeIndex !== lastActiveIndex) {
-        root.dataset.activeScene = journeyCards[activeIndex]?.dataset.sceneTone ?? "champagne";
-        lastActiveIndex = activeIndex;
-      }
-
-      journeyLinks.forEach((link, index) => {
-        if (index === activeIndex) link.setAttribute("aria-current", "step");
-        else link.removeAttribute("aria-current");
-      });
-
-      if (journey && journeyProgress) {
-        const journeyTop = documentTop(journey);
-        const distance = Math.max(journey.offsetHeight - viewportHeight, 1);
-        const progress = clamp((scrollY - journeyTop) / distance);
-        journeyProgress.style.setProperty("--journey-progress", progress.toFixed(4));
-      }
     };
-
-    const scheduleJourneyUpdate = () => {
+    const scheduleUpdate = () => {
       if (animationFrame) return;
-      animationFrame = window.requestAnimationFrame(updateJourney);
+      animationFrame = window.requestAnimationFrame(updatePageState);
     };
-
-    const scrollToJourneyTarget = (hash: string, behavior: ScrollBehavior) => {
-      const target = document.querySelector<HTMLElement>(hash);
-      if (!target?.hasAttribute("data-journey-card")) return;
-      const targetIndex = journeyCards.indexOf(target);
-      if (targetIndex < 0) return;
-      const offset = cinematicQuery.matches
-        ? clamp(window.innerHeight * 0.09, 76, 94)
-        : Math.min((header?.offsetHeight ?? 0) + 12, 96);
-      window.scrollTo({
-        top: Math.max(0, measureJourneyCardTops()[targetIndex] - offset),
-        behavior,
-      });
-    };
-
-    const handleJourneyAnchorClick = (event: MouseEvent) => {
-      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const link = event.currentTarget as HTMLAnchorElement;
-      event.preventDefault();
-      if (window.location.hash !== link.hash) window.history.pushState(null, "", link.hash);
-      scrollToJourneyTarget(link.hash, reduceMotion ? "auto" : "smooth");
-    };
-
-    const handleHashChange = () => {
-      if (window.location.hash) scrollToJourneyTarget(window.location.hash, "auto");
-    };
-
-    updateJourney();
-    window.addEventListener("scroll", scheduleJourneyUpdate, { passive: true });
-    window.addEventListener("resize", scheduleJourneyUpdate);
-    cinematicQuery.addEventListener("change", scheduleJourneyUpdate);
-    document.fonts.ready.then(scheduleJourneyUpdate).catch(() => undefined);
-    journeyAnchorLinks.forEach((link) => link.addEventListener("click", handleJourneyAnchorClick));
-    window.addEventListener("hashchange", handleHashChange);
-    if (window.location.hash) window.requestAnimationFrame(handleHashChange);
 
     const closeMenu = () => {
-      if (!menu?.open) return;
-      menu.open = false;
+      if (menu?.open) menu.open = false;
+    };
+    const handleMenuToggle = () => {
+      if (menu?.open) window.requestAnimationFrame(() => menu.querySelector<HTMLAnchorElement>("a")?.focus());
     };
 
-    const handleMenuToggle = () => {
-      if (menu?.open) {
-        window.requestAnimationFrame(() => menu.querySelector<HTMLAnchorElement>("a")?.focus());
-      }
+    const handleVolumeToggle = (event: Event) => {
+      const opened = event.currentTarget as HTMLDetailsElement;
+      if (!opened.open) return;
+      const collection = opened.closest(".collection");
+      volumes.forEach((volume) => {
+        if (volume !== opened && volume.open && volume.closest(".collection") === collection) volume.open = false;
+      });
+    };
+
+    const handleCloseVolume = (event: Event) => {
+      const button = event.currentTarget as HTMLButtonElement;
+      const volume = button.closest<HTMLDetailsElement>("[data-volume]");
+      if (!volume) return;
+      volume.open = false;
+      volume.querySelector<HTMLElement>("summary")?.focus();
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const target = event.currentTarget as HTMLElement;
+      const bounds = target.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      target.style.setProperty("--tilt-x", `${(-y * 5).toFixed(2)}deg`);
+      target.style.setProperty("--tilt-y", `${(x * 7).toFixed(2)}deg`);
+      target.style.setProperty("--glint-x", `${((x + 0.5) * 100).toFixed(1)}%`);
+      target.style.setProperty("--glint-y", `${((y + 0.5) * 100).toFixed(1)}%`);
+    };
+    const resetTilt = (event: PointerEvent) => {
+      const target = event.currentTarget as HTMLElement;
+      target.style.removeProperty("--tilt-x");
+      target.style.removeProperty("--tilt-y");
+      target.style.removeProperty("--glint-x");
+      target.style.removeProperty("--glint-y");
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && menu?.open) {
-        closeMenu();
-        menuSummary?.focus();
-        return;
+      if (event.key === "Escape") {
+        if (menu?.open) {
+          closeMenu();
+          menuSummary?.focus();
+          return;
+        }
+        const openVolume = [...volumes].reverse().find((volume) => volume.open);
+        if (openVolume) {
+          openVolume.open = false;
+          openVolume.querySelector<HTMLElement>("summary")?.focus();
+          return;
+        }
       }
 
       if (event.key !== "Tab" || !menu?.open) return;
@@ -215,23 +122,48 @@ export default function ScrollMotion() {
       }
     };
 
+    const openHashTarget = () => {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+      const target = document.getElementById(hash);
+      const volume = target?.matches("[data-volume]") ? target as HTMLDetailsElement : target?.closest<HTMLDetailsElement>("[data-volume]");
+      if (volume) volume.open = true;
+    };
+
+    updatePageState();
+    openHashTarget();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("hashchange", openHashTarget);
     menu?.addEventListener("toggle", handleMenuToggle);
     menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
+    volumes.forEach((volume) => volume.addEventListener("toggle", handleVolumeToggle));
+    closeButtons.forEach((button) => button.addEventListener("click", handleCloseVolume));
     document.addEventListener("keydown", handleKeyDown);
+
+    if (finePointer && !reducedMotion) {
+      tiltTargets.forEach((target) => {
+        target.addEventListener("pointermove", handlePointerMove);
+        target.addEventListener("pointerleave", resetTilt);
+      });
+    }
 
     return () => {
       revealObserver?.disconnect();
       window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener("scroll", scheduleJourneyUpdate);
-      window.removeEventListener("resize", scheduleJourneyUpdate);
-      cinematicQuery.removeEventListener("change", scheduleJourneyUpdate);
-      journeyAnchorLinks.forEach((link) => link.removeEventListener("click", handleJourneyAnchorClick));
-      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("hashchange", openHashTarget);
       menu?.removeEventListener("toggle", handleMenuToggle);
       menu?.querySelectorAll("a").forEach((link) => link.removeEventListener("click", closeMenu));
+      volumes.forEach((volume) => volume.removeEventListener("toggle", handleVolumeToggle));
+      closeButtons.forEach((button) => button.removeEventListener("click", handleCloseVolume));
       document.removeEventListener("keydown", handleKeyDown);
-      root.classList.remove("reveal-ready", "journey-ready");
-      delete root.dataset.activeScene;
+      tiltTargets.forEach((target) => {
+        target.removeEventListener("pointermove", handlePointerMove);
+        target.removeEventListener("pointerleave", resetTilt);
+      });
+      root.classList.remove("motion-ready");
     };
   }, []);
 

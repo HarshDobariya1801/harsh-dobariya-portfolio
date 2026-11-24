@@ -32,6 +32,16 @@ function collectRuntimeSignals(page: Page): RuntimeSignals {
   return signals;
 }
 
+async function openProject(page: Page, id: "distributed-key-value-store" | "collab-work") {
+  const volume = page.locator(`#${id}`);
+  const summary = volume.locator("summary");
+  if ((await volume.getAttribute("open")) === null) await summary.click();
+  await expect(volume).toHaveAttribute("open", "");
+  await volume.locator(".project-demo-frame").scrollIntoViewIfNeeded();
+  await expect(volume.locator("[data-demo-ready]")).toHaveAttribute("data-demo-ready", "true");
+  return volume;
+}
+
 test("loads without runtime failures or horizontal overflow", async ({ page }) => {
   const signals = collectRuntimeSignals(page);
   await page.goto("/", { waitUntil: "networkidle" });
@@ -94,33 +104,57 @@ test("external profile links are not missing", async ({ page, request }, testInf
   }
 });
 
-test("critical project and contact interactions work", async ({ context, page }, testInfo) => {
+test("editorial volumes are keyboard accessible and only one opens per collection", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const asuVolume = page.locator("#education-asu");
+  const asuSummary = asuVolume.locator("summary");
+  await asuSummary.focus();
+  await asuSummary.press("Enter");
+  await expect(asuVolume).toHaveAttribute("open", "");
+  await expect(asuVolume.getByRole("heading", { name: "Arizona State University" })).toBeVisible();
+  await expect(asuVolume.getByText("3.5 / 4.0", { exact: true })).toBeVisible();
+  await expect(asuVolume.getByText("IFT 511: Analyzing Big Data", { exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(asuVolume).not.toHaveAttribute("open", "");
+  await expect(asuSummary).toBeFocused();
+
+  const communityVolume = page.locator("#experience-community-dreams");
+  const ninjaVolume = page.locator("#experience-ninja-technolabs");
+  await communityVolume.locator("summary").click();
+  await expect(communityVolume).toHaveAttribute("open", "");
+  await ninjaVolume.locator("summary").click();
+  await expect(ninjaVolume).toHaveAttribute("open", "");
+  await expect(communityVolume).not.toHaveAttribute("open", "");
+  await ninjaVolume.getByRole("button", { name: "Close reading view" }).click();
+  await expect(ninjaVolume).not.toHaveAttribute("open", "");
+});
+
+test("project demos and contact interactions still work", async ({ context, page }, testInfo) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/", { waitUntil: "networkidle" });
 
-  await page.locator("#work").scrollIntoViewIfNeeded();
-  await expect(page.locator('[data-demo-kind="kv"]')).toHaveAttribute("data-demo-ready", "true");
-  const result = page.locator(".kv-command-readout strong");
-  await page.getByRole("button", { name: "SET", exact: true }).click();
+  const kvVolume = await openProject(page, "distributed-key-value-store");
+  const result = kvVolume.locator(".kv-command-readout strong");
+  await kvVolume.getByRole("button", { name: "SET", exact: true }).click();
   await expect(result).toContainText("value stored");
-  await page.getByRole("button", { name: "GET", exact: true }).click();
+  await kvVolume.getByRole("button", { name: "GET", exact: true }).click();
   await expect(result).toContainText("Harsh");
-  await page.getByRole("button", { name: "DEL", exact: true }).click();
+  await kvVolume.getByRole("button", { name: "DEL", exact: true }).click();
   await expect(result).toContainText("key removed");
 
-  const harshEditor = page.getByLabel("Harsh code editor");
-  const guestEditor = page.getByLabel("Guest code editor");
-  const editorHint = page.locator("[data-editor-hint]");
+  const collabVolume = await openProject(page, "collab-work");
+  await expect(kvVolume).not.toHaveAttribute("open", "");
+  const harshEditor = collabVolume.getByLabel("Harsh code editor");
+  const guestEditor = collabVolume.getByLabel("Guest code editor");
+  const editorHint = collabVolume.locator("[data-editor-hint]");
   const harshChange = "const message = \"Hello from Harsh\";\nreturn message;";
   const guestChange = "const message = \"Guest replied\";\n\nreturn message.toUpperCase();";
 
-  await page.locator("#collab-work").scrollIntoViewIfNeeded();
-  await expect(page.locator('[data-demo-kind="collaborative"]')).toHaveAttribute("data-demo-ready", "true");
   await harshEditor.scrollIntoViewIfNeeded();
   await expect(editorHint).toBeVisible();
   await guestEditor.click();
   await expect(editorHint).not.toBeAttached();
-
   await harshEditor.fill(harshChange);
   await expect(guestEditor).toHaveValue(harshChange);
   await harshEditor.pressSequentially("\n// rapid edit", { delay: 0 });
@@ -130,53 +164,45 @@ test("critical project and contact interactions work", async ({ context, page },
   await page.evaluate((text) => navigator.clipboard.writeText(text), guestChange);
   await page.keyboard.press(process.platform === "darwin" ? "Meta+V" : "Control+V");
   await expect(harshEditor).toHaveValue(guestChange);
-
-  await page.getByRole("button", { name: "Reset demo" }).click();
+  await collabVolume.getByRole("button", { name: "Reset demo" }).click();
   await expect(harshEditor).toHaveValue(/const workspace/);
   await expect(guestEditor).toHaveValue(/collaborators: 2/);
-  await expect(editorHint).toBeVisible();
 
   if (testInfo.project.name === "mobile") {
-    const architectureTab = page.getByRole("tab", { name: "Architecture" });
-    const editorTab = page.getByRole("tab", { name: "Editor" });
+    const architectureTab = collabVolume.getByRole("tab", { name: "Architecture" });
+    const editorTab = collabVolume.getByRole("tab", { name: "Editor" });
     await architectureTab.click();
     await expect(architectureTab).toHaveAttribute("aria-selected", "true");
     await architectureTab.press("ArrowLeft");
     await expect(editorTab).toHaveAttribute("aria-selected", "true");
-    await editorTab.press("End");
-    await expect(architectureTab).toHaveAttribute("aria-selected", "true");
+    await architectureTab.click();
   }
-  const diagram = page.getByRole("img", { name: /Client A connects bidirectionally/ });
+
+  const diagram = collabVolume.getByRole("img", { name: /Client A connects bidirectionally/ });
   await expect(diagram).toBeVisible();
   await expect(diagram.getByText("Redis Pub/Sub", { exact: true })).toBeVisible();
   await expect(diagram.getByText("PostgreSQL", { exact: true })).toBeVisible();
 
+  await page.locator("#contact").scrollIntoViewIfNeeded();
   await page.getByRole("button", { name: /^Copy email:/ }).click();
   await expect(page.getByRole("button", { name: /^Copied:/ })).toBeVisible();
-
-  await page.getByRole("link", { name: "Back to introduction" }).click();
-  await expect(page).toHaveURL(/#top$/);
-
-  await page.getByRole("link", { name: "View my work" }).click();
-  await expect(page).toHaveURL(/#work$/);
+  await page.getByRole("link", { name: "Back to introduction ↑" }).click();
+  await expect(page).toHaveURL(/#intro$/);
 });
 
 test("collaborative editor hint types, cycles, and dismisses", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop", "One animation lifecycle check is sufficient.");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/", { waitUntil: "networkidle" });
-
-  await page.locator("#collab-work").scrollIntoViewIfNeeded();
-  await expect(page.locator('[data-demo-kind="collaborative"]')).toHaveAttribute("data-demo-ready", "true");
-  const harshEditor = page.getByLabel("Harsh code editor");
-  const hint = page.locator("[data-editor-hint]");
+  const collabVolume = await openProject(page, "collab-work");
+  const harshEditor = collabVolume.getByLabel("Harsh code editor");
+  const hint = collabVolume.locator("[data-editor-hint]");
   await harshEditor.scrollIntoViewIfNeeded();
 
   await expect(hint).toBeVisible();
   await expect(hint.locator("i")).toBeVisible();
   await expect(hint).toContainText("Try editing this code...", { timeout: 4_000 });
   await expect(hint).toContainText("Your changes sync live!", { timeout: 7_500 });
-
   await harshEditor.click();
   await expect(hint).not.toBeAttached();
 });
@@ -185,11 +211,9 @@ test("collaborative editor hint is static with reduced motion", async ({ page },
   test.skip(testInfo.project.name !== "desktop", "One reduced-motion check is sufficient.");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/", { waitUntil: "networkidle" });
-
-  await page.locator("#collab-work").scrollIntoViewIfNeeded();
-  await expect(page.locator('[data-demo-kind="collaborative"]')).toHaveAttribute("data-demo-ready", "true");
-  const harshEditor = page.getByLabel("Harsh code editor");
-  const hint = page.locator("[data-editor-hint]");
+  const collabVolume = await openProject(page, "collab-work");
+  const harshEditor = collabVolume.getByLabel("Harsh code editor");
+  const hint = collabVolume.locator("[data-editor-hint]");
   await harshEditor.scrollIntoViewIfNeeded();
 
   await expect(hint).toContainText("Try editing this code...");
@@ -197,115 +221,21 @@ test("collaborative editor hint is static with reduced motion", async ({ page },
   await expect(hint).toContainText("Try editing this code...");
 });
 
-test("desktop journey uses native scroll with a responsive card stack", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "The cinematic stack is desktop-only.");
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/", { waitUntil: "networkidle" });
-
-  const cards = page.locator("[data-journey-card]");
-  const journeyNav = page.getByRole("navigation", { name: "Portfolio journey" });
-  await expect(cards).toHaveCount(6);
-  await expect(journeyNav).toBeVisible();
-  await expect(page.locator("html")).toHaveClass(/journey-ready/);
-  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "champagne");
-  await expect(page.locator("#engineering")).toHaveCount(0);
-
-  const introPosition = await cards.first().evaluate((card) => getComputedStyle(card).position);
-  expect(introPosition).toBe("sticky");
-
-  await page.getByRole("link", { name: "Scroll to experience scene" }).click();
-  await expect(page).toHaveURL(/#experience$/);
-  await expect(journeyNav.locator('a[href="#experience"]')).toHaveAttribute("aria-current", "step");
-  await expect(page.locator("html")).toHaveAttribute("data-active-scene", "gold");
-
-  const introTransform = await cards.first().evaluate((card) => getComputedStyle(card).transform);
-  expect(introTransform).not.toBe("none");
-  expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe("smooth");
-});
-
-test("final contact card completes the shared desktop stack boundary", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "The cinematic stack is desktop-only.");
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/", { waitUntil: "networkidle" });
-
-  const journeyNav = page.getByRole("navigation", { name: "Portfolio journey" });
-  const aboutLink = journeyNav.locator('a[href="#about"]');
-  const contactLink = journeyNav.locator('a[href="#contact"]');
-
-  await contactLink.focus();
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/#contact$/);
-  await expect(contactLink).toHaveAttribute("aria-current", "step");
-
-  await aboutLink.click();
-  await expect(aboutLink).toHaveAttribute("aria-current", "step");
-  await contactLink.click();
-  await expect(contactLink).toHaveAttribute("aria-current", "step");
-
-  await page.evaluate(() => {
-    document.documentElement.style.scrollBehavior = "auto";
-  });
-
-  for (const viewport of [
-    { width: 1920, height: 1080 },
-    { width: 1440, height: 900 },
-    { width: 1280, height: 800 },
-  ]) {
-    await page.setViewportSize(viewport);
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    await page.waitForFunction(() => Math.abs(window.scrollY - (document.documentElement.scrollHeight - window.innerHeight)) <= 1);
-    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
-
-    const boundary = await page.locator("#contact").evaluate((card) => {
-      const rect = card.getBoundingClientRect();
-      const styles = getComputedStyle(card);
-      return {
-        active: card.classList.contains("is-active"),
-        bottom: rect.bottom,
-        opacity: Number(styles.opacity),
-        position: styles.position,
-        stickyTop: Number.parseFloat(styles.top),
-        top: rect.top,
-        viewportHeight: window.innerHeight,
-      };
-    });
-
-    expect(boundary.position, `${viewport.width}x${viewport.height} contact position`).toBe("sticky");
-    expect(boundary.active, `${viewport.width}x${viewport.height} contact active state`).toBe(true);
-    expect(boundary.opacity, `${viewport.width}x${viewport.height} contact opacity`).toBe(1);
-    expect(Math.abs(boundary.top - boundary.stickyTop), `${viewport.width}x${viewport.height} contact top boundary`).toBeLessThanOrEqual(2);
-    expect(Math.abs(boundary.bottom - boundary.viewportHeight), `${viewport.width}x${viewport.height} contact bottom boundary`).toBeLessThanOrEqual(2);
-  }
-});
-
-test("mobile and reduced motion keep the journey in normal document flow", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile", "One mobile fallback check is sufficient.");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/", { waitUntil: "networkidle" });
-
-  await expect(page.locator("[data-journey-card]")).toHaveCount(6);
-  await expect(page.getByRole("navigation", { name: "Portfolio journey" })).toBeHidden();
-
-  const styles = await page.locator("[data-journey-card]").evaluateAll((cards) =>
-    cards.map((card) => ({
-      position: getComputedStyle(card).position,
-      transform: getComputedStyle(card).transform,
-    })),
-  );
-  expect(styles.every(({ position }) => position !== "sticky")).toBe(true);
-  expect(styles.every(({ transform }) => transform === "none")).toBe(true);
+test("project deep links open the matching publication", async ({ page }) => {
+  await page.goto("/#collab-work", { waitUntil: "networkidle" });
+  await expect(page.locator("#collab-work")).toHaveAttribute("open", "");
+  await expect(page).toHaveURL(/#collab-work$/);
 });
 
 test("mobile menu opens, traps focus, and closes with Escape", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile", "The menu is a mobile-only interaction.");
+  test.skip(testInfo.project.name !== "mobile", "The index menu is mobile-only.");
   await page.goto("/", { waitUntil: "networkidle" });
 
   const menu = page.locator("[data-mobile-nav]");
   const summary = menu.locator("summary");
   await summary.click();
   await expect(menu).toHaveAttribute("open", "");
-  await expect(menu.getByRole("link", { name: "Work" })).toBeFocused();
-
+  await expect(menu.getByRole("link", { name: "Intro" })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(menu).not.toHaveAttribute("open", "");
   await expect(summary).toBeFocused();

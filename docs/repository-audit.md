@@ -1,6 +1,6 @@
 # Repository audit
 
-Audit date: 2026-10-08
+Audit date: 2026-11-23
 
 ## Executive assessment
 
@@ -18,13 +18,12 @@ This is a small, coherent portfolio application rather than a candidate for re-p
 ## Application architecture
 
 - `app/layout.tsx` owns global metadata, Open Graph/Twitter metadata, canonical URL, favicon, and Person JSON-LD.
-- `app/page.tsx` server-renders the single portfolio route and composes navigation, hero, selected work, capabilities, experience, about, education, tools, contact, and footer.
-- `app/portfolio-data.ts` is the source of truth for profile, experience, education, metrics, and skills content.
+- `app/page.tsx` server-renders the single portfolio route as five editorial collections: introduction, education, experience, projects, and about/contact.
+- `app/portfolio-data.ts` is the source of truth for profile, experience, education, projects, metrics, and skills content.
 - `app/KVStoreDemo.tsx` and `app/CollaborativeDemo.tsx` are isolated client-side demonstrations with local state only.
-- `app/ScrollMotion.tsx` handles reveal observers, active navigation state, and mobile-menu focus/keyboard behavior.
+- `app/ScrollMotion.tsx` handles reveal observers, active navigation state, mobile-menu focus/keyboard behavior, progressive volume controls, and pointer tilt.
 - `app/CopyEmail.tsx` and `app/CountUp.tsx` provide small progressive interactions.
-- `app/HeroSculptureVisual.tsx` owns the responsive hero artwork.
-- `app/globals.css` defines the color, type, spacing, radius, shadow, and easing tokens plus all responsive and reduced-motion rules.
+- `app/globals.css` defines the warm editorial color, type, spacing, radius, shadow, and easing tokens plus the CSS 3D collection covers, responsive layouts, and reduced-motion rules.
 - `app/robots.ts` and `app/sitemap.ts` provide the search crawler surface.
 - There are no `/work/<slug>` routes; the two projects intentionally remain on the main page.
 
@@ -54,9 +53,9 @@ This is a small, coherent portfolio application rather than a candidate for re-p
 - TypeScript: pass.
 - ESLint: pass with no reported warnings.
 - Production build and server-render tests: 3 of 3 pass.
-- Playwright: 17 applicable checks pass; 4 checks are intentionally skipped outside their applicable viewport/project.
+- Playwright: 28 applicable checks pass; 8 checks are intentionally skipped outside their applicable viewport/project.
 - Visual baselines: pass at desktop, tablet, and mobile.
-- Lighthouse: performance 89, accessibility 100, best practices 100, SEO 100.
+- Lighthouse: performance 90, accessibility 100, best practices 100, SEO 100.
 - Production dependency audit: 0 vulnerabilities.
 - Full dependency graph: 27 known findings in the beta framework/build toolchain; see `docs/improvement-roadmap.md` for the non-forced upgrade plan.
 
