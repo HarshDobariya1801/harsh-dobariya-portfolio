@@ -63,8 +63,8 @@ test("loads without runtime failures or horizontal overflow", async ({ page }) =
 test("remains composed at the additional review breakpoints", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop", "One breakpoint sweep is sufficient.");
 
-  for (const width of [1280, 1024, 430]) {
-    await page.setViewportSize({ width, height: width === 430 ? 932 : 900 });
+  for (const width of [1280, 1024, 430, 375]) {
+    await page.setViewportSize({ width, height: width <= 430 ? 812 : 900 });
     await page.goto("/", { waitUntil: "networkidle" });
     await page.locator("#contact").scrollIntoViewIfNeeded();
 
@@ -76,6 +76,35 @@ test("remains composed at the additional review breakpoints", async ({ page }, t
     await expect(page.locator("#work")).toBeAttached();
     await expect(page.locator("#education")).toBeAttached();
   }
+});
+
+test("hero LRU cache follows deterministic eviction and reset behavior", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const workbench = page.locator(".cache-workbench");
+  const order = async () => workbench.locator("[data-cache-key]").evaluateAll((entries) =>
+    entries.map((entry) => entry.getAttribute("data-cache-key")),
+  );
+
+  await expect(workbench.getByRole("heading", { name: "Try my cache." })).toBeVisible();
+  expect(await order()).toEqual(["A", "B", "C"]);
+  await expect(workbench.getByText("Least recent", { exact: true })).toBeVisible();
+
+  const touchB = workbench.getByRole("button", { name: "Touch B" });
+  await touchB.focus();
+  await touchB.press("Enter");
+  expect(await order()).toEqual(["A", "C", "B"]);
+  await expect(workbench.getByText("Touched B. It is now the most recently used entry.", { exact: true }).first()).toBeVisible();
+
+  await workbench.getByRole("button", { name: "Add a key" }).click();
+  expect(await order()).toEqual(["C", "B", "D"]);
+  await expect(workbench.getByText("Evicted A", { exact: true })).toBeVisible();
+  await expect(workbench.getByText("Added D. Evicted A because it was used least recently.", { exact: true }).first()).toBeVisible();
+
+  await workbench.getByRole("button", { name: "Add a key" }).click();
+  expect(await order()).toEqual(["B", "D", "E"]);
+  await workbench.getByRole("button", { name: "Reset" }).click();
+  expect(await order()).toEqual(["A", "B", "C"]);
+  await expect(workbench.getByText("Reset cache to A, B, and C. A is least recently used.", { exact: true }).first()).toBeVisible();
 });
 
 test("links have valid targets and local destinations resolve", async ({ page, request }) => {

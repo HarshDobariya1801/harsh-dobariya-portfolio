@@ -56,7 +56,12 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /Let(?:'|&apos;)s build something dependable/i);
   assert.match(html, /Back to introduction/i);
-  assert.match(html, /building backend systems, distributed infrastructure, and polished products/i);
+  assert.match(html, /I(?:'|&apos;)m a software engineer who builds backend systems and the products they power/i);
+  assert.match(html, /Try my cache/i);
+  assert.match(html, /Browser simulation \/ Capacity 3/i);
+  assert.match(html, /See the C\+\+ key-value store/i);
+  assert.match(html, /Decision \/ Bound concurrency/i);
+  assert.match(html, /Decision \/ Fan out live edits/i);
   assert.match(html, /GET, SET, and DEL behavior/i);
   assert.match(html, /data-demo-kind="kv"/i);
   assert.match(html, /data-demo-kind="collaborative"/i);
@@ -87,6 +92,7 @@ test("server-renders Harsh Dobariya's portfolio", async () => {
   assert.doesNotMatch(html, /system-stats|harsh-system-poster\.png|hero-system-diagram/i);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
   assert.doesNotMatch(html, /Academic volume|technical publication|VOL\./i);
+  assert.doesNotMatch(html, /Portfolio collection index|archive-index/i);
 
   const experiencePosition = html.indexOf('id="experience"');
   const projectsPosition = html.indexOf('id="work"');
