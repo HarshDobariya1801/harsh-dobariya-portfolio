@@ -9,3 +9,7 @@
   opacity: 1 !important;
   transform: none !important;
 }
+
+.skip-link {
+  display: none !important;
+}

@@ -1,6 +1,7 @@
 import CopyEmail from "./CopyEmail";
 import CountUp from "./CountUp";
 import LazyProjectDemo from "./LazyProjectDemo";
+import LRUCacheDemo from "./LRUCacheDemo";
 import ScrollMotion from "./ScrollMotion";
 import { education, experience, profile, projects, toolGroups } from "./portfolio-data";
 import ActionLink from "./ui/ActionLink";
@@ -130,7 +131,7 @@ function ExperienceCollection() {
                     ))}
                   </dl>
                   <span className="experience-meta">{item.period}<br />{item.location}</span>
-                  <i aria-hidden="true">View details +</i>
+                  <i aria-hidden="true">Implementation details +</i>
                 </span>
               </summary>
               <div className="volume-reader experience-reader">
@@ -162,6 +163,38 @@ function ExperienceCollection() {
   );
 }
 
+function ProjectDecisionVisual({ project }: { project: (typeof projects)[number] }) {
+  if (project.id === "distributed-key-value-store") {
+    return (
+      <div
+        className="project-decision-visual"
+        role="img"
+        aria-label="Client connections enter a bounded worker pool before reaching thread-safe in-memory state and append-only persistence."
+      >
+        <span className="decision-visual-label">Decision / Bound concurrency</span>
+        <div className="decision-flow decision-flow-kv" aria-hidden="true">
+          <span>Clients</span><i>→</i><span>Accept loop</span><i>→</i><strong>Worker pool</strong><i>→</i><span>State</span>
+          <small>AOF persistence</small>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="project-decision-visual"
+      role="img"
+      aria-label="An edit travels from Browser A through a WebSocket server and Redis Pub/Sub to a second WebSocket server and Browser B, while PostgreSQL stores durable workspace state."
+    >
+      <span className="decision-visual-label">Decision / Fan out live edits</span>
+      <div className="decision-flow decision-flow-collab" aria-hidden="true">
+        <span>Browser A</span><i>→</i><span>WebSocket</span><i>→</i><strong>Redis</strong><i>→</i><span>WebSocket</span><i>→</i><span>Browser B</span>
+        <small>PostgreSQL / durable state</small>
+      </div>
+    </div>
+  );
+}
+
 function ProjectCollection() {
   return (
     <section className="collection project-collection section-shell" id="work" data-nav-section aria-labelledby="work-title">
@@ -183,6 +216,7 @@ function ProjectCollection() {
               <span className="publication-index">Project / {project.number}</span>
               <strong>{project.title}</strong>
               <span>{project.subtitle}</span>
+              <ProjectDecisionVisual project={project} />
               <ul aria-label={`${project.title} technologies`}>
                 {project.technologies.slice(0, 4).map((technology) => <li key={technology}>{technology}</li>)}
               </ul>
@@ -229,7 +263,7 @@ export default function Home() {
 
       <header className="site-header" data-site-header>
         <div className="site-header-inner section-shell">
-          <a className="wordmark" href="#intro" aria-label="Harsh Dobariya, introduction">HD / Portfolio</a>
+          <a className="wordmark" href="#intro" aria-label="Harsh Dobariya, introduction">Harsh&apos;s Workbench</a>
           <nav className="desktop-nav" aria-label="Primary navigation"><NavigationLinks /></nav>
           <div className="header-utilities">
             <a href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>
@@ -248,17 +282,14 @@ export default function Home() {
       <div id="main-content">
         <section className="intro section-shell" id="intro" data-nav-section aria-labelledby="hero-title">
           <div className="intro-copy">
-            <p className="intro-kicker" data-reveal>Software Engineer / Seattle</p>
+            <p className="intro-kicker" data-reveal>Harsh&apos;s Workbench / Seattle</p>
             <h1 id="hero-title" data-reveal>Harsh<br /><em>Dobariya</em></h1>
             <p className="intro-statement" data-reveal>
-              Software Engineer building backend systems, distributed infrastructure, and polished products.
-            </p>
-            <p className="intro-summary" data-reveal>
-              I work across backend and full-stack engineering, designing clear APIs, reliable data flows, and thoughtful product experiences.
+              I&apos;m a software engineer who builds backend systems and the products they power.
             </p>
             <div className="intro-actions" data-reveal>
-              <ActionLink href="/Harsh_Dobariya_Resume.pdf" icon="external" variant="primary" target="_blank">Resume</ActionLink>
-              <ActionLink href={profile.github} icon="external" target="_blank" rel="noreferrer">GitHub</ActionLink>
+              <ActionLink href="#experience" icon="arrow" variant="primary">Experience</ActionLink>
+              <ActionLink href="/Harsh_Dobariya_Resume.pdf" icon="external" variant="outline" target="_blank">Resume</ActionLink>
               <ActionLink href={`mailto:${profile.email}`}>Email</ActionLink>
             </div>
             <div className="intro-status" data-reveal>
@@ -266,16 +297,7 @@ export default function Home() {
               <span>{profile.location} / Open to relocate</span>
             </div>
           </div>
-          <aside className="archive-index" aria-label="Portfolio collection index" data-reveal>
-            <div className="archive-monogram" aria-hidden="true"><span>H</span><span>D</span></div>
-            <p>Backend systems, distributed infrastructure, and full-stack product engineering.</p>
-            <ol>
-              {navigation.map((item) => (
-                <li key={item.href}><a href={item.href}><span>{item.number}</span>{item.label}</a></li>
-              ))}
-            </ol>
-            <a className="browse-collection" href="#experience">View experience <span aria-hidden="true">↓</span></a>
-          </aside>
+          <LRUCacheDemo />
         </section>
 
         <ExperienceCollection />
