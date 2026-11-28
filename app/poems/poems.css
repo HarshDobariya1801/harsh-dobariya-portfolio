@@ -1,0 +1,400 @@
+.poems-index,
+.poem-reading-page {
+  --devanagari: "Noto Serif Devanagari", "Kohinoor Devanagari", "Nirmala UI", "Mangal", serif;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.poems-site-header {
+  border-bottom-color: var(--line);
+  background: rgba(244,241,232,.94);
+  -webkit-backdrop-filter: blur(16px) saturate(115%);
+  backdrop-filter: blur(16px) saturate(115%);
+}
+
+.poems-site-header .desktop-nav a[aria-current="page"] {
+  color: var(--accent);
+}
+
+.poems-cover {
+  width: min(var(--page), calc(100% - clamp(3rem, 8vw, 9rem)));
+  min-height: clamp(34rem, 58vw, 47rem);
+  position: relative;
+  margin: clamp(1rem, 2.5vw, 2rem) auto 0;
+  overflow: hidden;
+  background: #241516;
+  color: #fff9ed;
+}
+
+.poems-cover::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  content: "";
+  background: linear-gradient(90deg, rgba(21,13,14,.93) 0%, rgba(28,15,17,.82) 30%, rgba(28,15,17,.22) 61%, transparent 78%);
+  pointer-events: none;
+}
+
+.poems-cover picture,
+.poems-cover img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.poems-cover img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.poems-cover-copy {
+  min-height: inherit;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+.poems-eyebrow,
+.poems-contents > header > p {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: var(--type-label);
+  font-weight: 650;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.poems-eyebrow { color: rgba(255,249,237,.65); }
+
+.poems-cover h1 {
+  margin: .75rem 0 0;
+  font-family: var(--serif);
+  font-size: clamp(5.5rem, 12vw, 10.5rem);
+  font-weight: 400;
+  letter-spacing: -.07em;
+  line-height: .82;
+}
+
+.poems-cover-copy > p:not(.poems-eyebrow) {
+  max-width: 28rem;
+  margin: 1.8rem 0 0;
+  color: rgba(255,249,237,.8);
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.3vw, 2rem);
+  line-height: 1.25;
+}
+
+.poems-cover-copy > a {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 2.1rem;
+  padding: 0 1rem;
+  border: 1px solid rgba(255,249,237,.56);
+  color: #fff9ed;
+  font-size: .84rem;
+  font-weight: 650;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms var(--ease);
+}
+
+.poems-cover-copy > a:hover {
+  background: #fff9ed;
+  color: #2b1619;
+  transform: translateY(-2px);
+}
+
+.poems-contents {
+  padding-block: clamp(5.5rem, 10vw, 9rem);
+}
+
+.poems-contents > header {
+  display: grid;
+  grid-template-columns: minmax(10rem, .42fr) minmax(0, 1fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  align-items: end;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--text);
+}
+
+.poems-contents > header > p { color: var(--muted); }
+
+.poems-contents h2 {
+  max-width: 9ch;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(3.4rem, 7vw, 6.7rem);
+  font-weight: 400;
+  letter-spacing: -.055em;
+  line-height: .9;
+}
+
+.poems-contents ol {
+  margin: clamp(3.5rem, 6vw, 6rem) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line-strong);
+  list-style: none;
+}
+
+.poems-contents li { border-bottom: 1px solid var(--line-strong); }
+
+.poems-contents li a {
+  min-height: 8rem;
+  display: grid;
+  grid-template-columns: minmax(14rem, .85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  align-items: center;
+  padding: 1.4rem clamp(.25rem, 1vw, 1rem);
+  transition: background-color 200ms ease, padding 240ms var(--ease);
+}
+
+.poems-contents li a:hover {
+  padding-inline: 1.25rem;
+  background: rgba(116,27,54,.055);
+}
+
+.poems-contents li a:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline-color: var(--accent);
+}
+
+.poem-list-title {
+  color: var(--accent);
+  font-family: var(--serif);
+  font-size: clamp(1.65rem, 3vw, 2.55rem);
+  letter-spacing: -.025em;
+  line-height: 1.15;
+}
+
+.poems-contents a[lang="hi"] .poem-list-title {
+  font-family: var(--devanagari);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
+.poem-list-excerpt {
+  max-width: 48rem;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: clamp(1.02rem, 1.5vw, 1.22rem);
+  line-height: 1.55;
+}
+
+.poems-contents a[lang="hi"] .poem-list-excerpt {
+  font-family: var(--devanagari);
+  line-height: 1.75;
+}
+
+.poem-reading {
+  width: min(50rem, calc(100% - clamp(3rem, 12vw, 12rem)));
+  margin-inline: auto;
+  padding-block: clamp(5rem, 9vw, 8.5rem) clamp(6rem, 12vw, 11rem);
+}
+
+.poem-reading > header {
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.all-poems-link {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.all-poems-link:hover { text-decoration: underline; text-underline-offset: .3em; }
+
+.poem-reading h1 {
+  max-width: 12ch;
+  margin: 1.2rem 0 0;
+  font-family: var(--serif);
+  font-size: clamp(3.7rem, 8vw, 7.25rem);
+  font-weight: 400;
+  letter-spacing: -.055em;
+  line-height: .92;
+  text-wrap: balance;
+}
+
+.poem-reading[lang="hi"] h1 {
+  max-width: 15ch;
+  font-family: var(--devanagari);
+  font-size: clamp(3.25rem, 7vw, 6.35rem);
+  letter-spacing: -.015em;
+  line-height: 1.16;
+}
+
+.poem-subtitle {
+  max-width: 38rem;
+  margin: 1.5rem 0 0;
+  color: var(--accent);
+  font-family: var(--devanagari);
+  font-size: clamp(1.35rem, 2.5vw, 1.9rem);
+  line-height: 1.6;
+}
+
+.poem-text {
+  max-width: 46rem;
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  line-height: 1.75;
+}
+
+.poem-text[lang="hi"] {
+  font-family: var(--devanagari);
+  font-size: clamp(1.22rem, 1.85vw, 1.5rem);
+  line-height: 1.95;
+}
+
+.poem-stanza {
+  margin: 0 0 1.75em;
+}
+
+.poem-stanza:last-child { margin-bottom: 0; }
+
+.poem-line {
+  max-width: 100%;
+  display: block;
+  overflow-wrap: break-word;
+}
+
+.poem-line strong { color: var(--accent-dark); font-weight: 700; }
+
+.poem-reading footer {
+  display: grid;
+  gap: .65rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--text);
+}
+
+.poem-reading footer > span {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: .75rem;
+  font-weight: 650;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.poem-reading footer a {
+  width: fit-content;
+  color: var(--accent);
+  font-family: var(--serif);
+  font-size: clamp(1.55rem, 3vw, 2.4rem);
+  line-height: 1.3;
+  transition: color 180ms ease, transform 200ms var(--ease);
+}
+
+.poem-reading footer a[lang="hi"] { font-family: var(--devanagari); }
+
+.poem-reading footer a:hover {
+  color: var(--accent-dark);
+  transform: translateX(.25rem);
+}
+
+@media (max-width: 820px) {
+  .poems-cover { width: calc(100% - 2.5rem); }
+  .poems-contents > header { grid-template-columns: 1fr; gap: 1.2rem; }
+  .poems-contents li a { grid-template-columns: minmax(12rem, .9fr) minmax(0, 1.1fr); gap: 2rem; }
+}
+
+@media (max-width: 600px) {
+  .poems-cover {
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    overflow: visible;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .poems-cover::after { display: none; }
+
+  .poems-cover-copy {
+    width: calc(100% - 2rem);
+    min-height: 0;
+    order: 1;
+    padding-block: 3.75rem 2.5rem;
+  }
+
+  .poems-eyebrow { color: var(--muted); }
+
+  .poems-cover h1 { font-size: clamp(4.8rem, 23vw, 6.2rem); }
+
+  .poems-cover-copy > p:not(.poems-eyebrow) {
+    max-width: 21rem;
+    margin-top: 1.15rem;
+    color: var(--muted-strong);
+    font-size: 1.35rem;
+  }
+
+  .poems-cover-copy > a {
+    margin-top: 1.5rem;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .poems-cover picture {
+    width: 100%;
+    height: auto;
+    position: relative;
+    order: 2;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .poems-cover img {
+    position: absolute;
+    object-position: 72% center;
+  }
+
+  .poems-contents { padding-block: 5rem 6rem; }
+  .poems-contents h2 { font-size: clamp(3.1rem, 15vw, 4.6rem); }
+  .poems-contents ol { margin-top: 3.25rem; }
+
+  .poems-contents li a {
+    min-height: 0;
+    display: block;
+    padding: 1.5rem .2rem;
+  }
+
+  .poems-contents li a:hover { padding-inline: .65rem; }
+  .poem-list-title { display: block; font-size: 1.65rem; }
+  .poems-contents a[lang="hi"] .poem-list-title { font-size: 1.75rem; }
+  .poem-list-excerpt { display: block; margin-top: .55rem; font-size: 1rem; }
+
+  .poem-reading {
+    width: calc(100% - 2rem);
+    padding-block: 4rem 6rem;
+  }
+
+  .poem-reading > header { padding-bottom: 2.75rem; }
+  .poem-reading h1 { font-size: clamp(3.25rem, 16vw, 4.6rem); }
+  .poem-reading[lang="hi"] h1 { font-size: clamp(2.9rem, 14vw, 4rem); line-height: 1.22; }
+  .poem-subtitle { font-size: 1.28rem; line-height: 1.65; }
+  .poem-text { padding-block: 3rem 4rem; font-size: 1.12rem; line-height: 1.78; }
+  .poem-text[lang="hi"] { font-size: 1.2rem; line-height: 2; }
+  .poem-stanza { margin-bottom: 1.9em; }
+  .poem-reading footer a { font-size: 1.55rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poems-cover-copy > a:hover,
+  .poem-reading footer a:hover { transform: none; }
+}

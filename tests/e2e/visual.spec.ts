@@ -33,3 +33,35 @@ test("collaborative editor hint matches the reviewed component baseline", async 
     stylePath: stabilityStyles,
   });
 });
+
+test("poetry index matches the reviewed book layout", async ({ page }) => {
+  await page.goto("/poems", { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+
+  await expect(page).toHaveScreenshot("poems-index.png", {
+    fullPage: true,
+    stylePath: stabilityStyles,
+  });
+});
+
+test("Hindi reading page matches the reviewed mobile typography", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The dedicated reading review is mobile-specific.");
+  await page.goto("/poems/tumko-dekhun-to", { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+
+  await expect(page).toHaveScreenshot("poem-tumko-dekhun-to.png", {
+    fullPage: true,
+    stylePath: stabilityStyles,
+  });
+});
+
+test("long final poem matches the reviewed wrapping and emphasis", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The dedicated reading review is mobile-specific.");
+  await page.goto("/poems/prem-jahan-ant-hi-aarambh-hai", { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+
+  await expect(page).toHaveScreenshot("poem-prem-jahan-ant-hi-aarambh-hai.png", {
+    fullPage: true,
+    stylePath: stabilityStyles,
+  });
+});
