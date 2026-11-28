@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-html-link-for-pages -- Native navigation avoids Vinext's production next/link runtime crash. */
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import PoemText, { getPoemSubtitle } from "../PoemText";
 import PoemsHeader from "../PoemsHeader";
@@ -38,7 +38,7 @@ export default async function PoemPage({ params }: PoemPageProps) {
       <PoemsHeader />
       <article className="poem-reading" id="poem-content" lang={poem.language}>
         <header>
-          <Link className="all-poems-link" href="/poems">All poems</Link>
+          <a className="all-poems-link" href="/poems">All poems</a>
           <h1>{poem.title}</h1>
           {subtitle ? <p className="poem-subtitle"><strong>{subtitle}</strong></p> : null}
         </header>
@@ -47,10 +47,10 @@ export default async function PoemPage({ params }: PoemPageProps) {
           {nextPoem ? (
             <>
               <span>Next poem</span>
-              <Link href={`/poems/${nextPoem.slug}`} lang={nextPoem.language}>{nextPoem.title}</Link>
+              <a href={`/poems/${nextPoem.slug}`} lang={nextPoem.language}>{nextPoem.title}</a>
             </>
           ) : (
-            <Link href="/poems">Back to all poems.</Link>
+            <a href="/poems">Back to all poems.</a>
           )}
         </footer>
       </article>

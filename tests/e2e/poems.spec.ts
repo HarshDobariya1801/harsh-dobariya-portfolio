@@ -65,6 +65,21 @@ test("homepage exposes Poems in desktop and mobile navigation", async ({ page },
   }
 });
 
+test("poem links navigate through real browser requests", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "One click-through regression is sufficient.");
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  await page.locator(".desktop-nav").getByRole("link", { name: "Poems" }).click();
+  await expect(page).toHaveURL(/\/poems$/);
+
+  await page.locator(".poems-contents").getByRole("link", { name: /The Illusion of Two/ }).click();
+  await expect(page).toHaveURL(/\/poems\/the-illusion-of-two$/);
+  await expect(page.getByRole("heading", { level: 1, name: "The Illusion of Two" })).toBeVisible();
+
+  await page.getByRole("link", { name: "All poems" }).click();
+  await expect(page).toHaveURL(/\/poems$/);
+});
+
 test("all poem URLs load directly", async ({ request }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop", "One route sweep is sufficient.");
 
