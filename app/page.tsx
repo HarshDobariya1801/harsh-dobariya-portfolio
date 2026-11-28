@@ -1,4 +1,4 @@
-import Link from "next/link";
+/* eslint-disable @next/next/no-html-link-for-pages -- Native navigation avoids Vinext's production next/link runtime crash. */
 import CopyEmail from "./CopyEmail";
 import CountUp from "./CountUp";
 import LazyProjectDemo from "./LazyProjectDemo";
@@ -19,7 +19,7 @@ function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
       {navigation.map((item) => (
         <a href={item.href} data-nav-link key={item.href}><span aria-hidden="true">{item.number}</span>{item.label}</a>
       ))}
-      <Link href="/poems"><span aria-hidden="true">06</span>Poems</Link>
+      <a href="/poems"><span aria-hidden="true">06</span>Poems</a>
       {mobile ? (
         <>
           <a href="/Harsh_Dobariya_Resume.pdf" target="_blank">Resume</a>

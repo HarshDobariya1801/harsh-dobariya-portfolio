@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import PoemsHeader from "./PoemsHeader";
 import { featuredPoem, poems } from "./poems-data";
 
@@ -32,7 +31,7 @@ export default function PoemsPage() {
             <p className="poems-eyebrow">A bilingual collection</p>
             <h1 id="poems-title">Poems</h1>
             <p>On love, distance, and looking within.</p>
-            <Link href={`/poems/${featuredPoem.slug}`}>Read the featured poem</Link>
+            <a href={`/poems/${featuredPoem.slug}`}>Read the featured poem</a>
           </div>
           <picture>
             <source media="(max-width: 600px)" srcSet="/poems/poems-cover-720.webp" />
@@ -54,10 +53,10 @@ export default function PoemsPage() {
           <ol>
             {poems.map((poem) => (
               <li key={poem.slug}>
-                <Link href={`/poems/${poem.slug}`} lang={poem.language}>
+                <a href={`/poems/${poem.slug}`} lang={poem.language}>
                   <span className="poem-list-title">{poem.title}</span>
                   <span className="poem-list-excerpt">{poem.excerpt}</span>
-                </Link>
+                </a>
               </li>
             ))}
           </ol>
