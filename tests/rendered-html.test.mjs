@@ -102,17 +102,56 @@ test("removes project case-study routes and sitemap entries", async () => {
 
   await assert.rejects(access(new URL("app/work/[slug]/page.tsx", projectRoot)));
   assert.doesNotMatch(sitemap, /\/work\//);
+  assert.match(sitemap, /\/poems/);
+});
+
+test("server-renders the poetry index and individual reading pages", async () => {
+  const indexResponse = await render("/poems");
+  assert.equal(indexResponse.status, 200);
+  const indexHtml = await indexResponse.text();
+
+  assert.match(indexHtml, /On love, distance, and looking within/);
+  assert.match(indexHtml, /poems-cover-1600\.webp/);
+  assert.match(indexHtml, /poems-cover-720\.webp/);
+  assert.match(indexHtml, /Read the featured poem/);
+  const visibleIndexText = indexHtml
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ");
+  assert.equal((visibleIndexText.match(/उस पते पर कोई नहीं था/g) ?? []).length, 1);
+  assert.equal((indexHtml.match(/class="poem-list-title"/g) ?? []).length, 10);
+
+  const hindiResponse = await render("/poems/tumko-dekhun-to");
+  assert.equal(hindiResponse.status, 200);
+  const hindiHtml = await hindiResponse.text();
+  assert.match(hindiHtml, /lang="hi"/);
+  assert.match(hindiHtml, /तुमको देखूँ तो फूल-सा बिखर जाता हूँ/);
+  assert.match(hindiHtml, /—हर्ष/);
+  assert.match(hindiHtml, /All poems/);
+  assert.match(hindiHtml, /नज़दीकियों की दूरी/);
+
+  const finalResponse = await render("/poems/prem-jahan-ant-hi-aarambh-hai");
+  assert.equal(finalResponse.status, 200);
+  const finalHtml = await finalResponse.text();
+  assert.match(finalHtml, /class="poem-subtitle"><strong>प्रेम - जहाँ &#x27;मैं&#x27; समाप्त होता है।<\/strong>/);
+  assert.match(finalHtml, /<strong>जीवन ही प्रेम है।<\/strong>/);
+  assert.match(finalHtml, /अगर तुम प्रेम को समझ रहे हो, तो वह प्रेम नहीं है।/);
+  assert.match(finalHtml, /Back to all poems\./);
 });
 
 test("includes portfolio assets and removes starter-only files", async () => {
   const resume = await stat(new URL("public/Harsh_Dobariya_Resume.pdf", projectRoot));
   const ogImage = await readFile(new URL("public/og.png", projectRoot));
+  const poemCoverDesktop = await stat(new URL("public/poems/poems-cover-1600.webp", projectRoot));
+  const poemCoverMobile = await stat(new URL("public/poems/poems-cover-720.webp", projectRoot));
   const packageJson = await readFile(new URL("package.json", projectRoot), "utf8");
   const readme = await readFile(new URL("README.md", projectRoot), "utf8");
 
   assert.ok(resume.size > 50_000);
   assert.equal(ogImage.readUInt32BE(16), 1200);
   assert.equal(ogImage.readUInt32BE(20), 630);
+  assert.ok(poemCoverDesktop.size > poemCoverMobile.size);
+  assert.ok(poemCoverMobile.size < 40_000);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(readme, /Harsh Dobariya Portfolio/);
   assert.doesNotMatch(readme, /case stud|\/work\//i);
